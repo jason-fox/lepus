@@ -32,7 +32,7 @@ All NGSI-v2 response attributes are converted to `Property` or `Relationship` an
 
 ### Supported Endpoints
 
-The following endpoints are supported:
+The following endpoints are supported as defined in the latest [NGSI-LD Specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf)
 
 -   **GET**  `/entities/`- Query entities  §5.7.2; §6.4.3.2
 -   **GET** `/entities/{entityId}` - Entity retrieval by id  - §5.7.1; §6.5.3.1
