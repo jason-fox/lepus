@@ -1,7 +1,13 @@
 # FIWARE Lepus
 
-An **NGSI-LD** wrapper for **NGSI-v2** Context Brokers. It understands the NGSI-LD endpoints inputs, converts them to NGSI-v2, makes a request to
-the NGSI-v2 broker behind it and transforms responses back to NGSI-LD using a fixed JSON-LD `@context`. It supports the NGSI-LD **federationOps** endpoints only 
+[![FIWARE Core Context Management](https://nexus.lab.fiware.org/static/badges/chapters/core.svg)](https://github.com/FIWARE/catalogue/blob/master/core/README.md)
+[![License: MIT](https://img.shields.io/github/license/jason-fox/lepus.svg)](https://opensource.org/licenses/MIT)<br/>
+[![NGSI v2](https://img.shields.io/badge/NGSI-v2-5dc0cf.svg)](https://fiware-ges.github.io/orion/api/v2/stable/)
+[![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf)
+[![JSON LD](https://img.shields.io/badge/JSON--LD-1.1-f06f38.svg)](https://w3c.github.io/json-ld-syntax/)
+
+An **NGSI-LD** wrapper for use with **NGSI-v2** Context Brokers. It understands the NGSI-LD endpoints and inputs, converts them to NGSI-v2, makes a request to
+the NGSI-v2 broker behind it and transforms responses back to NGSI-LD using a **fixed JSON-LD `@context`**. It supports the NGSI-LD **federationOps** endpoints only 
 and is designed to be used as a registered source with NGSI-LD Context Brokers in federation mode.
 
 ### Example
