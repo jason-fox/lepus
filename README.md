@@ -1,7 +1,8 @@
 # FIWARE Lepus
 
 [![FIWARE Core Context Management](https://nexus.lab.fiware.org/static/badges/chapters/core.svg)](https://github.com/FIWARE/catalogue/blob/master/core/README.md)
-[![License: MIT](https://img.shields.io/github/license/jason-fox/lepus.svg)](https://opensource.org/licenses/MIT)<br/>
+[![License: MIT](https://img.shields.io/github/license/jason-fox/lepus.svg)](https://opensource.org/licenses/MIT)
+[![Docker badge](https://img.shields.io/badge/quay.io-fiware%2Flepus-grey?logo=red%20hat&labelColor=EE0000)](https://quay.io/repository/fiware/lepus)<br/>
 [![NGSI v2](https://img.shields.io/badge/NGSI-v2-5dc0cf.svg)](https://fiware-ges.github.io/orion/api/v2/stable/)
 [![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf)
 [![JSON LD](https://img.shields.io/badge/JSON--LD-1.1-f06f38.svg)](https://w3c.github.io/json-ld-syntax/)

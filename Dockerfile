@@ -1,5 +1,7 @@
 ARG NODE_VERSION=16
 ARG DOWNLOAD=latest
+ARG GITHUB_REPOSITORY=lepus
+ARG GITHUB_ACCOUNT=jason-fox
 
 ########################################################################################
 #
@@ -72,8 +74,8 @@ LABEL "maintainer"="FIWARE Foundation <fiware.eu@gmail.com>"
 LABEL "org.opencontainers.image.authors"="https://www.fiware.org/contact-us/"
 LABEL "org.opencontainers.image.vendor"="FIWARE Foundation"
 LABEL "org.opencontainers.image.licenses"="MIT"
-LABEL "org.opencontainers.image.title"="Adminstration Asset Shell Proxy"
-LABEL "org.opencontainers.image.description"="Simple Node.js express application to proxy an AAS"
+LABEL "org.opencontainers.image.title"="FIWARE Lepus"
+LABEL "org.opencontainers.image.description"="An NGSI-LD wrapper for use with NGSI-v2 Context Brokers. It understands the NGSI-LD endpoints and inputs, converts them to NGSI-v2"
 LABEL "org.opencontainers.image.source"=https://github.com/${GITHUB_ACCOUNT}/${GITHUB_REPOSITORY}
 LABEL "org.nodejs.version"=${NODE_VERSION}
 
