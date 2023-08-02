@@ -193,6 +193,7 @@ curl -L 'http://localhost:9090/ngsi-ld/v1/csourceRegistrations/' \
     ],
     "endpoint": "http://<lepus>"
 }'
+```
 
 
 ## License
