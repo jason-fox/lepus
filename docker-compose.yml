@@ -1,0 +1,54 @@
+
+version: '3.9'
+services:
+  mongo-for-orion-v2:
+    image: mongo:${MONGO_DB_VERSION}
+    hostname: mongo-db2
+    container_name: db-mongo-2
+    volumes:
+      - mongo-db2:/data
+    ports:
+      - 27018:27017 # localhost:27017
+    networks:
+      - default
+  lepus:
+    image: quay.io/fiware/lepus
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: adapter
+    container_name: lepus
+    networks:
+      - default
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    environment:
+      - DEBUG=adapter:*
+      - NGSI_V2_CONTEXT_BROKER=http://orion2:1026/v2
+      - CONTEXT_URL=https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld
+      - NOTIFICATION_RELAY_URL=http://adapter:3000/notify
+      
+  orion:
+    image: quay.io/fiware/orion:${ORION_VERSION}
+    hostname: orion2
+    container_name: fiware-orion-v2
+    depends_on:
+      - mongo-for-orion-v2
+    networks:
+      - default
+    expose:
+      - "${ORION_PORT}"
+    ports:
+      - "${ORION_PORT}:1026" # localhost:1026
+    command: -dbhost mongo-db2 -logLevel DEBUG
+    healthcheck:
+      test: curl --fail -s http://orion2:1026/version || exit 1
+      interval: 5s
+
+networks:
+  default:
+
+volumes:
+  mongo-db2: ~
