@@ -165,7 +165,7 @@ Configuration occurs using Docker Environment variables:
 Since Lepus does not understand JSON-LD directly, registrations must as an LD context broker to preprocess all interactions
 using the `"key": "jsonldContext"`:
 
-```
+```console
 curl -L 'http://localhost:9090/ngsi-ld/v1/csourceRegistrations/' \
 -H 'Content-Type: application/json' \
 -H 'Link: <ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
