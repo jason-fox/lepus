@@ -27,8 +27,8 @@ const Constants = require('../lib/constants');
  * @param res - the response to return
  */
 async function proxyResponse(req, res) {
-    const contentType = req.get('Accept');
     const isJSONLD = req.get('Accept') === 'application/ld+json';
+    const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const queryOptions = req.query.options ? req.query.options.split(',') : null;
     const queryAttrs = req.query.attrs ? req.query.attrs.split(',') : null;
     const queryType = req.query.type ? req.query.type.split(',') : [];
