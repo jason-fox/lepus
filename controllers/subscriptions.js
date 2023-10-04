@@ -27,13 +27,7 @@ const NGSI_V2 = require('../lib/ngsi-v2');
  */
 
 async function listSubscriptions(req, res) {
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
-    headers.accept = 'application/json';
+    const headers = res.locals.headers;
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const options = {
@@ -43,12 +37,12 @@ async function listSubscriptions(req, res) {
         retry: 0
     };
 
-    debug("listSubscriptions: ", req.path, options);
+    debug('listSubscriptions: ', req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions'), options);
 
     res.statusCode = response.statusCode;
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
     }
     const v2Body = JSON.parse(response.body);
     if (!Constants.is2xxSuccessful(res.statusCode)) {
@@ -78,13 +72,7 @@ async function listSubscriptions(req, res) {
  */
 
 async function readSubscription(req, res) {
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
-    headers.accept = 'application/json';
+    const headers = res.locals.headers;
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const id = req.params.id.replace(/urn:ngsi-ld:Subscription:/gi, '');
@@ -95,12 +83,12 @@ async function readSubscription(req, res) {
         retry: 0
     };
 
-    debug("readSubscription: ", req.path, options);
+    debug('readSubscription: ', req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions/' + id), options);
     const v2Body = JSON.parse(response.body);
     res.statusCode = response.statusCode;
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
     }
     if (!Constants.is2xxSuccessful(res.statusCode)) {
         return Constants.sendError(res, v2Body);
@@ -119,12 +107,7 @@ async function readSubscription(req, res) {
  */
 
 async function deleteSubscription(req, res) {
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
+    const headers = res.locals.headers;
 
     const id = req.params.id.replace(/urn:ngsi-ld:Subscription:/gi, '');
     const options = {
@@ -134,13 +117,13 @@ async function deleteSubscription(req, res) {
         retry: 0
     };
 
-    debug("deleteSubscription: ", req.path, options);
+    debug('deleteSubscription: ', req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions/' + id), options);
 
     res.statusCode = response.statusCode;
     res.headers = response.headers;
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
     }
     if (!Constants.is2xxSuccessful(res.statusCode)) {
         const v2Body = JSON.parse(response.body);
@@ -157,13 +140,7 @@ async function deleteSubscription(req, res) {
  */
 
 async function createSubscription(req, res) {
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
-
+    const headers = res.locals.headers;
     const v2Payload = NGSI_V2.formatSubscription(req.body);
 
     const options = {
@@ -174,7 +151,7 @@ async function createSubscription(req, res) {
         json: v2Payload
     };
 
-    debug("createSubscription: ", req.path, options);
+    debug('createSubscription: ', req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions'), options);
 
     res.statusCode = response.statusCode;
@@ -186,8 +163,8 @@ async function createSubscription(req, res) {
             );
         }
     }
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
     }
 
     if (!Constants.is2xxSuccessful(res.statusCode)) {
@@ -198,13 +175,7 @@ async function createSubscription(req, res) {
 }
 
 async function updateSubscription(req, res) {
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
-
+    const headers = res.locals.headers;
     const id = req.params.id.replace(/urn:ngsi-ld:Subscription:/gi, '');
     let v2Payload = NGSI_V2.formatSubscription(req.body);
 
@@ -216,13 +187,13 @@ async function updateSubscription(req, res) {
         json: v2Payload
     };
 
-    debug("updateSubscription: ", req.path, options);
+    debug('updateSubscription: ', req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions/' + id), options);
 
     res.statusCode = response.statusCode;
     res.headers = response.headers;
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
     }
     if (!Constants.is2xxSuccessful(res.statusCode)) {
         const v2Body = JSON.parse(response.body);

@@ -60,7 +60,7 @@ async function notify(req, res) {
             '<' + JSON_LD_CONTEXT + '>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
     }
 
-    debug("notify: ", req.path, options);
+    debug('notify: ', req.path, options);
     const response = await got(target, options);
 
     res.statusCode = response.statusCode;

@@ -45,13 +45,10 @@ async function proxyResponse(req, res) {
         v2queryOptions = _.without(queryOptions, 'concise', 'sysAttrs');
     }
 
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
-    headers.accept = 'application/json';
+    const headers = res.locals.headers;
+
+    console.log(res.locals.headers);
+    console.log(headers);
 
     const options = {
         method: req.method,
@@ -59,6 +56,8 @@ async function proxyResponse(req, res) {
         throwHttpErrors: false,
         retry: 0
     };
+
+    console.log(options);
 
     if (req.query) {
         options.searchParams = req.query;
@@ -84,12 +83,15 @@ async function proxyResponse(req, res) {
         options.searchParams.sysAttrs = 'true';
     }
 
-    debug("proxyResponse: ", req.path, options);
+    debug('proxyResponse: ', req.path, options);
     const response = await got(Constants.v2BrokerURL(req.path), options);
 
     res.statusCode = response.statusCode;
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
+    }
+    if (res.locals.servicePath) {
+        res.set('NGSILD-Path', res.locals.servicePath);
     }
     const v2Body = JSON.parse(response.body);
     const type = v2Body.type;

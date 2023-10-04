@@ -19,13 +19,7 @@ const NGSI_LD = require('../lib/ngsi-ld');
 const Constants = require('../lib/constants');
 
 async function listTypes(req, res) {
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
-    headers.accept = 'application/json';
+    const headers = res.locals.headers;
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const options = {
@@ -35,13 +29,13 @@ async function listTypes(req, res) {
         retry: 0
     };
 
-    debug("listTypes: ", req.path, options);
+    debug('listTypes: ', req.path, options);
     const response = await got(Constants.v2BrokerURL(req.path), options);
 
     res.statusCode = response.statusCode;
     res.headers = response.headers;
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
     }
     const v2Body = JSON.parse(response.body);
     if (!Constants.is2xxSuccessful(res.statusCode)) {
@@ -58,13 +52,7 @@ async function listTypes(req, res) {
 }
 
 async function readType(req, res) {
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
-    headers.accept = 'application/json';
+    const headers = res.locals.headers;
     const typeName = req.params.type;
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
@@ -75,12 +63,12 @@ async function readType(req, res) {
         retry: 0
     };
 
-    debug("readType: ", req.path, options);
+    debug('readType: ', req.path, options);
     const response = await got(Constants.v2BrokerURL(req.path), options);
 
     res.statusCode = response.statusCode;
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
     }
     const v2Body = JSON.parse(response.body);
     if (!Constants.is2xxSuccessful(res.statusCode)) {

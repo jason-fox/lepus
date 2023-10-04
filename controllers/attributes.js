@@ -26,13 +26,7 @@ const Constants = require('../lib/constants');
  */
 
 async function listAttributes(req, res) {
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
-    headers.accept = 'application/json';
+    const headers = res.locals.headers;
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
 
@@ -43,12 +37,12 @@ async function listAttributes(req, res) {
         retry: 0
     };
 
-    debug("listAttributes: ", req.path, options);
+    debug('listAttributes: ', req.path, options);
     const response = await got(Constants.v2BrokerURL('/types'), options);
 
     res.statusCode = response.statusCode;
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
     }
 
     const v2Body = JSON.parse(response.body);
@@ -74,13 +68,7 @@ async function listAttributes(req, res) {
  */
 
 async function readAttribute(req, res) {
-    const headers = {};
-    const tenant = req.header('NGSILD-Tenant') || null;
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
-    if (tenant) {
-        headers['fiware-service'] = tenant;
-    }
-    headers.accept = 'application/json';
+    const headers = res.locals.headers;
     const attrName = req.params.attr;
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
@@ -91,12 +79,12 @@ async function readAttribute(req, res) {
         headers,
         retry: 0
     };
-    debug("readAttribute: ", req.path, options);
+    debug('readAttribute: ', req.path, options);
     const response = await got(Constants.v2BrokerURL('/types'), options);
 
     res.statusCode = response.statusCode;
-    if (tenant) {
-        res.set('NGSILD-Tenant', tenant);
+    if (res.locals.tenant) {
+        res.set('NGSILD-Tenant', res.locals.tenant);
     }
 
     const v2Body = JSON.parse(response.body);
