@@ -43,6 +43,7 @@ async function listSubscriptions(req, res) {
         retry: 0
     };
 
+    debug("listSubscriptions: ", req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions'), options);
 
     res.statusCode = response.statusCode;
@@ -94,6 +95,7 @@ async function readSubscription(req, res) {
         retry: 0
     };
 
+    debug("readSubscription: ", req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions/' + id), options);
     const v2Body = JSON.parse(response.body);
     res.statusCode = response.statusCode;
@@ -132,6 +134,7 @@ async function deleteSubscription(req, res) {
         retry: 0
     };
 
+    debug("deleteSubscription: ", req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions/' + id), options);
 
     res.statusCode = response.statusCode;
@@ -171,6 +174,7 @@ async function createSubscription(req, res) {
         json: v2Payload
     };
 
+    debug("createSubscription: ", req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions'), options);
 
     res.statusCode = response.statusCode;
@@ -212,6 +216,7 @@ async function updateSubscription(req, res) {
         json: v2Payload
     };
 
+    debug("updateSubscription: ", req.path, options);
     const response = await got(Constants.v2BrokerURL('/subscriptions/' + id), options);
 
     res.statusCode = response.statusCode;

@@ -42,6 +42,8 @@ async function listAttributes(req, res) {
         headers,
         retry: 0
     };
+
+    debug("listAttributes: ", req.path, options);
     const response = await got(Constants.v2BrokerURL('/types'), options);
 
     res.statusCode = response.statusCode;
@@ -89,6 +91,7 @@ async function readAttribute(req, res) {
         headers,
         retry: 0
     };
+    debug("readAttribute: ", req.path, options);
     const response = await got(Constants.v2BrokerURL('/types'), options);
 
     res.statusCode = response.statusCode;

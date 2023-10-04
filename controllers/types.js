@@ -35,6 +35,7 @@ async function listTypes(req, res) {
         retry: 0
     };
 
+    debug("listTypes: ", req.path, options);
     const response = await got(Constants.v2BrokerURL(req.path), options);
 
     res.statusCode = response.statusCode;
@@ -74,6 +75,7 @@ async function readType(req, res) {
         retry: 0
     };
 
+    debug("readType: ", req.path, options);
     const response = await got(Constants.v2BrokerURL(req.path), options);
 
     res.statusCode = response.statusCode;
