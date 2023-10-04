@@ -46,10 +46,6 @@ async function proxyResponse(req, res) {
     }
 
     const headers = res.locals.headers;
-
-    console.log(res.locals.headers);
-    console.log(headers);
-
     const options = {
         method: req.method,
         headers,
@@ -57,11 +53,10 @@ async function proxyResponse(req, res) {
         retry: 0
     };
 
-    console.log(options);
-
     if (req.query) {
         options.searchParams = req.query;
         delete options.searchParams.options;
+        delete options.searchParams.scopeQ;
 
         if (queryType.length > 1) {
             delete options.searchParams.type;

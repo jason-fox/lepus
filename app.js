@@ -32,15 +32,18 @@ app.use(function (req, res, next) {
     delete headers['link'];
 
     if (req.header('NGSILD-Tenant')) {
-    	res.locals.tenant = req.header('NGSILD-Tenant');
+        res.locals.tenant = req.header('NGSILD-Tenant');
         headers['fiware-service'] = res.locals.tenant;
-    	delete headers['ngsild-tenant'];
+        delete headers['ngsild-tenant'];
     }
 
-    if ( req.header('NGSILD-Path')) {
-    	res.locals.servicePath = req.header('NGSILD-Path');
-        headers['fiware-servicepath'] = res.locals.servicePath;
-        delete headers['ngsild-path'];
+    if (req.query.scopeQ) {
+        const scope = req.query.scopeQ;
+        const servicePath = scope.startsWith('/') ? scope : '/' + scope;
+        res.locals.servicePath = servicePath;
+        headers['fiware-servicepath'] = servicePath;
+    } else {
+        headers['fiware-servicepath'] = '/';
     }
 
     res.locals.headers = headers;
