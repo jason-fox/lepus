@@ -9,10 +9,11 @@ const _ = require('lodash');
 const NGSI_LD = require('../lib/ngsi-ld');
 const Constants = require('../lib/constants');
 const debug = require('debug')('adapter:notify');
+const timeout = process.env.NOTIFICATION_RELAY_TIMEOUT || 1000;
 
 const got = require('got').extend({
     timeout: {
-        request: 1000
+        request: timeout
     }
 });
 const moment = require('moment-timezone');

@@ -10,13 +10,13 @@ const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 const _ = require('lodash');
 
 const debug = require('debug')('adapter:types');
-const got = require('got').extend({
-    timeout: {
-        request: 1000
-    }
-});
 const NGSI_LD = require('../lib/ngsi-ld');
 const Constants = require('../lib/constants');
+const got = require('got').extend({
+    timeout: {
+        request: Constants.v2Timeout()
+    }
+});
 
 async function listTypes(req, res) {
     const headers = res.locals.headers;

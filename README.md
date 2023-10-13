@@ -164,8 +164,10 @@ Configuration occurs using Docker Environment variables:
 
   -   **DEBUG** - for debug output - e.g. `DEBUG=adapter:*`
   -   **NGSI_V2_CONTEXT_BROKER** for the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL - e.g. `NGSI_V2_CONTEXT_BROKER=http://orion2:1026/v2` 
+  -   **NGSI_V2_TIMEOUT** maximum length of time to access the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL in milliseconds
   -   **CONTEXT_URL** for the fixed JSON-LD `@context` to be supplied - e.g. `CONTEXT_URL=https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
   -   **NOTIFICATION_RELAY_URL** for the location of Lepus itself -  e.g. `NOTIFICATION_RELAY_URL=http://<lepus>/notify`
+  -   **NOTIFICATION_RELAY_TIMEOUT** maximum length of time to forward the **NGSI-LD** notification
 
 ## NGSI-LD Registration
 

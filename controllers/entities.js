@@ -6,11 +6,6 @@
  */
 
 const debug = require('debug')('adapter:entities');
-const got = require('got').extend({
-    timeout: {
-        request: 1000
-    }
-});
 const StatusCodes = require('http-status-codes').StatusCodes;
 const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 const _ = require('lodash');
@@ -18,6 +13,11 @@ const moment = require('moment-timezone');
 const path = require('node:path');
 const NGSI_LD = require('../lib/ngsi-ld');
 const Constants = require('../lib/constants');
+const got = require('got').extend({
+    timeout: {
+        request: Constants.v2Timeout()
+    }
+});
 
 /**
  * "Access Permitted" forwarding. Forward the proxied request and

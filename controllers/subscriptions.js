@@ -9,15 +9,14 @@ const StatusCodes = require('http-status-codes').StatusCodes;
 const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 const _ = require('lodash');
 const debug = require('debug')('adapter:subscriptions');
-const got = require('got').extend({
-    timeout: {
-        request: 1000
-    }
-});
-
 const Constants = require('../lib/constants');
 const NGSI_LD = require('../lib/ngsi-ld');
 const NGSI_V2 = require('../lib/ngsi-v2');
+const got = require('got').extend({
+    timeout: {
+        request: Constants.v2Timeout()
+    }
+});
 
 /**
  * /subscription proxying
