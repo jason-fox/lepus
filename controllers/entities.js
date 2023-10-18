@@ -116,9 +116,7 @@ async function proxyResponse(req, res) {
     }
     ldPayload = Constants.appendContext(ldPayload, isJSONLD);
     Constants.linkContext(res, isJSONLD);
-    if (!isJSONLD) {
-        res.type(!isJSONLD ? 'application/json' : 'application/json');
-    }
+    res.type(!isJSONLD ? 'application/json' : 'application/ld+json');
     return Constants.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
