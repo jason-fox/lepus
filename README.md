@@ -168,6 +168,7 @@ Configuration occurs using Docker Environment variables:
   -   **CONTEXT_URL** for the fixed JSON-LD `@context` to be supplied - e.g. `CONTEXT_URL=https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
   -   **NOTIFICATION_RELAY_URL** for the location of Lepus itself -  e.g. `NOTIFICATION_RELAY_URL=http://<lepus>/notify`
   -   **NOTIFICATION_RELAY_TIMEOUT** maximum length of time to forward the **NGSI-LD** notification
+  -   **INCLUDE_VALUE_TYPE** - include the NGSI-v2 attribute `type` in the returned payload
 
 ## NGSI-LD Registration
 

@@ -78,7 +78,7 @@ async function proxyResponse(req, res) {
         options.searchParams.metadata="dateCreated,dateModified";
     }
 
-    debug('proxyResponse: ', req.path, options);
+    //debug('proxyResponse: ', req.path, options);
     const response = await got(Constants.v2BrokerURL(req.path), options);
 
     res.statusCode = response.statusCode;
