@@ -68,11 +68,16 @@ function methodNotAllowedHandler(req, res) {
     });
 }
 
-//Entities
-router.route('/entities').get(tryCatch(entities.response)).all(methodNotAllowedHandler);
-router.route('/entities/:id').get(tryCatch(entities.response)).all(methodNotAllowedHandler);
-router.route('/entities/:id/attrs').get(tryCatch(entities.response)).all(methodNotAllowedHandler);
-router.route('/entities/:id/attrs/:attr').get(tryCatch(entities.response)).all(methodNotAllowedHandler);
+// Entities
+router.route('/entities').get(tryCatch(entities.read)).post(tryCatch(entities.create)).all(methodNotAllowedHandler);
+router
+    .route('/entities/:id')
+    .get(tryCatch(entities.read))
+    .delete(tryCatch(entities.delete))
+    .all(methodNotAllowedHandler);
+// Entity Attributes
+router.route('/entities/:id/attrs').get(tryCatch(entities.read)).all(methodNotAllowedHandler);
+router.route('/entities/:id/attrs/:attr').get(tryCatch(entities.read)).all(methodNotAllowedHandler);
 
 // Subscriptions
 router

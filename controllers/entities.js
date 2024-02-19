@@ -12,6 +12,7 @@ const _ = require('lodash');
 const moment = require('moment-timezone');
 const path = require('node:path');
 const NGSI_LD = require('../lib/ngsi-ld');
+const NGSI_V2 = require('../lib/ngsi-v2');
 const Constants = require('../lib/constants');
 const got = require('got').extend({
     timeout: {
@@ -20,13 +21,13 @@ const got = require('got').extend({
 });
 
 /**
- * "Access Permitted" forwarding. Forward the proxied request and
+ * Forward the proxied request to read data and
  * return the response.
  *
  * @param req - the incoming request
  * @param res - the response to return
  */
-async function proxyResponse(req, res) {
+async function readEntities(req, res) {
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const queryOptions = req.query.options ? req.query.options.split(',') : null;
@@ -75,10 +76,11 @@ async function proxyResponse(req, res) {
 
     if (transformFlags.sysAttrs) {
         options.searchParams = options.searchParams || {};
-        options.searchParams.metadata="dateCreated,dateModified";
+        options.searchParams.metadata = 'dateCreated,dateModified';
     }
 
-    //debug('proxyResponse: ', req.path, options);
+    //debug('readEntities: ', req.path, options);
+    console.log(Constants.v2BrokerURL(req.path), options);
     const response = await got(Constants.v2BrokerURL(req.path), options);
 
     res.statusCode = response.statusCode;
@@ -120,4 +122,57 @@ async function proxyResponse(req, res) {
     return Constants.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
-exports.response = proxyResponse;
+/**
+ * Forward the proxied request to create an entity and
+ * return the response.
+ *
+ * @param req - the incoming request
+ * @param res - the response to return
+ */
+async function createEntity(req, res) {
+    const headers = res.locals.headers;
+    const contentType = req.get('content-type') ? 'application/json' : undefined;
+
+    headers['content-type'] = contentType;
+    const options = {
+        method: req.method,
+        throwHttpErrors: false,
+        retry: 0,
+        json: NGSI_V2.formatEntity(req.body)
+    };
+
+    const response = await got(Constants.v2BrokerURL(req.path), options);
+    res.statusCode = response.statusCode;
+    const v2Body = response.body ? JSON.parse(response.body) : undefined;
+    const ldPayload = null;
+
+    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+}
+
+/**
+ * Forward the proxied request to delete an entity and
+ * return the response.
+ *
+ * @param req - the incoming request
+ * @param res - the response to return
+ */
+async function deleteEntity(req, res) {
+    const headers = res.locals.headers;
+    const contentType = undefined;
+    const options = {
+        method: req.method,
+        throwHttpErrors: false,
+        retry: 0
+    };
+
+    const response = await got(Constants.v2BrokerURL(req.path), options);
+    res.statusCode = response.statusCode;
+    const v2Body = response.body ? JSON.parse(response.body) : undefined;
+    const ldPayload = null;
+
+    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+}
+
+exports.read = readEntities;
+exports.create = createEntity;
+exports.delete = deleteEntity;
