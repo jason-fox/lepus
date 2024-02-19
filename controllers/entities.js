@@ -75,7 +75,7 @@ async function proxyResponse(req, res) {
 
     if (transformFlags.sysAttrs) {
         options.searchParams = options.searchParams || {};
-        options.searchParams.sysAttrs = 'true';
+        options.searchParams.metadata="dateCreated,dateModified";
     }
 
     debug('proxyResponse: ', req.path, options);
