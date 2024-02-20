@@ -76,11 +76,31 @@ async function readEntities(req, res) {
 
     if (transformFlags.sysAttrs) {
         options.searchParams = options.searchParams || {};
-        options.searchParams.metadata = 'dateCreated,dateModified';
+        options.searchParams.metadata = 'dateCreated,dateModified,*';
     }
 
-    //debug('readEntities: ', req.path, options);
-    console.log(Constants.v2BrokerURL(req.path), options);
+    if (options.searchParams) {
+        attrs = [];
+        if (options.searchParams.q) {
+            attrs.push('q=' + options.searchParams.q);
+        }
+        if (options.searchParams.options) {
+            attrs.push('options=' + options.searchParams.options);
+        }
+        if (options.searchParams.type) {
+            attrs.push('type=' + options.searchParams.type);
+        }
+        if (options.searchParams.id) {
+            attrs.push('id=' + options.searchParams.id);
+        }
+        if (options.searchParams.attrs) {
+            attrs.push('attrs=' + options.searchParams.attrs);
+        }
+
+        debug(req.method, Constants.v2BrokerURL(req.path) + '?' + attrs.join('&'));
+    } else {
+        debug(req.method, Constants.v2BrokerURL(req.path));
+    }
     const response = await got(Constants.v2BrokerURL(req.path), options);
 
     res.statusCode = response.statusCode;
@@ -130,6 +150,7 @@ async function readEntities(req, res) {
  * @param res - the response to return
  */
 async function createEntity(req, res) {
+    debug(req.method, Constants.v2BrokerURL(req.path));
     const headers = res.locals.headers;
     const contentType = req.get('content-type') ? 'application/json' : undefined;
 
@@ -157,6 +178,7 @@ async function createEntity(req, res) {
  * @param res - the response to return
  */
 async function deleteEntity(req, res) {
+    debug(req.method, Constants.v2BrokerURL(req.path));
     const headers = res.locals.headers;
     const contentType = undefined;
     const options = {
@@ -173,6 +195,64 @@ async function deleteEntity(req, res) {
     return Constants.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
+/**
+ * Forward the proxied request to update an entity and
+ * return the response.
+ *
+ * @param req - the incoming request
+ * @param res - the response to return
+ */
+async function updateEntity(req, res) {
+    debug(req.method, Constants.v2BrokerURL(req.path));
+    const headers = res.locals.headers;
+    const contentType = req.get('content-type') ? 'application/json' : undefined;
+
+    headers['content-type'] = contentType;
+    const options = {
+        method: req.method,
+        throwHttpErrors: false,
+        retry: 0,
+        json: NGSI_V2.formatEntity(req.body)
+    };
+
+    const response = await got(Constants.v2BrokerURL(req.path), options);
+    res.statusCode = response.statusCode;
+    const v2Body = response.body ? JSON.parse(response.body) : undefined;
+    const ldPayload = null;
+
+    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+}
+
+/**
+ * Forward the proxied request to update an entity and
+ * return the response.
+ *
+ * @param req - the incoming request
+ * @param res - the response to return
+ */
+async function updateEntityAttribute(req, res) {
+    debug('PUT', Constants.v2BrokerURL(req.path));
+    const headers = res.locals.headers;
+    const contentType = req.get('content-type') ? 'application/json' : undefined;
+
+    headers['content-type'] = contentType;
+    const options = {
+        method: 'PUT',
+        throwHttpErrors: false,
+        retry: 0,
+        json: NGSI_V2.formatAttribute(req.body)
+    };
+
+    const response = await got(Constants.v2BrokerURL(req.path), options);
+    res.statusCode = response.statusCode;
+    const v2Body = response.body ? JSON.parse(response.body) : undefined;
+    const ldPayload = null;
+
+    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+}
+
 exports.read = readEntities;
 exports.create = createEntity;
+exports.update = updateEntity;
+exports.updateAttr = updateEntityAttribute;
 exports.delete = deleteEntity;

@@ -12,6 +12,7 @@ const entities = require('../controllers/entities');
 const subscriptions = require('../controllers/subscriptions');
 const notify = require('../controllers/notify');
 const types = require('../controllers/types');
+const batch = require('../controllers/batchOperations');
 const attributes = require('../controllers/attributes');
 const StatusCodes = require('http-status-codes').StatusCodes;
 const getReasonPhrase = require('http-status-codes').getReasonPhrase;
@@ -76,8 +77,17 @@ router
     .delete(tryCatch(entities.delete))
     .all(methodNotAllowedHandler);
 // Entity Attributes
-router.route('/entities/:id/attrs').get(tryCatch(entities.read)).all(methodNotAllowedHandler);
-router.route('/entities/:id/attrs/:attr').get(tryCatch(entities.read)).all(methodNotAllowedHandler);
+router
+    .route('/entities/:id/attrs')
+    .get(tryCatch(entities.read))
+    .post(tryCatch(entities.create))
+    .patch(tryCatch(entities.update))
+    .all(methodNotAllowedHandler);
+router
+    .route('/entities/:id/attrs/:attr')
+    .get(tryCatch(entities.read))
+    .patch(tryCatch(entities.updateAttr))
+    .all(methodNotAllowedHandler);
 
 // Subscriptions
 router
@@ -103,6 +113,12 @@ router.route('/attributes/:attr').get(tryCatch(attributes.read)).all(methodNotAl
 
 // Notifications
 router.route('/notify').post(tryCatch(notify.notify)).all(methodNotAllowedHandler);
+
+// Batch Operations
+router.route('/entityOperations/create').post(tryCatch(batch.create)).all(methodNotAllowedHandler);
+router.route('/entityOperations/upsert').post(tryCatch(batch.upsert)).all(methodNotAllowedHandler);
+router.route('/entityOperations/update').post(tryCatch(batch.update)).all(methodNotAllowedHandler);
+router.route('/entityOperations/delete').post(tryCatch(batch.upsert)).all(methodNotAllowedHandler);
 
 // All other routes
 router.route('/*').all(methodNotAllowedHandler);
