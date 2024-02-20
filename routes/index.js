@@ -87,6 +87,7 @@ router
     .route('/entities/:id/attrs/:attr')
     .get(tryCatch(entities.read))
     .patch(tryCatch(entities.updateAttr))
+    .delete(tryCatch(entities.deleteAttr))
     .all(methodNotAllowedHandler);
 
 // Subscriptions

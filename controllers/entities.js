@@ -224,7 +224,7 @@ async function updateEntity(req, res) {
 }
 
 /**
- * Forward the proxied request to update an entity and
+ * Forward the proxied request to update an entity attribute and
  * return the response.
  *
  * @param req - the incoming request
@@ -251,8 +251,34 @@ async function updateEntityAttribute(req, res) {
     return Constants.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
+/**
+ * Forward the proxied request to delete an entity attribute and
+ * return the response.
+ *
+ * @param req - the incoming request
+ * @param res - the response to return
+ */
+async function deleteEntityAttribute(req, res) {
+    debug(req.method, Constants.v2BrokerURL(req.path));
+    const headers = res.locals.headers;
+    const contentType = undefined;
+    const options = {
+        method: req.method,
+        throwHttpErrors: false,
+        retry: 0
+    };
+
+    const response = await got(Constants.v2BrokerURL(req.path), options);
+    res.statusCode = response.statusCode;
+    const v2Body = response.body ? JSON.parse(response.body) : undefined;
+    const ldPayload = null;
+
+    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+}
+
 exports.read = readEntities;
 exports.create = createEntity;
 exports.update = updateEntity;
 exports.updateAttr = updateEntityAttribute;
 exports.delete = deleteEntity;
+exports.deleteAttr = deleteEntityAttribute;
