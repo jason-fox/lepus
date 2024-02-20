@@ -74,6 +74,7 @@ router.route('/entities').get(tryCatch(entities.read)).post(tryCatch(entities.cr
 router
     .route('/entities/:id')
     .get(tryCatch(entities.read))
+    .put(tryCatch(entities.overwrite))
     .delete(tryCatch(entities.delete))
     .all(methodNotAllowedHandler);
 // Entity Attributes
@@ -88,6 +89,7 @@ router
     .get(tryCatch(entities.read))
     .patch(tryCatch(entities.updateAttr))
     .delete(tryCatch(entities.deleteAttr))
+    .put(tryCatch(entities.overwriteAttr))
     .all(methodNotAllowedHandler);
 
 // Subscriptions

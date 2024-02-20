@@ -35,23 +35,54 @@ All NGSI-v2 response attributes are converted to `Property` or `Relationship` an
 
 The following endpoints are supported as defined in the latest [NGSI-LD Specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf)
 
--   **GET**  `/entities/`- Query entities  §5.7.2; §6.4.3.2
+#### Entities
+
+-   **GET**  `/entities/` - Query entities  - §5.7.2; §6.4.3.2
+-   **POST**  `/entities/` - Entity creation  - §5.6.1; §6.4.3.1
+<br/>
+
 -   **GET** `/entities/{entityId}` - Entity retrieval by id  - §5.7.1; §6.5.3.1
+> -   **PATCH** `/entities/{entityId}` - Merge Entity  - §5.6.17; §6.5.3.4 ❌
+-   **PUT** `/entities/{entityId}` - Replace Entity  - §5.6.17; §6.5.3.3
+-   **DELETE** `/entities/{entityId}` - Entity retrieval by id  - §5.6.6; §6.5.3.2
 <br/>
 
--   **POST** `/subscriptions/` - Create Subscription  §5.8.1;  §6.10.3.1
--   **GET**  ` /subscriptions/` - Retrieve list of Subscriptions  §5.8.4;  §6.10.3.2
--   **GET** `/subscriptions/{subscriptionId}` - Subscription retrieval by id  §5.8.3;  §6.11.3.1
--   **PATCH** `/subscriptions/{subscriptionId}` - Subscription update by id  §5.8.2;  §6.11.3.2
--   **DELETE** `/subscriptions/{subscriptionId}` - Subscription deletion by id  §5.8.5;  §6.11.3.3
+-   **POST** `/entities/{entityId}/attrs` - Append Entity attributes - §5.6.3; §6.6.3.1
+-   **PATCH** `/entities/{entityId}/attrs` - Update Entity attributes  - §5.6.2; §6.6.3.2
+<br>
+
+-   **DELETE** `/entities/{entityId}/{attr}` - Delete Entity attribute - §5.6.5; §6.7.3.2
+-   **PUT** `/entities/{entityId}/{attr}` - Replace Entity attribute - §5.6.19; §6.7.3.3
 <br/>
 
--   **GET** ` /types/` - Retrieve available entity types  §5.7.5; §d5.7.6; §6.25.3.1
--   **GET** ` /types/{type}` -  Details about available entity type §5.7.7; §6.26.3.1
+#### Subscriptions
+
+-   **POST** `/subscriptions/` - Create Subscription  - §5.8.1;  §6.10.3.1
+-   **GET**  ` /subscriptions/` - Retrieve list of Subscriptions  - §5.8.4;  §6.10.3.2
+-   **GET** `/subscriptions/{subscriptionId}` - Subscription retrieval by id  - §5.8.3;  §6.11.3.1
+-   **PATCH** `/subscriptions/{subscriptionId}` - Subscription update by id  - §5.8.2;  §6.11.3.2
+-   **DELETE** `/subscriptions/{subscriptionId}` - Subscription deletion by id  - §5.8.5;  §6.11.3.3
 <br/>
 
--   **GET** ` /attributes/` - Available attributes §5.7.8; §5.7.9; §6.27.3.1
--   **GET** `/attributes/{attrId}` - Details about available attribute §5.7.10; §6.28.3.1
+#### Types
+
+-   **GET** ` /types/` - Retrieve available entity types  - §5.7.5; §5.7.6; §6.25.3.1
+-   **GET** ` /types/{type}` -  Details about available entity type  - §5.7.7; §6.26.3.1
+<br/>
+
+#### Attributes
+
+-   **GET** ` /attributes/` - Available attributes  - §5.7.8; §5.7.9; §6.27.3.1
+-   **GET** `/attributes/{attrId}` - Details about available attribute - §5.7.10; §6.28.3.1
+
+#### Batch Operations
+
+-   **POST** `/entityOperations/create` - Batch Entity creation  - §5.6.7; 6.14.3.1
+-   **POST** `/entityOperations/upsert` - Batch Entity create or update (upsert)  - §5.6.8; §6.15.3.1
+-   **POST** `/entityOperations/update` - Batch Entity update - §5.6.9; §6.16.3.1
+-   **POST** `/entityOperations/delete` - Batch Entity deletion  - §5.6.10; §6.17.3.1
+> -   **POST** `/entityOperations/query` - Query entities based on POST - §5.7.2; §6.23.3.1 ❌
+> -   **POST** `/entityOperations/merge` - Batch Entity merge - §5.6.20; §6.31.3.1  ❌
 
 Internally 
 
