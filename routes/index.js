@@ -75,6 +75,7 @@ router
     .route('/entities/:id')
     .get(tryCatch(entities.read))
     .put(tryCatch(entities.overwrite))
+    .patch(tryCatch(entities.merge))
     .delete(tryCatch(entities.delete))
     .all(methodNotAllowedHandler);
 // Entity Attributes

@@ -28,7 +28,7 @@ curl -L '<ngsi-v2-context-broker>/v2/entities?type=Store&q=nameEinkauf' \
 -H 'Accept: application/json'
 ```
 
-All NGSI-v2 response attributes are converted to `Property` or `Relationship` and a fixed `@context` added to the body or `Link` header.
+All NGSI-v2 response attributes are converted to `Property` or `Relationship` (or subtype) and a fixed `@context` added to the body or `Link` header.
 
 
 ### Supported Endpoints
@@ -42,7 +42,7 @@ The following endpoints are supported as defined in the latest [NGSI-LD Specific
 <br/>
 
 -   **GET** `/entities/{entityId}` - Entity retrieval by id  - §5.7.1; §6.5.3.1
-> -   **PATCH** `/entities/{entityId}` - Merge Entity  - §5.6.17; §6.5.3.4 ❌
+-   **PATCH** `/entities/{entityId}` - Merge Entity  - §5.6.17; §6.5.3.4
 -   **PUT** `/entities/{entityId}` - Replace Entity  - §5.6.17; §6.5.3.3
 -   **DELETE** `/entities/{entityId}` - Entity retrieval by id  - §5.6.6; §6.5.3.2
 <br/>

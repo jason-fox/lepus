@@ -46,7 +46,7 @@ async function readEntities(req, res) {
         v2queryOptions = _.without(queryOptions, 'concise', 'sysAttrs');
     }
 
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: req.method,
         headers,
@@ -151,14 +151,14 @@ async function readEntities(req, res) {
  */
 async function createEntity(req, res) {
     debug(req.method, Constants.v2BrokerURL(req.path));
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: req.method,
         throwHttpErrors: false,
         retry: 0,
+        headers,
         json: NGSI_V2.formatEntity(req.body)
     };
-
     const response = await got(Constants.v2BrokerURL(req.path), options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
@@ -174,9 +174,10 @@ async function createEntity(req, res) {
  */
 async function deleteEntity(req, res) {
     debug('DELETE', Constants.v2BrokerURL(req.path));
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'DELETE',
+        headers,
         throwHttpErrors: false,
         retry: 0
     };
@@ -196,9 +197,10 @@ async function deleteEntity(req, res) {
  */
 async function updateEntity(req, res) {
     debug('PATCH', Constants.v2BrokerURL(req.path));
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'PATCH',
+        headers,
         throwHttpErrors: false,
         retry: 0,
         json: NGSI_V2.formatEntity(req.body)
@@ -220,17 +222,83 @@ async function updateEntity(req, res) {
  */
 async function replaceEntity(req, res) {
     debug('PUT', Constants.v2BrokerURL(path.join(req.path, 'attrs')));
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'PUT',
+        headers,
         throwHttpErrors: false,
         retry: 0,
         json: NGSI_V2.formatEntity(req.body)
     };
 
+    delete options.json.type;
+
     const response = await got(Constants.v2BrokerURL(path.join(req.path, 'attrs')), options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
+    return Constants.sendResponse(res, v2Body);
+}
+
+/**
+ * Forward the proxied request to merge an entity and
+ * return the response.
+ *
+ * @param req - the incoming request
+ * @param res - the response to return
+ */
+async function mergeEntity(req, res) {
+    debug('PUT', Constants.v2BrokerURL(path.join(req.path, 'attrs')));
+    const headers = NGSI_V2.setHeaders(res);
+
+    const optionsGet = {
+        method: 'GET',
+        headers,
+        throwHttpErrors: false,
+        retry: 0
+    };
+    const responseGet = await got(Constants.v2BrokerURL(req.path), optionsGet);
+
+    if (responseGet.statusCode === 404) {
+        res.set('Content-Type', 'application/json');
+        res.type('application/json');
+        return res.status(StatusCodes.NOT_FOUND).send({
+            type: 'https://uri.etsi.org/ngsi-ld/errors/ResourceNotFound',
+            title: getReasonPhrase(StatusCodes.NOT_FOUND),
+            detail: `${req.path}`
+        });
+    }
+
+    const mergeObject = NGSI_LD.normalizeEntity(req.body);
+    const entity = NGSI_LD.formatEntity(JSON.parse(responseGet.body));
+    const mergedEntity = _.merge(entity, mergeObject);
+
+    Object.keys(req.body).forEach(function (key) {
+        if (req.body[key] === 'urn:ngsi-ld:null') {
+            delete mergedEntity[key];
+        } else {
+            Object.keys(req.body[key]).forEach(function (metadataKey) {
+                if (req.body[key][metadataKey] === 'urn:ngsi-ld:null') {
+                    delete mergedEntity[key][metadataKey];
+                }
+            });
+        }
+    });
+
+    const v2mergedEntity = NGSI_V2.formatEntity(mergedEntity);
+    delete v2mergedEntity.type;
+    delete v2mergedEntity.id;
+
+    const optionsPut = {
+        method: 'PUT',
+        headers,
+        throwHttpErrors: false,
+        retry: 0,
+        json: v2mergedEntity
+    };
+
+    const responsePut = await got(Constants.v2BrokerURL(path.join(req.path, 'attrs')), optionsPut);
+    res.statusCode = responsePut.statusCode;
+    const v2Body = responsePut.body ? JSON.parse(responsePut.body) : undefined;
     return Constants.sendResponse(res, v2Body);
 }
 
@@ -242,21 +310,17 @@ async function replaceEntity(req, res) {
  * @param res - the response to return
  */
 async function updateEntityAttribute(req, res) {
-
     debug('PATCH', Constants.v2BrokerURL(path.join('/entities', req.params.id, 'attrs')));
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'PATCH',
+        headers,
         throwHttpErrors: false,
         retry: 0,
         json: {}
     };
 
-
     options.json[req.params.attr] = NGSI_V2.formatAttribute(req.body);
-
-    console.log(Constants.v2BrokerURL(path.join('/entities', req.params.id, 'attrs')))
-    console.log(  options.json)  
     const response = await got(Constants.v2BrokerURL(path.join('/entities', req.params.id, 'attrs')), options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
@@ -272,9 +336,10 @@ async function updateEntityAttribute(req, res) {
  */
 async function replaceEntityAttribute(req, res) {
     debug('PUT', Constants.v2BrokerURL(req.path));
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'PUT',
+        headers,
         throwHttpErrors: false,
         retry: 0,
         json: NGSI_V2.formatAttribute(req.body)
@@ -296,9 +361,10 @@ async function replaceEntityAttribute(req, res) {
  */
 async function deleteEntityAttribute(req, res) {
     debug('DELETE', Constants.v2BrokerURL(req.path));
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'DELETE',
+        headers,
         throwHttpErrors: false,
         retry: 0
     };
@@ -312,9 +378,10 @@ async function deleteEntityAttribute(req, res) {
 
 exports.read = readEntities;
 exports.create = createEntity;
-exports.update = updateEntity;
-exports.overwrite = replaceEntity;
-exports.updateAttr = updateEntityAttribute;
 exports.delete = deleteEntity;
+exports.merge = mergeEntity;
+exports.overwrite = replaceEntity;
+exports.update = updateEntity;
+exports.updateAttr = updateEntityAttribute;
 exports.deleteAttr = deleteEntityAttribute;
 exports.overwriteAttr = replaceEntityAttribute;
