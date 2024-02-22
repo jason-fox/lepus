@@ -22,6 +22,15 @@ function errorHandler(error, req, res, next) {
     res.status(error.statusCode || 400).send(error);
 }
 
+function optionsHandler(req, res, next, options = 'GET,OPTIONS', acceptPatch) {
+    if (acceptPatch) {
+        res.header('Accept-Patch', acceptPatch);
+    }
+
+    res.header('Allow', options);
+    res.status(StatusCodes.OK).send();
+}
+
 const tryCatch = (controller) => async (req, res, next) => {
     try {
         await controller(req, res);
@@ -70,13 +79,30 @@ function methodNotAllowedHandler(req, res) {
 }
 
 // Entities
-router.route('/entities').get(tryCatch(entities.read)).post(tryCatch(entities.create)).all(methodNotAllowedHandler);
+router
+    .route('/entities')
+    .get(tryCatch(entities.read))
+    .post(tryCatch(entities.create))
+    .delete(tryCatch(entities.purge))
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'GET,POST,DELETE,OPTIONS');
+    })
+    .all(methodNotAllowedHandler);
 router
     .route('/entities/:id')
     .get(tryCatch(entities.read))
     .put(tryCatch(entities.overwrite))
     .patch(tryCatch(entities.merge))
     .delete(tryCatch(entities.delete))
+    .options((req, res, next) => {
+        optionsHandler(
+            req,
+            res,
+            next,
+            'GET,PATCH,PUT,DELETE,OPTIONS',
+            'application/json, application/ld+json, application/merge-patch+json'
+        );
+    })
     .all(methodNotAllowedHandler);
 // Entity Attributes
 router
@@ -84,6 +110,9 @@ router
     .get(tryCatch(entities.read))
     .post(tryCatch(entities.create))
     .patch(tryCatch(entities.update))
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'GET,PATCH,POST,OPTIONS', 'application/json, application/ld+json');
+    })
     .all(methodNotAllowedHandler);
 router
     .route('/entities/:id/attrs/:attr')
@@ -91,6 +120,9 @@ router
     .patch(tryCatch(entities.updateAttr))
     .delete(tryCatch(entities.deleteAttr))
     .put(tryCatch(entities.overwriteAttr))
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'GET,PATCH,PUT,DELETE,OPTIONS', 'application/json, application/ld+json');
+    })
     .all(methodNotAllowedHandler);
 
 // Subscriptions
@@ -98,6 +130,9 @@ router
     .route('/subscriptions')
     .get(tryCatch(subscriptions.list))
     .post(tryCatch(subscriptions.create))
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'GET,POST,OPTIONS');
+    })
     .all(methodNotAllowedHandler);
 
 router
@@ -105,24 +140,51 @@ router
     .get(tryCatch(subscriptions.read))
     .delete(tryCatch(subscriptions.delete))
     .patch(tryCatch(subscriptions.update))
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'GET,PATCH,DELETE,OPTIONS');
+    })
     .all(methodNotAllowedHandler);
 
 // Types
-router.route('/types').get(tryCatch(types.list)).all(methodNotAllowedHandler);
-router.route('/types/:type').get(tryCatch(types.read)).all(methodNotAllowedHandler);
+router.route('/types').get(tryCatch(types.list)).options(optionsHandler).all(methodNotAllowedHandler);
+router.route('/types/:type').get(tryCatch(types.read)).options(optionsHandler).all(methodNotAllowedHandler);
 
 // Attributes
-router.route('/attributes').get(tryCatch(attributes.list)).all(methodNotAllowedHandler);
-router.route('/attributes/:attr').get(tryCatch(attributes.read)).all(methodNotAllowedHandler);
+router.route('/attributes').get(tryCatch(attributes.list)).options(optionsHandler).all(methodNotAllowedHandler);
+router.route('/attributes/:attr').get(tryCatch(attributes.read)).options(optionsHandler).all(methodNotAllowedHandler);
 
 // Notifications
 router.route('/notify').post(tryCatch(notify.notify)).all(methodNotAllowedHandler);
 
 // Batch Operations
-router.route('/entityOperations/create').post(tryCatch(batch.create)).all(methodNotAllowedHandler);
-router.route('/entityOperations/upsert').post(tryCatch(batch.upsert)).all(methodNotAllowedHandler);
-router.route('/entityOperations/update').post(tryCatch(batch.update)).all(methodNotAllowedHandler);
-router.route('/entityOperations/delete').post(tryCatch(batch.upsert)).all(methodNotAllowedHandler);
+router
+    .route('/entityOperations/create')
+    .post(tryCatch(batch.create))
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'POST,OPTIONS');
+    })
+    .all(methodNotAllowedHandler);
+router
+    .route('/entityOperations/upsert')
+    .post(tryCatch(batch.upsert))
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'POST,OPTIONS');
+    })
+    .all(methodNotAllowedHandler);
+router
+    .route('/entityOperations/update')
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'POST,OPTIONS');
+    })
+    .post(tryCatch(batch.update))
+    .all(methodNotAllowedHandler);
+router
+    .route('/entityOperations/delete')
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'POST,OPTIONS');
+    })
+    .post(tryCatch(batch.upsert))
+    .all(methodNotAllowedHandler);
 
 // All other routes
 router.route('/*').all(methodNotAllowedHandler);

@@ -376,10 +376,78 @@ async function deleteEntityAttribute(req, res) {
     return Constants.sendResponse(res, v2Body);
 }
 
+/**
+ * Forward the proxied request to delete entities based on q and
+ * pick/omit
+ *
+ * @param req - the incoming request
+ * @param res - the response to return
+ */
+async function purgeEntities(req, res) {
+    const isJSONLD = req.get('Accept') === 'application/ld+json';
+    const queryOptions = req.query.options ? req.query.options.split(',') : null;
+    const queryAttrs = req.query.attrs ? req.query.attrs.split(',') : null;
+    const queryType = req.query.type ? req.query.type.split(',') : [];
+    const queryQ = req.query.q;
+
+    const headers = NGSI_V2.setHeaders(res);
+    const options = {
+        method: req.method,
+        headers,
+        throwHttpErrors: false,
+        retry: 0
+    };
+
+    options.searchParams = req.query;
+    delete options.searchParams.options;
+    delete options.searchParams.scopeQ;
+
+    if (queryType.length > 1) {
+        delete options.searchParams.type;
+    }
+    if (v2queryOptions && v2queryOptions.length > 0) {
+        options.searchParams.options = v2queryOptions.join(',');
+    }
+
+    if (queryAttrs && queryAttrs.length > 0) {
+        options.searchParams.attrs = queryAttrs.join(',');
+    }
+    if (queryQ) {
+        options.searchParams.q = queryQ.replace(/"/gi, '').replace(/%22/gi, '');
+    }
+
+    if (options.searchParams) {
+        attrs = [];
+        if (options.searchParams.q) {
+            attrs.push('q=' + options.searchParams.q);
+        }
+        if (options.searchParams.options) {
+            attrs.push('options=' + options.searchParams.options);
+        }
+        if (options.searchParams.type) {
+            attrs.push('type=' + options.searchParams.type);
+        }
+        if (options.searchParams.id) {
+            attrs.push('id=' + options.searchParams.id);
+        }
+        if (options.searchParams.attrs) {
+            attrs.push('attrs=' + options.searchParams.attrs);
+        }
+
+        debug(req.method, Constants.v2BrokerURL(req.path) + '?' + attrs.join('&'));
+    }
+
+    const response = await got(Constants.v2BrokerURL(req.path), options);
+    const v2Body = JSON.parse(response.body);
+
+    return v2Body;
+}
+
 exports.read = readEntities;
 exports.create = createEntity;
 exports.delete = deleteEntity;
 exports.merge = mergeEntity;
+exports.purge = purgeEntities;
 exports.overwrite = replaceEntity;
 exports.update = updateEntity;
 exports.updateAttr = updateEntityAttribute;
