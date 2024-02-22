@@ -39,6 +39,7 @@ The following endpoints are supported as defined in the latest [NGSI-LD Specific
 
 -   **GET**  `/entities/` - Query entities  - §5.7.2; §6.4.3.2
 -   **POST**  `/entities/` - Entity creation  - §5.6.1; §6.4.3.1
+-   **DELETE**  `/entities/` - Purge Entities
 <br/>
 
 -   **GET** `/entities/{entityId}` - Entity retrieval by id  - §5.7.1; §6.5.3.1
