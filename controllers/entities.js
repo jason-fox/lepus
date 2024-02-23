@@ -16,7 +16,6 @@ const NGSI_V2 = require('../lib/ngsi-v2');
 const Config = require('../lib/configService');
 const Request = require('../lib/request');
 
-
 /**
  * Forward the proxied request to read data and
  * return the response.
@@ -29,14 +28,17 @@ async function readEntities(req, res) {
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const queryOptions = req.query.options ? req.query.options.split(',') : null;
+    const queryFormat = req.query.format;
     const queryAttrs = req.query.attrs ? req.query.attrs.split(',') : null;
     const queryType = req.query.type ? req.query.type.split(',') : [];
     const queryQ = req.query.q;
 
     const transformFlags = {};
     transformFlags.sysAttrs = !!(queryOptions && queryOptions.includes('sysAttrs'));
-    transformFlags.concise = !!(queryOptions && queryOptions.includes('concise'));
-    transformFlags.keyValues = !!(queryOptions && queryOptions.includes('keyValues'));
+    transformFlags.concise = !!(queryOptions && queryOptions.includes('concise')) || queryFormat === 'concise';
+    transformFlags.keyValues =
+        !!(queryOptions && (queryOptions.includes('keyValues') || queryOptions.includes('simplified'))) ||
+        (queryFormat === 'keyValues') | (queryFormat === 'simplified');
     transformFlags.attrsOnly = req.path.split(path.sep).includes('attrs');
     transformFlags.pick = req.query.pick;
     transformFlags.omit = req.query.omit;
@@ -59,6 +61,9 @@ async function readEntities(req, res) {
         options.searchParams = req.query;
         delete options.searchParams.options;
         delete options.searchParams.scopeQ;
+        delete options.searchParams.pick;
+        delete options.searchParams.omit;
+        delete options.searchParams.format;
 
         if (queryType.length > 1) {
             delete options.searchParams.type;
@@ -111,7 +116,7 @@ async function readEntities(req, res) {
     if (res.locals.servicePath) {
         res.set('NGSILD-Path', res.locals.servicePath);
     }
-    const v2Body = JSON.parse(response.body);
+    const v2Body =  response.body ? JSON.parse(response.body) : {};
     const type = v2Body.type;
     if (!Request.is2xxSuccessful(res.statusCode)) {
         return Request.sendError(res, v2Body);
@@ -444,7 +449,7 @@ async function purgeEntities(req, res) {
             attrs.push('attrs=' + optionsGet.searchParams.attrs);
         }
 
-        debug('GET', req.path  + '?' + attrs.join('&'));
+        debug('GET', req.path + '?' + attrs.join('&'));
     } else {
         debug('GET', req.path);
     }

@@ -5,7 +5,17 @@
   "scripts": {
     "start": "node ./bin/www",
     "lint": "eslint lib/ bin/www --cache --fix",
-    "prettier": "prettier --config .prettierrc.json --write **/**/*.js  **/*.js *.js"
+    "prettier": "prettier --config .prettierrc.json --write **/**/*.js  **/*.js *.js",
+    "test:single": "nyc --reporter=text mocha --recursive 'test/**/*.js' --reporter spec --timeout 5000 --ui bdd --exit  --color true -g 'When no entity is found'",
+    "test:html": "nyc --reporter=html mocha -- --recursive 'test/**/*.js' --reporter spec --exit",
+    
+
+    "test": "nyc --reporter=text mocha --recursive 'test/**/*.js' --reporter spec --timeout 5000 --ui bdd --exit  --color true",
+    "test:coverage": "nyc --reporter=lcov mocha -- --recursive 'test/**/*.js' --reporter spec --exit",
+    "test:coveralls": "npm run test:coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
+  },
+  "bugs": {
+    "url": "https://github.com/jason-fox/lepus/issues"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
@@ -18,12 +28,17 @@
     "moment-timezone": "~0.5.43",
     "morgan": "~1.10.0",
     "nocache": "^4.0.0",
+    "timekeeper": "^2.3.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "~8.46.0",
     "eslint-config-tamia": "~8.1.0",
     "eslint-plugin-prettier": "~5.0.0",
-    "prettier": "~3.0.0"
+    "mocha": "8.0.1",
+    "nock": "13.0.3",
+    "nyc": "~15.1.0",
+    "prettier": "~3.0.0",
+    "should": "13.2.3"
   }
 }

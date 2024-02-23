@@ -1,9 +1,14 @@
+/*
+ * Copyright 2023 -  FIWARE Foundation e.V.
+ *
+ * This file is part of NGSI-LD to NGSI-v2 Adapter
+ *
+ */
 const debug = require('debug')('adapter:batch');
 const _ = require('lodash');
 const NGSI_V2 = require('../lib/ngsi-v2');
 const Config = require('../lib/configService');
 const Request = require('../lib/request');
-
 
 /**
  * Forward the proxied request to create an entity and

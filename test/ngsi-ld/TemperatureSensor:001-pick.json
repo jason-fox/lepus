@@ -1,0 +1,11 @@
+{
+    "category": {
+        "type": "Property",
+        "value": "sensor"
+    },
+    "temperature": {
+        "type": "Property",
+        "value": 25,
+        "unitCode": "CEL"
+    }
+}

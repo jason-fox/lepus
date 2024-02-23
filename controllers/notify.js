@@ -17,13 +17,11 @@ const util = require('util');
 const StatusCodes = require('http-status-codes').StatusCodes;
 const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 
-
 const got = require('got').extend({
     timeout: {
         request: Config.getConfig().relayTimeout
     }
 });
-
 
 async function notify(req, res) {
     const target = req.get('Target');
@@ -61,7 +59,9 @@ async function notify(req, res) {
 
     if (!isJSONLD) {
         options.headers['Link'] =
-            '<' + Config.getConfig().userContext + '>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
+            '<' +
+            Config.getConfig().userContext +
+            '>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
     }
 
     debug('notify: ', req.path, options);

@@ -1,0 +1,68 @@
+{
+    "id": "urn:ngsi-ld:TemperatureSensor:001",
+    "type": "TemperatureSensor",
+    "batteryLevel": {
+        "type": "Property",
+        "value": 0.8,
+        "metadata": {
+            "unitCode": {
+                "type": "Property",
+                "value": "C62"
+            },
+            "dateCreated": {
+                "type": "DateTime",
+                "value": "2024-02-22T01:00:00.00Z"
+            },
+            "dateModified": {
+                "type": "DateTime",
+                "value": "2024-02-22T01:00:00.00Z"
+            }
+        }
+    },
+    "category": {
+        "type": "Property",
+        "value": "sensor",
+        "metadata": {
+            "dateCreated": {
+                "type": "DateTime",
+                "value": "2024-02-22T01:00:00Z"
+            },
+            "dateModified": {
+                "type": "DateTime",
+                "value": "2024-02-22T01:00:00Z"
+            }
+        }
+    },
+    "controlledAsset": {
+        "type": "Relationship",
+        "value": "urn:ngsi-ld:Building:barn002",
+        "metadata": {
+            "dateCreated": {
+                "type": "DateTime",
+                "value": "2024-02-22T01:00:00.00Z"
+            },
+            "dateModified": {
+                "type": "DateTime",
+                "value": "2024-02-22T01:00:00.00Z"
+            }
+        }
+    },
+    "temperature": {
+        "type": "Property",
+        "value": 25,
+        "metadata": {
+            "unitCode": {
+                "type": "Property",
+                "value": "CEL"
+            },
+            "dateCreated": {
+                "type": "DateTime",
+                "value": "2024-01-11T01:00:00Z"
+            },
+            "dateModified": {
+                "type": "DateTime",
+                "value": "2024-02-22T01:00:00Z"
+            }
+        }
+    }
+}

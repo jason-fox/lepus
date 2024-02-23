@@ -13,7 +13,6 @@ const debug = require('debug')('adapter:attributes');
 const NGSI_LD = require('../lib/ngsi-ld');
 const Constants = require('../lib/constants');
 
-
 /**
  * /attributes proxying
  *
@@ -76,7 +75,7 @@ async function readAttribute(req, res) {
         retry: 0
     };
     debug('readAttribute: ', req.path, options);
-    const response = await Request.sendRequest(('/types'), options);
+    const response = await Request.sendRequest('/types', options);
 
     res.statusCode = response.statusCode;
     if (res.locals.tenant) {
