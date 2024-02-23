@@ -1,0 +1,12 @@
+{
+  "id": "temperature",
+  "type": "Attribute",
+  "attributeCount": 3,
+  "attributeTypes": [
+    "Property"
+  ],
+  "typeNames": [
+    "TemperatureSensor"
+  ],
+  "attributeName": "temperature"
+}

@@ -12,6 +12,7 @@ const _ = require('lodash');
 const debug = require('debug')('adapter:attributes');
 const NGSI_LD = require('../lib/ngsi-ld');
 const Constants = require('../lib/constants');
+const Request = require('../lib/request');
 
 /**
  * /attributes proxying
@@ -32,7 +33,7 @@ async function listAttributes(req, res) {
         retry: 0
     };
 
-    debug('listAttributes: ', req.path, options);
+    debug('listAttributes');
     const response = await Request.sendRequest('/types', options);
 
     res.statusCode = response.statusCode;
@@ -74,7 +75,7 @@ async function readAttribute(req, res) {
         headers,
         retry: 0
     };
-    debug('readAttribute: ', req.path, options);
+    debug('readAttribute');
     const response = await Request.sendRequest('/types', options);
 
     res.statusCode = response.statusCode;

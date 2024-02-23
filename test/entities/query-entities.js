@@ -154,7 +154,6 @@ describe('Query Entities Tests', function () {
         });
     });
 
-
     describe('When no entities are returned', function () {
         const options = {
             method: 'GET',
@@ -163,9 +162,7 @@ describe('Query Entities Tests', function () {
         };
 
         beforeEach(function (done) {
-            contextBrokerMock = nock(V2_BROKER)
-                .get('/v2/entities?type=TemperatureSensor')
-                .reply(200, []);
+            contextBrokerMock = nock(V2_BROKER).get('/v2/entities?type=TemperatureSensor').reply(200, []);
 
             done();
         });
@@ -185,7 +182,7 @@ describe('Query Entities Tests', function () {
         });
 
         it('should return an NGSI-LD payload', function (done) {
-            request(options, function (error, response, body) {;
+            request(options, function (error, response, body) {
                 done(_.isEqual(body, []) ? '' : 'Incorrect payload');
             });
         });

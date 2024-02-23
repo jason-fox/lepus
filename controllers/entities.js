@@ -116,7 +116,7 @@ async function readEntities(req, res) {
     if (res.locals.servicePath) {
         res.set('NGSILD-Path', res.locals.servicePath);
     }
-    const v2Body =  response.body ? JSON.parse(response.body) : {};
+    const v2Body = response.body ? JSON.parse(response.body) : {};
     const type = v2Body.type;
     if (!Request.is2xxSuccessful(res.statusCode)) {
         return Request.sendError(res, v2Body);

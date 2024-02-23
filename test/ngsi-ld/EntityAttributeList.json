@@ -1,0 +1,10 @@
+{
+  "id": "urn:ngsi-ld:EntityAttributeList:xxx",
+  "type": "EntityAttributeList",
+  "attributeList": [
+    "batteryLevel",
+    "category",
+    "controlledAsset",
+    "temperature"
+  ]
+}

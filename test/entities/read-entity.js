@@ -252,7 +252,7 @@ describe('Read Entity', function () {
         });
     });
 
-     describe('When an Entity with sysAttrs is read by id', function () {
+    describe('When an Entity with sysAttrs is read by id', function () {
         const options = {
             method: 'GET',
             searchParams: 'options=sysAttrs',
@@ -270,7 +270,7 @@ describe('Read Entity', function () {
             done();
         });
 
-         afterEach(function (done) {
+        afterEach(function (done) {
             timekeeper.reset();
             done();
         });
@@ -297,16 +297,14 @@ describe('Read Entity', function () {
         });
     });
 
-     describe('When no entity is found', function () {
+    describe('When no entity is found', function () {
         const options = {
             method: 'GET',
             url: LEPUS_URL + SINGLE_ENTITY
         };
 
         beforeEach(function (done) {
-            contextBrokerMock = nock(V2_BROKER)
-                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(404);
+            contextBrokerMock = nock(V2_BROKER).get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001').reply(404);
 
             done();
         });

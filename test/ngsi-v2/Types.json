@@ -1,0 +1,28 @@
+[
+  {
+    "type": "TemperatureSensor",
+    "attrs": {
+      "batteryLevel": {
+        "types": [
+          "Property"
+        ]
+      },
+      "category": {
+        "types": [
+          "Property"
+        ]
+      },
+      "controlledAsset": {
+        "types": [
+          "Relationship"
+        ]
+      },
+      "temperature": {
+        "types": [
+          "Property"
+        ]
+      }
+    },
+    "count": 3
+  }
+]

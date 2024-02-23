@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "lint": "eslint lib/ bin/www --cache --fix",
     "prettier": "prettier --config .prettierrc.json --write **/**/*.js  **/*.js *.js",
-    "test:single": "nyc --reporter=text mocha --recursive 'test/**/*.js' --reporter spec --timeout 5000 --ui bdd --exit  --color true -g 'When no entity is found'",
+    "test:single": "nyc --reporter=text mocha --recursive 'test/**/*.js' --reporter spec --timeout 5000 --ui bdd --exit  --color true -g 'Create Entity'",
     "test:html": "nyc --reporter=html mocha -- --recursive 'test/**/*.js' --reporter spec --exit",
     
 
