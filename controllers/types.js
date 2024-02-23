@@ -11,12 +11,8 @@ const _ = require('lodash');
 
 const debug = require('debug')('adapter:types');
 const NGSI_LD = require('../lib/ngsi-ld');
-const Constants = require('../lib/constants');
-const got = require('got').extend({
-    timeout: {
-        request: Constants.v2Timeout()
-    }
-});
+const Config = require('../lib/configService');
+const Request = require('../lib/request');
 
 async function listTypes(req, res) {
     const headers = res.locals.headers;
@@ -30,7 +26,7 @@ async function listTypes(req, res) {
     };
 
     debug('listTypes: ', req.path, options);
-    const response = await got(Constants.v2BrokerURL(req.path), options);
+    const response = await Request.sendRequest(req.path, options);
 
     res.statusCode = response.statusCode;
     res.headers = response.headers;
@@ -38,17 +34,17 @@ async function listTypes(req, res) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
     const v2Body = JSON.parse(response.body);
-    if (!Constants.is2xxSuccessful(res.statusCode)) {
-        return Constants.sendError(res, v2Body);
+    if (!Request.is2xxSuccessful(res.statusCode)) {
+        return Request.sendError(res, v2Body);
     }
 
-    Constants.linkContext(res, isJSONLD);
+    Request.linkContext(res, isJSONLD);
 
     let ldPayload = [];
 
     ldPayload = NGSI_LD.formatEntityTypeList(v2Body, isJSONLD);
 
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 async function readType(req, res) {
@@ -64,22 +60,22 @@ async function readType(req, res) {
     };
 
     debug('readType: ', req.path, options);
-    const response = await got(Constants.v2BrokerURL(req.path), options);
+    const response = await Request.sendRequest(req.path, options);
 
     res.statusCode = response.statusCode;
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
     const v2Body = JSON.parse(response.body);
-    if (!Constants.is2xxSuccessful(res.statusCode)) {
-        return Constants.sendError(res, v2Body);
+    if (!Request.is2xxSuccessful(res.statusCode)) {
+        return Request.sendError(res, v2Body);
     }
     res.headers = response.headers;
-    Constants.linkContext(res, isJSONLD);
+    Request.linkContext(res, isJSONLD);
 
     const ldPayload = NGSI_LD.formatEntityTypeInformation(v2Body, isJSONLD, typeName);
 
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 exports.list = listTypes;

@@ -9,14 +9,10 @@ const StatusCodes = require('http-status-codes').StatusCodes;
 const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 const _ = require('lodash');
 const debug = require('debug')('adapter:subscriptions');
-const Constants = require('../lib/constants');
+const Config = require('../lib/configService');
+const Request = require('../lib/request');
 const NGSI_LD = require('../lib/ngsi-ld');
 const NGSI_V2 = require('../lib/ngsi-v2');
-const got = require('got').extend({
-    timeout: {
-        request: Constants.v2Timeout()
-    }
-});
 
 /**
  * /subscription proxying
@@ -37,18 +33,18 @@ async function listSubscriptions(req, res) {
     };
 
     debug('listSubscriptions: ', req.path, options);
-    const response = await got(Constants.v2BrokerURL('/subscriptions'), options);
+    const response = await Request.sendRequest('/subscriptions', options);
 
     res.statusCode = response.statusCode;
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
     const v2Body = JSON.parse(response.body);
-    if (!Constants.is2xxSuccessful(res.statusCode)) {
-        return Constants.sendError(res, v2Body);
+    if (!Request.is2xxSuccessful(res.statusCode)) {
+        return Request.sendError(res, v2Body);
     }
     res.headers = response.headers;
-    Constants.linkContext(res, isJSONLD);
+    Request.linkContext(res, isJSONLD);
     let ldPayload = [];
 
     if (v2Body instanceof Array) {
@@ -60,7 +56,7 @@ async function listSubscriptions(req, res) {
         });
     }
 
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -83,19 +79,19 @@ async function readSubscription(req, res) {
     };
 
     debug('readSubscription: ', req.path, options);
-    const response = await got(Constants.v2BrokerURL('/subscriptions/' + id), options);
+    const response = await Request.sendRequest('/subscriptions/' + id, options);
     const v2Body = JSON.parse(response.body);
     res.statusCode = response.statusCode;
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
-    if (!Constants.is2xxSuccessful(res.statusCode)) {
-        return Constants.sendError(res, v2Body);
+    if (!Request.is2xxSuccessful(res.statusCode)) {
+        return Request.sendError(res, v2Body);
     }
     res.headers = response.headers;
-    Constants.linkContext(res, isJSONLD);
+    Request.linkContext(res, isJSONLD);
     const ldPayload = NGSI_LD.formatSubscription(v2Body, isJSONLD);
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -117,16 +113,16 @@ async function deleteSubscription(req, res) {
     };
 
     debug('deleteSubscription: ', req.path, options);
-    const response = await got(Constants.v2BrokerURL('/subscriptions/' + id), options);
+    const response = await Request.sendRequest('/subscriptions/' + id, options);
 
     res.statusCode = response.statusCode;
     res.headers = response.headers;
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
-    if (!Constants.is2xxSuccessful(res.statusCode)) {
+    if (!Request.is2xxSuccessful(res.statusCode)) {
         const v2Body = JSON.parse(response.body);
-        return Constants.sendError(res, v2Body);
+        return Request.sendError(res, v2Body);
     }
     return res.send();
 }
@@ -151,7 +147,7 @@ async function createSubscription(req, res) {
     };
 
     debug('createSubscription: ', req.path, options);
-    const response = await got(Constants.v2BrokerURL('/subscriptions'), options);
+    const response = await Request.sendRequest('/subscriptions', options);
 
     res.statusCode = response.statusCode;
     if (response.headers.location) {
@@ -166,9 +162,9 @@ async function createSubscription(req, res) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
 
-    if (!Constants.is2xxSuccessful(res.statusCode)) {
+    if (!Request.is2xxSuccessful(res.statusCode)) {
         const v2Body = JSON.parse(response.body);
-        return Constants.sendError(res, v2Body);
+        return Request.sendError(res, v2Body);
     }
     return res.send();
 }
@@ -187,16 +183,16 @@ async function updateSubscription(req, res) {
     };
 
     debug('updateSubscription: ', req.path, options);
-    const response = await got(Constants.v2BrokerURL('/subscriptions/' + id), options);
+    const response = await Request.sendRequest('/subscriptions/' + id, options);
 
     res.statusCode = response.statusCode;
     res.headers = response.headers;
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
-    if (!Constants.is2xxSuccessful(res.statusCode)) {
+    if (!Request.is2xxSuccessful(res.statusCode)) {
         const v2Body = JSON.parse(response.body);
-        return Constants.sendError(res, v2Body);
+        return Request.sendError(res, v2Body);
     }
     return res.send();
 }

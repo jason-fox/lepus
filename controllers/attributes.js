@@ -12,11 +12,7 @@ const _ = require('lodash');
 const debug = require('debug')('adapter:attributes');
 const NGSI_LD = require('../lib/ngsi-ld');
 const Constants = require('../lib/constants');
-const got = require('got').extend({
-    timeout: {
-        request: Constants.v2Timeout()
-    }
-});
+
 
 /**
  * /attributes proxying
@@ -38,7 +34,7 @@ async function listAttributes(req, res) {
     };
 
     debug('listAttributes: ', req.path, options);
-    const response = await got(Constants.v2BrokerURL('/types'), options);
+    const response = await Request.sendRequest('/types', options);
 
     res.statusCode = response.statusCode;
     if (res.locals.tenant) {
@@ -50,14 +46,14 @@ async function listAttributes(req, res) {
 
     if (_.isEmpty(ldPayload.attributeList)) {
         res.statusCode = StatusCodes.NOT_FOUND;
-        return Constants.sendError(res, {
+        return Request.sendError(res, {
             type: 'https://uri.etsi.org/ngsi-ld/errors/ResourceNotFound',
             title: getReasonPhrase(StatusCodes.NOT_FOUND),
             detail: `${req.path}`
         });
     }
-    Constants.linkContext(res, isJSONLD);
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    Request.linkContext(res, isJSONLD);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -80,7 +76,7 @@ async function readAttribute(req, res) {
         retry: 0
     };
     debug('readAttribute: ', req.path, options);
-    const response = await got(Constants.v2BrokerURL('/types'), options);
+    const response = await Request.sendRequest(('/types'), options);
 
     res.statusCode = response.statusCode;
     if (res.locals.tenant) {
@@ -92,14 +88,14 @@ async function readAttribute(req, res) {
 
     if (ldPayload.attributeCount === 0) {
         res.statusCode = StatusCodes.NOT_FOUND;
-        return Constants.sendError(res, {
+        return Request.sendError(res, {
             type: 'https://uri.etsi.org/ngsi-ld/errors/ResourceNotFound',
             title: getReasonPhrase(StatusCodes.NOT_FOUND),
             detail: `${attrName}`
         });
     }
-    Constants.linkContext(res, isJSONLD);
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    Request.linkContext(res, isJSONLD);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 exports.list = listAttributes;

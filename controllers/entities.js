@@ -13,12 +13,9 @@ const moment = require('moment-timezone');
 const path = require('node:path');
 const NGSI_LD = require('../lib/ngsi-ld');
 const NGSI_V2 = require('../lib/ngsi-v2');
-const Constants = require('../lib/constants');
-const got = require('got').extend({
-    timeout: {
-        request: Constants.v2Timeout()
-    }
-});
+const Config = require('../lib/configService');
+const Request = require('../lib/request');
+
 
 /**
  * Forward the proxied request to read data and
@@ -28,6 +25,7 @@ const got = require('got').extend({
  * @param res - the response to return
  */
 async function readEntities(req, res) {
+    debug('readEntities');
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const queryOptions = req.query.options ? req.query.options.split(',') : null;
@@ -100,11 +98,11 @@ async function readEntities(req, res) {
             attrs.push('attrs=' + options.searchParams.attrs);
         }
 
-        debug(req.method, Constants.v2BrokerURL(req.path) + '?' + attrs.join('&'));
+        debug(req.method, req.path + '?' + attrs.join('&'));
     } else {
-        debug(req.method, Constants.v2BrokerURL(req.path));
+        debug(req.method, req.path);
     }
-    const response = await got(Constants.v2BrokerURL(req.path), options);
+    const response = await Request.sendRequest(req.path, options);
 
     res.statusCode = response.statusCode;
     if (res.locals.tenant) {
@@ -115,8 +113,8 @@ async function readEntities(req, res) {
     }
     const v2Body = JSON.parse(response.body);
     const type = v2Body.type;
-    if (!Constants.is2xxSuccessful(res.statusCode)) {
-        return Constants.sendError(res, v2Body);
+    if (!Request.is2xxSuccessful(res.statusCode)) {
+        return Request.sendError(res, v2Body);
     }
 
     if (queryType.length > 1 && !queryType.includes(type)) {
@@ -139,10 +137,10 @@ async function readEntities(req, res) {
     } else {
         ldPayload = NGSI_LD.formatEntity(v2Body, isJSONLD, transformFlags);
     }
-    ldPayload = Constants.appendContext(ldPayload, isJSONLD);
-    Constants.linkContext(res, isJSONLD);
+    ldPayload = NGSI_LD.appendContext(ldPayload, isJSONLD);
+    Request.linkContext(res, isJSONLD);
     res.type(!isJSONLD ? 'application/json' : 'application/ld+json');
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -153,7 +151,7 @@ async function readEntities(req, res) {
  * @param res - the response to return
  */
 async function createEntity(req, res) {
-    debug(req.method, Constants.v2BrokerURL(req.path));
+    debug('createEntity');
     const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: req.method,
@@ -162,10 +160,10 @@ async function createEntity(req, res) {
         headers,
         json: NGSI_V2.formatEntity(req.body)
     };
-    const response = await got(Constants.v2BrokerURL(req.path), options);
+    const response = await Request.sendRequest(req.path, options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
-    return Constants.sendResponse(res, v2Body);
+    return Request.sendResponse(res, v2Body);
 }
 
 /**
@@ -176,7 +174,7 @@ async function createEntity(req, res) {
  * @param res - the response to return
  */
 async function deleteEntity(req, res) {
-    debug('DELETE', Constants.v2BrokerURL(req.path));
+    debug('deleteEntity');
     const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'DELETE',
@@ -185,10 +183,10 @@ async function deleteEntity(req, res) {
         retry: 0
     };
 
-    const response = await got(Constants.v2BrokerURL(req.path), options);
+    const response = await Request.sendRequest(req.path, options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
-    return Constants.sendResponse(res, v2Body);
+    return Request.sendResponse(res, v2Body);
 }
 
 /**
@@ -199,7 +197,7 @@ async function deleteEntity(req, res) {
  * @param res - the response to return
  */
 async function updateEntity(req, res) {
-    debug('PATCH', Constants.v2BrokerURL(req.path));
+    debug('updateEntity');
     const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'PATCH',
@@ -209,11 +207,11 @@ async function updateEntity(req, res) {
         json: NGSI_V2.formatEntity(req.body)
     };
 
-    const response = await got(Constants.v2BrokerURL(req.path), options);
+    const response = await Request.sendRequest(req.path, options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
 
-    return Constants.sendResponse(res, v2Body);
+    return Request.sendResponse(res, v2Body);
 }
 
 /**
@@ -224,7 +222,7 @@ async function updateEntity(req, res) {
  * @param res - the response to return
  */
 async function replaceEntity(req, res) {
-    debug('PUT', Constants.v2BrokerURL(path.join(req.path, 'attrs')));
+    debug('replaceEntity');
     const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'PUT',
@@ -236,10 +234,10 @@ async function replaceEntity(req, res) {
 
     delete options.json.type;
 
-    const response = await got(Constants.v2BrokerURL(path.join(req.path, 'attrs')), options);
+    const response = await Request.sendRequest(path.join(req.path, 'attrs'), options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
-    return Constants.sendResponse(res, v2Body);
+    return Request.sendResponse(res, v2Body);
 }
 
 /**
@@ -250,7 +248,7 @@ async function replaceEntity(req, res) {
  * @param res - the response to return
  */
 async function mergeEntity(req, res) {
-    debug('PUT', Constants.v2BrokerURL(path.join(req.path, 'attrs')));
+    debug('mergeEntity');
     const headers = NGSI_V2.setHeaders(res);
 
     const optionsGet = {
@@ -259,7 +257,7 @@ async function mergeEntity(req, res) {
         throwHttpErrors: false,
         retry: 0
     };
-    const responseGet = await got(Constants.v2BrokerURL(req.path), optionsGet);
+    const responseGet = await Request.sendRequest(req.path, optionsGet);
 
     if (responseGet.statusCode === 404) {
         res.set('Content-Type', 'application/json');
@@ -299,10 +297,10 @@ async function mergeEntity(req, res) {
         json: v2mergedEntity
     };
 
-    const responsePut = await got(Constants.v2BrokerURL(path.join(req.path, 'attrs')), optionsPut);
+    const responsePut = await Request.sendRequest(path.join(req.path, 'attrs'), optionsPut);
     res.statusCode = responsePut.statusCode;
     const v2Body = responsePut.body ? JSON.parse(responsePut.body) : undefined;
-    return Constants.sendResponse(res, v2Body);
+    return Request.sendResponse(res, v2Body);
 }
 
 /**
@@ -313,7 +311,7 @@ async function mergeEntity(req, res) {
  * @param res - the response to return
  */
 async function updateEntityAttribute(req, res) {
-    debug('PATCH', Constants.v2BrokerURL(path.join('/entities', req.params.id, 'attrs')));
+    debug('updateEntityAttribute');
     const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'PATCH',
@@ -324,10 +322,10 @@ async function updateEntityAttribute(req, res) {
     };
 
     options.json[req.params.attr] = NGSI_V2.formatAttribute(req.body);
-    const response = await got(Constants.v2BrokerURL(path.join('/entities', req.params.id, 'attrs')), options);
+    const response = await Request.sendRequest(path.join('/entities', req.params.id, 'attrs'), options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
-    return Constants.sendResponse(res, v2Body);
+    return Request.sendResponse(res, v2Body);
 }
 
 /**
@@ -338,7 +336,7 @@ async function updateEntityAttribute(req, res) {
  * @param res - the response to return
  */
 async function replaceEntityAttribute(req, res) {
-    debug('PUT', Constants.v2BrokerURL(req.path));
+    debug('replaceEntityAttribute');
     const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'PUT',
@@ -348,11 +346,11 @@ async function replaceEntityAttribute(req, res) {
         json: NGSI_V2.formatAttribute(req.body)
     };
 
-    const response = await got(Constants.v2BrokerURL(req.path), options);
+    const response = await Request.sendRequest(req.path, options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
 
-    return Constants.sendResponse(res, v2Body);
+    return Request.sendResponse(res, v2Body);
 }
 
 /**
@@ -363,7 +361,7 @@ async function replaceEntityAttribute(req, res) {
  * @param res - the response to return
  */
 async function deleteEntityAttribute(req, res) {
-    debug('DELETE', Constants.v2BrokerURL(req.path));
+    debug('deleteEntityAttribute');
     const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: 'DELETE',
@@ -372,11 +370,11 @@ async function deleteEntityAttribute(req, res) {
         retry: 0
     };
 
-    const response = await got(Constants.v2BrokerURL(req.path), options);
+    const response = await Request.sendRequest(req.path, options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
 
-    return Constants.sendResponse(res, v2Body);
+    return Request.sendResponse(res, v2Body);
 }
 
 /**
@@ -387,6 +385,7 @@ async function deleteEntityAttribute(req, res) {
  * @param res - the response to return
  */
 async function purgeEntities(req, res) {
+    debug('purgeEntities');
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const queryOptions = req.query.options ? req.query.options.split(',') : null;
     const queryAttrs = req.query.attrs ? req.query.attrs.split(',') : null;
@@ -445,17 +444,17 @@ async function purgeEntities(req, res) {
             attrs.push('attrs=' + optionsGet.searchParams.attrs);
         }
 
-        debug('GET', Constants.v2BrokerURL(req.path) + '?' + attrs.join('&'));
+        debug('GET', req.path  + '?' + attrs.join('&'));
     } else {
-        debug('GET', Constants.v2BrokerURL(req.path));
+        debug('GET', req.path);
     }
 
-    const responseGet = await got(Constants.v2BrokerURL(req.path), optionsGet);
+    const responseGet = await Request.sendRequest(req.path, optionsGet);
     res.statusCode = responseGet.statusCode;
 
     const v2BodyGet = JSON.parse(responseGet.body);
-    if (!Constants.is2xxSuccessful(res.statusCode)) {
-        return Constants.sendError(res, v2BodyGet);
+    if (!Request.is2xxSuccessful(res.statusCode)) {
+        return Request.sendError(res, v2BodyGet);
     }
     if (queryType.length > 1 && !queryType.includes(type)) {
         res.set('Content-Type', 'application/json');
@@ -469,9 +468,6 @@ async function purgeEntities(req, res) {
 
     let entities;
     let actionType;
-
-    console.log(JSON.stringify(v2BodyGet));
-
     if (req.query.pick || req.query.omit) {
         actionType = 'replace';
         entities = _.map(v2BodyGet, (entity) => {
@@ -501,11 +497,11 @@ async function purgeEntities(req, res) {
         }
     };
 
-    const responseDelete = await got(Constants.v2BrokerURL('/op/update/'), optionsBatchDelete);
+    const responseDelete = await Request.sendRequest('/op/update/', optionsBatchDelete);
     res.statusCode = responseDelete.statusCode;
     const v2BodyDelete = responseDelete.body ? JSON.parse(responseDelete.body) : undefined;
 
-    return Constants.sendResponse(res, v2BodyDelete);
+    return Request.sendResponse(res, v2BodyDelete);
 }
 
 exports.read = readEntities;

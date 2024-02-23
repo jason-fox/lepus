@@ -8,19 +8,22 @@
 const _ = require('lodash');
 const NGSI_LD = require('../lib/ngsi-ld');
 const Constants = require('../lib/constants');
+const Config = require('../lib/configService');
 const debug = require('debug')('adapter:notify');
-const timeout = process.env.NOTIFICATION_RELAY_TIMEOUT || 1000;
 
-const got = require('got').extend({
-    timeout: {
-        request: timeout
-    }
-});
 const moment = require('moment-timezone');
 const { v4: uuidv4 } = require('uuid');
 const util = require('util');
 const StatusCodes = require('http-status-codes').StatusCodes;
 const getReasonPhrase = require('http-status-codes').getReasonPhrase;
+
+
+const got = require('got').extend({
+    timeout: {
+        request: Config.getConfig().relayTimeout
+    }
+});
+
 
 async function notify(req, res) {
     const target = req.get('Target');
@@ -58,7 +61,7 @@ async function notify(req, res) {
 
     if (!isJSONLD) {
         options.headers['Link'] =
-            '<' + JSON_LD_CONTEXT + '>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
+            '<' + Config.getConfig().userContext + '>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
     }
 
     debug('notify: ', req.path, options);

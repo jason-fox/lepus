@@ -1,12 +1,9 @@
 const debug = require('debug')('adapter:batch');
 const _ = require('lodash');
 const NGSI_V2 = require('../lib/ngsi-v2');
-const Constants = require('../lib/constants');
-const got = require('got').extend({
-    timeout: {
-        request: Constants.v2Timeout()
-    }
-});
+const Config = require('../lib/configService');
+const Request = require('../lib/request');
+
 
 /**
  * Forward the proxied request to create an entity and
@@ -16,7 +13,7 @@ const got = require('got').extend({
  * @param res - the response to return
  */
 async function createEntities(req, res) {
-    debug('POST', Constants.v2BrokerURL('/op/update/'), 'actionType: append_strict');
+    debug('createEntities');
     const headers = res.locals.headers;
     const contentType = req.get('content-type') ? 'application/json' : undefined;
     const entities = _.map(req.body, (entity) => {
@@ -34,12 +31,12 @@ async function createEntities(req, res) {
         }
     };
 
-    const response = await got(Constants.v2BrokerURL('/op/update/'), options);
+    const response = await Request.sendRequest('/op/update/', options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
     const ldPayload = null;
 
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -50,7 +47,7 @@ async function createEntities(req, res) {
  * @param res - the response to return
  */
 async function deleteEntities(req, res) {
-    debug('POST', Constants.v2BrokerURL('/op/update/'), 'actionType: delete');
+    debug('deleteEntities');
     const headers = res.locals.headers;
     const contentType = undefined;
     const entities = _.map(req.body, (entity) => {
@@ -66,12 +63,12 @@ async function deleteEntities(req, res) {
         }
     };
 
-    const response = await got(Constants.v2BrokerURL('/op/update/'), options);
+    const response = await Request.sendRequest('/op/update/', options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
     const ldPayload = null;
 
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -82,7 +79,7 @@ async function deleteEntities(req, res) {
  * @param res - the response to return
  */
 async function upsertEntities(req, res) {
-    debug('POST', Constants.v2BrokerURL('/op/update/'), 'actionType: append');
+    debug('upsertEntities');
     const headers = res.locals.headers;
     const contentType = undefined;
     const entities = _.map(req.body, (entity) => {
@@ -98,12 +95,12 @@ async function upsertEntities(req, res) {
         }
     };
 
-    const response = await got(Constants.v2BrokerURL('/op/update/'), options);
+    const response = await Request.sendRequest('/op/update/', options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
     const ldPayload = null;
 
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -114,7 +111,7 @@ async function upsertEntities(req, res) {
  * @param res - the response to return
  */
 async function updateEntities(req, res) {
-    debug('POST', Constants.v2BrokerURL('/op/update/'), 'actionType: replace');
+    debug('updateEntities');
     const headers = res.locals.headers;
     const contentType = undefined;
     const entities = _.map(req.body, (entity) => {
@@ -130,12 +127,12 @@ async function updateEntities(req, res) {
         }
     };
 
-    const response = await got(Constants.v2BrokerURL('/op/update/'), options);
+    const response = await Request.sendRequest('/op/update/', options);
     res.statusCode = response.statusCode;
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
     const ldPayload = null;
 
-    return Constants.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }
 
 exports.upsert = upsertEntities;

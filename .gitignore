@@ -38,5 +38,6 @@ jspm_packages/
 .next
 push.sh
 package-lock.json
-#!docker/Dockerfile
-# Dockerfile
+
+
+/.nyc_output/

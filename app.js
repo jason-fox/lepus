@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const _ = require('lodash');
 
 const indexRouter = require('./routes/index');
 const nocache = require('nocache');
-const Constants = require('./lib/constants');
+const Request = require('./lib/request');
 
 const app = express();
 app.disable('x-powered-by');
@@ -27,7 +26,7 @@ app.use(nocache());
 
 app.use(function (req, res, next) {
     const headers = _.clone(req.headers);
-    headers['x-forwarded-for'] = Constants.getClientIp(req);
+    headers['x-forwarded-for'] = Request.getClientIp(req);
     headers.accept = 'application/json';
     delete headers['link'];
 
