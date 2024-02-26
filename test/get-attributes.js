@@ -79,19 +79,18 @@ describe('Attributes endpoint', function () {
         });
     });
 
-
     describe('When attributes are requested on a tenant', function () {
         const options = {
             method: 'GET',
             url: LEPUS_URL + 'attributes',
             headers: {
                 'NGSILD-Tenant': 'tenant'
-            },
+            }
         };
 
         beforeEach(function (done) {
             contextBrokerMock = nock(V2_BROKER)
-                .matchHeader("fiware-service", 'tenant')
+                .matchHeader('fiware-service', 'tenant')
                 .get('/v2/types')
                 .reply(200, utils.readExampleFile('./test/ngsi-v2/Types.json'));
 
@@ -179,19 +178,18 @@ describe('Attributes endpoint', function () {
         });
     });
 
-
-     describe('When single attribute is requested on a tenant', function () {
+    describe('When single attribute is requested on a tenant', function () {
         const options = {
             method: 'GET',
             url: LEPUS_URL + 'attributes/temperature',
             headers: {
                 'NGSILD-Tenant': 'tenant'
-            },
+            }
         };
 
         beforeEach(function (done) {
             contextBrokerMock = nock(V2_BROKER)
-                .matchHeader("fiware-service", 'tenant')
+                .matchHeader('fiware-service', 'tenant')
                 .get('/v2/types')
                 .reply(200, utils.readExampleFile('./test/ngsi-v2/Types.json'));
 
@@ -205,7 +203,7 @@ describe('Attributes endpoint', function () {
             });
         });
     });
-     
+
     describe('When single attribute and user context is requested', function () {
         const options = {
             method: 'GET',

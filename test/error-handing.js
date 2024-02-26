@@ -58,7 +58,6 @@ describe('Error Handling', function () {
                     url: LEPUS_URL + 'unknown'
                 },
                 function (error, response, body) {
-                    console.log(body);
                     const expected = {
                         type: 'urn:ngsi-ld:MethodNotAllowed',
                         title: 'Method Not Allowed',

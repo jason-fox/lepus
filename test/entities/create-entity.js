@@ -169,14 +169,13 @@ describe('Create Entity', function () {
     });
 
     describe('When an entity is created on a tenant', function () {
-
         beforeEach(function (done) {
             options.json = utils.readExampleFile('./test/ngsi-ld/Entity.json');
             options.headers = {
                 'NGSILD-Tenant': 'tenant'
             };
             contextBrokerMock = nock(V2_BROKER)
-                .matchHeader("fiware-service", 'tenant')
+                .matchHeader('fiware-service', 'tenant')
                 .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity.json'))
                 .reply(201);
 

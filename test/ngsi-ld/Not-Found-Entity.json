@@ -1,0 +1,5 @@
+{
+  "type":  "https://uri.etsi.org/ngsi-ld/errors/ResourceNotFound",
+  "title": "Not Found",
+  "detail": "/entities/urn:ngsi-ld:TemperatureSensor:001"
+}
