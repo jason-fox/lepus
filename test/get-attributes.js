@@ -79,6 +79,33 @@ describe('Attributes endpoint', function () {
         });
     });
 
+
+    describe('When attributes are requested on a tenant', function () {
+        const options = {
+            method: 'GET',
+            url: LEPUS_URL + 'attributes',
+            headers: {
+                'NGSILD-Tenant': 'tenant'
+            },
+        };
+
+        beforeEach(function (done) {
+            contextBrokerMock = nock(V2_BROKER)
+                .matchHeader("fiware-service", 'tenant')
+                .get('/v2/types')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Types.json'));
+
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request with a header', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+
     describe('When attributes and user context is requested are requested', function () {
         const options = {
             method: 'GET',
@@ -151,6 +178,34 @@ describe('Attributes endpoint', function () {
             });
         });
     });
+
+
+     describe('When single attribute is requested on a tenant', function () {
+        const options = {
+            method: 'GET',
+            url: LEPUS_URL + 'attributes/temperature',
+            headers: {
+                'NGSILD-Tenant': 'tenant'
+            },
+        };
+
+        beforeEach(function (done) {
+            contextBrokerMock = nock(V2_BROKER)
+                .matchHeader("fiware-service", 'tenant')
+                .get('/v2/types')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Types.json'));
+
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request with a header', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+     
     describe('When single attribute and user context is requested', function () {
         const options = {
             method: 'GET',
