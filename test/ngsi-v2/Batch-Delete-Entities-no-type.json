@@ -1,0 +1,14 @@
+{
+  "actionType": "delete",
+  "entities": [
+    {
+      "id": "urn:ngsi-ld:TemperatureSensor:001"
+    },
+    {
+      "id": "urn:ngsi-ld:TemperatureSensor:002"
+    },
+    {
+      "id": "urn:ngsi-ld:TemperatureSensor:003"
+    }
+  ]
+}

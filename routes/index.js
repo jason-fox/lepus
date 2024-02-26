@@ -183,7 +183,7 @@ router
     .options((req, res, next) => {
         optionsHandler(req, res, next, 'POST,OPTIONS');
     })
-    .post(tryCatch(batch.upsert))
+    .post(tryCatch(batch.delete))
     .all(methodNotAllowedHandler);
 
 // All other routes

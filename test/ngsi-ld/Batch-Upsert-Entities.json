@@ -1,0 +1,28 @@
+[
+    {
+        "id": "urn:ngsi-ld:TemperatureSensor:002",
+        "type": "TemperatureSensor",
+        "category": {
+            "type": "Property",
+            "value": "sensor"
+        },
+        "temperature": {
+            "type": "Property",
+            "value": 21,
+            "unitCode": "CEL"
+        }
+    },
+    {
+        "id": "urn:ngsi-ld:TemperatureSensor:003",
+        "type": "TemperatureSensor",
+        "category": {
+            "type": "Property",
+            "value": "sensor"
+        },
+        "temperature": {
+            "type": "Property",
+            "value": 27,
+            "unitCode": "CEL"
+        }
+    }
+]

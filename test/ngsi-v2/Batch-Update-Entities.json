@@ -1,0 +1,43 @@
+{
+  "actionType": "replace",
+  "entities": [
+    {
+      "id": "urn:ngsi-ld:TemperatureSensor:002",
+      "type": "TemperatureSensor",
+      "category": {
+        "type": "Property",
+        "value": "sensor",
+        "metadata": {}
+      },
+      "temperature": {
+        "type": "Property",
+        "value": 21,
+        "metadata": {
+          "unitCode": {
+            "type": "Property",
+            "value": "CEL"
+          }
+        }
+      }
+    },
+    {
+      "id": "urn:ngsi-ld:TemperatureSensor:003",
+      "type": "TemperatureSensor",
+      "category": {
+        "type": "Property",
+        "value": "sensor",
+        "metadata": {}
+      },
+      "temperature": {
+        "type": "Property",
+        "value": 27,
+        "metadata": {
+          "unitCode": {
+            "type": "Property",
+            "value": "CEL"
+          }
+        }
+      }
+    }
+  ]
+}

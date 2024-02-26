@@ -56,7 +56,7 @@ async function deleteEntities(req, res) {
     const headers = res.locals.headers;
     const contentType = undefined;
     const entities = _.map(req.body, (entity) => {
-        return NGSI_V2.formatEntity(entity);
+        return { id: entity };
     });
     const options = {
         method: req.method,
