@@ -79,6 +79,44 @@ describe('Attributes endpoint', function () {
         });
     });
 
+    describe('When attributes and user context is requested are requested', function () {
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/ld+json'
+            },
+            url: LEPUS_URL + 'attributes'
+        };
+
+        beforeEach(function (done) {
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/types')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Types.json'));
+
+            done();
+        });
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+        it('should return an EntityAttributeList', function (done) {
+            request(options, function (error, response, body) {
+                body.id = 'urn:ngsi-ld:EntityAttributeList:xxx';
+                const expected = utils.readExampleFile('./test/ngsi-ld/EntityAttributeList-context.json');
+                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+            });
+        });
+    });
+
     describe('When single attribute is requested', function () {
         const options = {
             method: 'GET',
@@ -109,6 +147,43 @@ describe('Attributes endpoint', function () {
         it('should return Attribute Details', function (done) {
             request(options, function (error, response, body) {
                 const expected = utils.readExampleFile('./test/ngsi-ld/Attribute.json');
+                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+            });
+        });
+    });
+    describe('When single attribute and user context is requested', function () {
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/ld+json'
+            },
+            url: LEPUS_URL + 'attributes/temperature'
+        };
+
+        beforeEach(function (done) {
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/types')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Types.json'));
+
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+        it('should return Attribute Details', function (done) {
+            request(options, function (error, response, body) {
+                const expected = utils.readExampleFile('./test/ngsi-ld/Attribute-context.json');
                 done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
             });
         });

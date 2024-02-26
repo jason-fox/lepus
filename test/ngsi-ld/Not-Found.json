@@ -1,0 +1,6 @@
+{
+ 	"message":"The requested entity has not been found. Check type and id",
+ 	"title":"Not Found",
+ 	"type":"https://uri.etsi.org/ngsi-ld/errors/NotFound"
+}
+

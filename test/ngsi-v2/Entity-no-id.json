@@ -1,0 +1,33 @@
+{
+  "type": "TemperatureSensor",
+  "batteryLevel": {
+    "type": "Property",
+    "value": 0.8,
+    "metadata": {
+      "unitCode": {
+        "type": "Property",
+        "value": "C62"
+      }
+    }
+  },
+  "category": {
+    "type": "Property",
+    "value": "sensor",
+    "metadata": {}
+  },
+  "controlledAsset": {
+    "type": "Relationship",
+    "value": "urn:ngsi-ld:Building:barn002",
+    "metadata": {}
+  },
+  "temperature": {
+    "type": "Property",
+    "value": 25,
+    "metadata": {
+      "unitCode": {
+        "type": "Property",
+        "value": "CEL"
+      }
+    }
+  }
+}

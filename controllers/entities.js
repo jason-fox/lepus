@@ -119,7 +119,11 @@ async function readEntities(req, res) {
     const v2Body = response.body ? JSON.parse(response.body) : {};
     const type = v2Body.type;
     if (!Request.is2xxSuccessful(res.statusCode)) {
-        return Request.sendError(res, v2Body);
+        const error = {
+            message: v2Body.description
+        };
+        //Request.getErrorType(res.statusCode, error)
+        return Request.sendError(res, error);
     }
 
     if (queryType.length > 1 && !queryType.includes(type)) {

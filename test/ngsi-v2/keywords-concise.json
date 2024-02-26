@@ -1,0 +1,100 @@
+{
+  "id": "urn:ngsi-ld:TemperatureSensor:001",
+  "type": "TemperatureSensor",
+  "batteryLevel": {
+    "type": "ListProperty",
+    "value": [
+      0.8,
+      0.9
+    ],
+    "metadata": {}
+  },
+  "category": {
+    "type": "VocabularyProperty",
+    "value": "sensor",
+    "metadata": {
+      "TimeInstant": {
+        "type": "ISO8601",
+        "value": "2024-02-22T01:00:00.000Z"
+      }
+    }
+  },
+  "controlledAsset": {
+    "type": "ListRelationship",
+    "value": [
+      "urn:ngsi-ld:Building:barn002"
+    ],
+    "metadata": {}
+  },
+  "location": {
+    "type": "geo:json",
+    "value": {
+      "type": "Point",
+      "coordinates": [
+        13.3505,
+        52.5144
+      ]
+    },
+    "metadata": {}
+  },
+  "name": {
+    "type": "LanguageProperty",
+    "value": {
+      "en": "english",
+      "es": "español",
+      "fr": "français"
+    },
+    "metadata": {}
+  },
+  "temperature": {
+    "type": "Property",
+    "value": 25,
+    "metadata": {}
+  },
+  "isTrue": {
+    "type": "Property",
+    "value": true,
+    "metadata": {}
+  },
+  "isJson": {
+    "type": "JsonProperty",
+    "value": {
+      "hello": "world"
+    },
+    "metadata": {}
+  },
+  "isFloat": {
+    "type": "Property",
+    "value": 0.8,
+    "metadata": {}
+  },
+  "isInteger": {
+    "type": "Property",
+    "value": 8,
+    "metadata": {}
+  },
+  "isDatetime": {
+    "type": "Property",
+    "value": {
+      "@type": "DateTime",
+      "@value": "2024-02-22T01:00:00.000Z"
+    },
+    "metadata": {}
+  },
+  "isDate": {
+    "type": "Property",
+    "value": {
+      "@type": "Date",
+      "@value": "2024-02-22"
+    },
+    "metadata": {}
+  },
+  "isTime": {
+    "type": "Property",
+    "value": {
+      "@type": "Time",
+      "@value": "01:00:00"
+    },
+    "metadata": {}
+  }
+}

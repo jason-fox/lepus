@@ -53,7 +53,7 @@ describe('Query Entities Tests', function () {
         beforeEach(function (done) {
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?type=TemperatureSensor')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/TemperatureSensors.json'));
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });
@@ -74,7 +74,7 @@ describe('Query Entities Tests', function () {
 
         it('should return an NGSI-LD payload', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/TemperatureSensors.json');
+                const expected = utils.readExampleFile('./test/ngsi-ld/Entities.json');
                 done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
             });
         });
@@ -90,7 +90,7 @@ describe('Query Entities Tests', function () {
         beforeEach(function (done) {
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?type=TemperatureSensor')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/TemperatureSensors.json'));
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });
@@ -111,7 +111,7 @@ describe('Query Entities Tests', function () {
 
         it('should return an NGSI-LD payload', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/TemperatureSensors-concise.json');
+                const expected = utils.readExampleFile('./test/ngsi-ld/Entities-concise.json');
                 done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
             });
         });
@@ -127,7 +127,7 @@ describe('Query Entities Tests', function () {
         beforeEach(function (done) {
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?type=TemperatureSensor&options=keyValues')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/TemperatureSensors-keyValues.json'));
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities-keyValues.json'));
 
             done();
         });
@@ -148,7 +148,7 @@ describe('Query Entities Tests', function () {
 
         it('should return a keyValues payload', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/TemperatureSensors-keyValues.json');
+                const expected = utils.readExampleFile('./test/ngsi-ld/Entities-keyValues.json');
                 done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
             });
         });
@@ -184,6 +184,46 @@ describe('Query Entities Tests', function () {
         it('should return an NGSI-LD payload', function (done) {
             request(options, function (error, response, body) {
                 done(_.isEqual(body, []) ? '' : 'Incorrect payload');
+            });
+        });
+    });
+
+    describe('When normalized entities and user context is requested', function () {
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/ld+json'
+            },
+            searchParams: 'type=TemperatureSensor',
+            url: LEPUS_URL + 'entities'
+        };
+
+        beforeEach(function (done) {
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities?type=TemperatureSensor')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should return an NGSI-LD payload with @context', function (done) {
+            request(options, function (error, response, body) {
+                const expected = utils.readExampleFile('./test/ngsi-ld/Entities-context.json');
+                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
             });
         });
     });

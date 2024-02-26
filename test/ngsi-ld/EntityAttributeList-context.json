@@ -1,0 +1,11 @@
+{
+  "@context":"https://context/ngsi-ld.jsonld",
+  "id": "urn:ngsi-ld:EntityAttributeList:xxx",
+  "type": "EntityAttributeList",
+  "attributeList": [
+    "batteryLevel",
+    "category",
+    "controlledAsset",
+    "temperature"
+  ]
+}

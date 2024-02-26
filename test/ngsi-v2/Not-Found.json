@@ -1,0 +1,4 @@
+{
+  "error":"NotFound",
+  "description":"The requested entity has not been found. Check type and id"
+}

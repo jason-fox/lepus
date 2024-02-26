@@ -1,0 +1,5 @@
+{
+	"id":"urn:ngsi-ld:EntityTypeList:xxx",
+	"type":"EntityTypeList",
+	"typeList":["TemperatureSensor"]
+}
