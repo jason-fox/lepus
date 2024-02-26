@@ -1,0 +1,46 @@
+{
+  "actionType": "replace",
+  "entities": [
+    {
+      "id": "urn:ngsi-ld:TemperatureSensor:001",
+      "type": "TemperatureSensor",
+      "batteryLevel": {
+        "type": "Property",
+        "value": 0.8,
+        "metadata": {
+          "unitCode": {
+            "type": "Property",
+            "value": "C62"
+          }
+        }
+      },
+      "category": {
+        "type": "Property",
+        "value": "sensor",
+        "metadata": {}
+      },
+      "controlledAsset": {
+        "type": "Relationship",
+        "metadata": {}
+      }
+    },
+    {
+      "id": "urn:ngsi-ld:TemperatureSensor:002",
+      "type": "TemperatureSensor",
+      "category": {
+        "type": "Property",
+        "value": "sensor",
+        "metadata": {}
+      }
+    },
+    {
+      "id": "urn:ngsi-ld:TemperatureSensor:003",
+      "type": "TemperatureSensor",
+      "category": {
+        "type": "Property",
+        "value": "sensor",
+        "metadata": {}
+      }
+    }
+  ]
+}
