@@ -17,11 +17,6 @@ const attributes = require('../controllers/attributes');
 const StatusCodes = require('http-status-codes').StatusCodes;
 const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 
-function errorHandler(error, req, res, next) {
-    debug(error);
-    res.status(error.statusCode || 400).send(error);
-}
-
 function optionsHandler(req, res, next, options = 'GET,OPTIONS', acceptPatch) {
     if (acceptPatch) {
         res.header('Accept-Patch', acceptPatch);
