@@ -43,26 +43,23 @@ describe('Update Entity', function () {
         });
     });
 
-    describe('When a normalized entity is overwritten', function () {
-        const options = {
-            method: 'PUT',
-            url: LEPUS_URL + 'entities/urn:ngsi-ld:TemperatureSensor:001',
-            json: utils.readExampleFile('./test/ngsi-ld/Entity-no-id.json')
-        };
+    const options = {
+        method: 'PUT',
+        url: LEPUS_URL + 'entities/urn:ngsi-ld:TemperatureSensor:001'
+    };
+    const ORION_ENDPOINT = '/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs';
 
+    describe('When a normalized entity is overwritten', function () {
         beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-no-id.json');
             contextBrokerMock = nock(V2_BROKER)
-                .put(
-                    '/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs',
-                    utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json')
-                )
+                .put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json'))
                 .reply(200);
 
             done();
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                console.log(JSON.stringify(body));
                 response.statusCode.should.equal(200);
                 done();
             });
@@ -72,6 +69,47 @@ describe('Update Entity', function () {
             request(options, function (error, response, body) {
                 contextBrokerMock.done();
                 done();
+            });
+        });
+    });
+
+    describe('When a concise entity is overwritten', function () {
+        beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-concise-no-id.json');
+            contextBrokerMock = nock(V2_BROKER)
+                .put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json'))
+                .reply(200);
+
+            done();
+        });
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should forward an NGSI-v2 PUT request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+
+    describe('When an overwritten entity is not found', function () {
+        beforeEach(function (done) {
+            contextBrokerMock = nock(V2_BROKER)
+                .put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json'))
+                .reply(404, utils.readExampleFile('./test/ngsi-v2/Not-Found.json'));
+
+            done();
+        });
+        it('should return not found', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(404);
+                const expected = utils.readExampleFile('./test/ngsi-ld/Not-Found.json');
+                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
             });
         });
     });

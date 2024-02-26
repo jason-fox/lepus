@@ -45,13 +45,14 @@ describe('Read Entity', function () {
         });
     });
 
-    describe('When a normalized entity is read by id', function () {
-        const options = {
-            method: 'GET',
-            url: LEPUS_URL + SINGLE_ENTITY
-        };
+    const options = {
+        method: 'GET',
+        url: LEPUS_URL + SINGLE_ENTITY
+    };
 
+    describe('When a normalized entity is read by id', function () {
         beforeEach(function (done) {
+            delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
                 .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
@@ -82,12 +83,8 @@ describe('Read Entity', function () {
     });
 
     describe('When an entity using v2 typed keywords is read by id', function () {
-        const options = {
-            method: 'GET',
-            url: LEPUS_URL + SINGLE_ENTITY
-        };
-
         beforeEach(function (done) {
+            delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
                 .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
@@ -104,13 +101,8 @@ describe('Read Entity', function () {
     });
 
     describe('When a concise entity is read by id', function () {
-        const options = {
-            method: 'GET',
-            searchParams: 'options=concise',
-            url: LEPUS_URL + SINGLE_ENTITY
-        };
-
         beforeEach(function (done) {
+            options.searchParams = 'options=concise';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
                 .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
@@ -141,13 +133,8 @@ describe('Read Entity', function () {
     });
 
     describe('When a keyValues entity is read by id', function () {
-        const options = {
-            method: 'GET',
-            searchParams: 'options=keyValues',
-            url: LEPUS_URL + SINGLE_ENTITY
-        };
-
         beforeEach(function (done) {
+            options.searchParams = 'options=keyValues';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001?options=keyValues')
                 .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-keyValues.json'));
@@ -178,13 +165,8 @@ describe('Read Entity', function () {
     });
 
     describe('When an Entity with attrs is read by id', function () {
-        const options = {
-            method: 'GET',
-            searchParams: 'attrs=category,temperature',
-            url: LEPUS_URL + SINGLE_ENTITY
-        };
-
         beforeEach(function (done) {
+            options.searchParams = 'attrs=category,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001?attrs=category,temperature')
                 .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
@@ -201,13 +183,8 @@ describe('Read Entity', function () {
     });
 
     describe('When an Entity with pick is read by id', function () {
-        const options = {
-            method: 'GET',
-            searchParams: 'pick=category,temperature',
-            url: LEPUS_URL + SINGLE_ENTITY
-        };
-
         beforeEach(function (done) {
+            options.searchParams = 'pick=category,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
                 .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
@@ -238,13 +215,8 @@ describe('Read Entity', function () {
     });
 
     describe('When an Entity with omit is read by id', function () {
-        const options = {
-            method: 'GET',
-            searchParams: 'omit=category,temperature',
-            url: LEPUS_URL + SINGLE_ENTITY
-        };
-
         beforeEach(function (done) {
+            options.searchParams = 'omit=category,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
                 .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
@@ -275,13 +247,8 @@ describe('Read Entity', function () {
     });
 
     describe('When an Entity with sysAttrs is read by id', function () {
-        const options = {
-            method: 'GET',
-            searchParams: 'options=sysAttrs',
-            url: LEPUS_URL + SINGLE_ENTITY
-        };
-
         beforeEach(function (done) {
+            options.searchParams = 'options=sysAttrs';
             const time = new Date(1708729200); // 2024-02-23T16:18:07+0000
 
             timekeeper.freeze(time);
@@ -320,12 +287,8 @@ describe('Read Entity', function () {
     });
 
     describe('When no entity is found', function () {
-        const options = {
-            method: 'GET',
-            url: LEPUS_URL + SINGLE_ENTITY
-        };
-
         beforeEach(function (done) {
+            delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
                 .reply(404, utils.readExampleFile('./test/ngsi-v2/Not-Found.json'));
@@ -342,9 +305,6 @@ describe('Read Entity', function () {
         it('should return not found', function (done) {
             request(options, function (error, response, body) {
                 const expected = utils.readExampleFile('./test/ngsi-ld/Not-Found.json');
-
-                console.log(body);
-
                 done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
             });
         });

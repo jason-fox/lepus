@@ -17,6 +17,7 @@ const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 const _ = require('lodash');
+const SINGLE_ENTITY = 'entities/urn:ngsi-ld:TemperatureSensor:001';
 
 let contextBrokerMock;
 
@@ -43,19 +44,18 @@ describe('Update Entity', function () {
         });
     });
 
-    describe('When a normalized entity is updated', function () {
-        const options = {
-            method: 'PATCH',
-            url: LEPUS_URL + 'entities/urn:ngsi-ld:TemperatureSensor:001/attrs',
-            json: utils.readExampleFile('./test/ngsi-ld/Entity-no-id.json')
-        };
+    const options = {
+        method: 'PATCH',
+        url: LEPUS_URL + SINGLE_ENTITY + '/attrs'
+    };
 
+    const ORION_ENDPOINT = '/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs';
+
+    describe('When a normalized entity is updated', function () {
         beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-no-id.json');
             contextBrokerMock = nock(V2_BROKER)
-                .patch(
-                    '/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs',
-                    utils.readExampleFile('./test/ngsi-v2/Entity-no-id.json')
-                )
+                .patch(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-no-id.json'))
                 .reply(200);
 
             done();
@@ -71,6 +71,47 @@ describe('Update Entity', function () {
             request(options, function (error, response, body) {
                 contextBrokerMock.done();
                 done();
+            });
+        });
+    });
+
+    describe('When a concise entity is updated', function () {
+        beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-no-id.json');
+            contextBrokerMock = nock(V2_BROKER)
+                .patch(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-no-id.json'))
+                .reply(200);
+
+            done();
+        });
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should forward an NGSI-v2 PATCH request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+
+    describe('When an updated entity is not found', function () {
+        beforeEach(function (done) {
+            contextBrokerMock = nock(V2_BROKER)
+                .patch(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-no-id.json'))
+                .reply(404, utils.readExampleFile('./test/ngsi-v2/Not-Found.json'));
+
+            done();
+        });
+        it('should return not found', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(404);
+                const expected = utils.readExampleFile('./test/ngsi-ld/Not-Found.json');
+                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
             });
         });
     });

@@ -43,14 +43,15 @@ describe('Delete Entity', function () {
         });
     });
 
-    describe('When an entity is deleted', function () {
-        const options = {
-            method: 'DELETE',
-            url: LEPUS_URL + 'entities/urn:ngsi-ld:TemperatureSensor:001'
-        };
+    const options = {
+        method: 'DELETE',
+        url: LEPUS_URL + 'entities/urn:ngsi-ld:TemperatureSensor:001'
+    };
+    const ORION_ENDPOINT = '/v2/entities/urn:ngsi-ld:TemperatureSensor:001';
 
+    describe('When an entity is deleted', function () {
         beforeEach(function (done) {
-            contextBrokerMock = nock(V2_BROKER).delete('/v2/entities/urn:ngsi-ld:TemperatureSensor:001').reply(204);
+            contextBrokerMock = nock(V2_BROKER).delete(ORION_ENDPOINT).reply(204);
 
             done();
         });
@@ -70,14 +71,9 @@ describe('Delete Entity', function () {
     });
 
     describe('When an deleted entity is not found', function () {
-        const options = {
-            method: 'DELETE',
-            url: LEPUS_URL + 'entities/urn:ngsi-ld:TemperatureSensor:001'
-        };
-
         beforeEach(function (done) {
             contextBrokerMock = nock(V2_BROKER)
-                .delete('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .delete(ORION_ENDPOINT)
                 .reply(404, utils.readExampleFile('./test/ngsi-v2/Not-Found.json'));
 
             done();

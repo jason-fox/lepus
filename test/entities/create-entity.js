@@ -44,16 +44,17 @@ describe('Create Entity', function () {
         });
     });
 
-    describe('When a normalized entity is created', function () {
-        const options = {
-            method: 'POST',
-            url: LEPUS_URL + 'entities',
-            json: utils.readExampleFile('./test/ngsi-ld/Entity.json')
-        };
+    const options = {
+        method: 'POST',
+        url: LEPUS_URL + 'entities'
+    };
+    const ORION_ENDPOINT = '/v2/entities';
 
+    describe('When a normalized entity is created', function () {
         beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity.json');
             contextBrokerMock = nock(V2_BROKER)
-                .post('/v2/entities', utils.readExampleFile('./test/ngsi-v2/Entity.json'))
+                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity.json'))
                 .reply(201);
 
             done();
@@ -74,15 +75,10 @@ describe('Create Entity', function () {
     });
 
     describe('When a normalized entity using keywords is created', function () {
-        const options = {
-            method: 'POST',
-            url: LEPUS_URL + 'entities',
-            json: utils.readExampleFile('./test/ngsi-ld/keywords.json')
-        };
-
         beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/keywords.json');
             contextBrokerMock = nock(V2_BROKER)
-                .post('/v2/entities', utils.readExampleFile('./test/ngsi-v2/keywords-id.json'))
+                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/keywords-id.json'))
                 .reply(201);
 
             done();
@@ -97,15 +93,10 @@ describe('Create Entity', function () {
     });
 
     describe('When a concise entity using keywords is created', function () {
-        const options = {
-            method: 'POST',
-            url: LEPUS_URL + 'entities',
-            json: utils.readExampleFile('./test/ngsi-ld/keywords-concise.json')
-        };
-
         beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/keywords-concise.json');
             contextBrokerMock = nock(V2_BROKER)
-                .post('/v2/entities', utils.readExampleFile('./test/ngsi-v2/keywords-concise.json'))
+                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/keywords-concise.json'))
                 .reply(201);
 
             done();
@@ -120,15 +111,11 @@ describe('Create Entity', function () {
     });
 
     describe('When a concise entity is created', function () {
-        const options = {
-            method: 'POST',
-            url: LEPUS_URL + 'entities',
-            json: utils.readExampleFile('./test/ngsi-ld/Entity-concise.json')
-        };
-
         beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-concise.json');
+
             contextBrokerMock = nock(V2_BROKER)
-                .post('/v2/entities', utils.readExampleFile('./test/ngsi-v2/Entity.json'))
+                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity.json'))
                 .reply(201);
 
             done();
@@ -150,20 +137,20 @@ describe('Create Entity', function () {
     });
 
     describe('When a normalized entity with a user context is created', function () {
-        const options = {
-            method: 'POST',
-            url: LEPUS_URL + 'entities',
-            headers: {
-                'content-type': 'application/ld+json'
-            },
-            json: utils.readExampleFile('./test/ngsi-ld/Entity-context.json')
-        };
-
         beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-context.json');
+            options.headers = {
+                'content-type': 'application/ld+json'
+            };
             contextBrokerMock = nock(V2_BROKER)
-                .post('/v2/entities', utils.readExampleFile('./test/ngsi-v2/Entity.json'))
+                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity.json'))
                 .reply(201);
 
+            done();
+        });
+
+        afterEach(function (done) {
+            delete options.headers;
             done();
         });
         it('should return success', function (done) {

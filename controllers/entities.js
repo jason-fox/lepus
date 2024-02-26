@@ -419,6 +419,7 @@ async function purgeEntities(req, res) {
         optionsGet.searchParams = req.query;
         delete optionsGet.searchParams.options;
         delete optionsGet.searchParams.scopeQ;
+        delete optionsGet.searchParams.pick;
 
         if (queryType.length > 1) {
             delete optionsGet.searchParams.type;
@@ -477,7 +478,8 @@ async function purgeEntities(req, res) {
 
     let entities;
     let actionType;
-    if (req.query.pick || req.query.omit) {
+
+    if (transformFlags.pick || transformFlags.omit) {
         actionType = 'replace';
         entities = _.map(v2BodyGet, (entity) => {
             const obj = NGSI_V2.formatEntity(entity, transformFlags);
