@@ -61,7 +61,6 @@ describe('Batch Delete Entities', function () {
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                console.log(body);
                 response.statusCode.should.equal(201);
                 done();
             });

@@ -309,4 +309,31 @@ describe('Read Entity', function () {
             });
         });
     });
+
+    describe('When a normalized entity is read on a tenant', function () {
+        beforeEach(function (done) {
+            delete options.searchParams;
+            options.headers = {
+                'NGSILD-Tenant': 'tenant'
+            };
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .matchHeader('fiware-service', 'tenant')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
+
+            done();
+        });
+
+        afterEach(function (done) {
+            delete options.headers;
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
 });

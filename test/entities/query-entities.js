@@ -307,4 +307,51 @@ describe('Query Entities Tests', function () {
             });
         });
     });
+    describe('When entities are read on a tenant', function () {
+        beforeEach(function (done) {
+            options.searchParams = 'type=TemperatureSensor';
+            options.headers = {
+                'NGSILD-Tenant': 'tenant'
+            };
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities?type=TemperatureSensor')
+                .matchHeader('fiware-service', 'tenant')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+
+            done();
+        });
+
+        afterEach(function (done) {
+            delete options.headers;
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+
+    describe('When normalized entities are read by id', function () {
+        beforeEach(function (done) {
+            options.searchParams =
+                'id=urn:ngsi-ld:TemperatureSensor:001,urn:ngsi-ld:TemperatureSensor:002,urn:ngsi-ld:TemperatureSensor:003';
+            contextBrokerMock = nock(V2_BROKER)
+                .get(
+                    '/v2/entities?id=urn:ngsi-ld:TemperatureSensor:001,urn:ngsi-ld:TemperatureSensor:002,urn:ngsi-ld:TemperatureSensor:003'
+                )
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
 });

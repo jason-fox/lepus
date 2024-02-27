@@ -90,7 +90,6 @@ describe('Purge Entities Tests', function () {
 
         it('should forward requests to the v2 broker', function (done) {
             request(options, function (error, response, body) {
-                console.log(body);
                 contextBrokerMock.done();
                 done();
             });

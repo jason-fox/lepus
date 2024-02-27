@@ -102,7 +102,6 @@ router
 // Entity Attributes
 router
     .route('/entities/:id/attrs')
-    .get(tryCatch(entities.read))
     .post(tryCatch(entities.create))
     .patch(tryCatch(entities.update))
     .options((req, res, next) => {

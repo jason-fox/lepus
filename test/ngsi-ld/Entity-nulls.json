@@ -1,0 +1,17 @@
+{
+    "batteryLevel": {
+        "type": "Property",
+        "value": 0.8,
+        "unitCode": "C62"
+    },
+    "category": {
+        "type": "Property",
+        "value": "sensor"
+    },
+    "controlledAsset": "urn:ngsi-ld:null",
+    "temperature": {
+        "type": "Property",
+        "value": 25,
+        "unitCode": "urn:ngsi-ld:null"
+    }
+}

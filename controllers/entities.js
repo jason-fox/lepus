@@ -396,11 +396,9 @@ async function deleteEntityAttribute(req, res) {
 async function purgeEntities(req, res) {
     debug('purgeEntities');
     const isJSONLD = req.get('Accept') === 'application/ld+json';
-    const queryOptions = req.query.options ? req.query.options.split(',') : null;
     const queryAttrs = req.query.attrs ? req.query.attrs.split(',') : null;
     const queryType = req.query.type ? req.query.type.split(',') : [];
     const queryQ = req.query.q;
-    let v2queryOptions = null;
 
     const transformFlags = {};
     // Deliberately swap these for the delete function
@@ -424,9 +422,6 @@ async function purgeEntities(req, res) {
         if (queryType.length > 1) {
             delete optionsGet.searchParams.type;
         }
-        if (v2queryOptions && v2queryOptions.length > 0) {
-            optionsGet.searchParams.options = v2queryOptions.join(',');
-        }
 
         if (queryAttrs && queryAttrs.length > 0) {
             optionsGet.searchParams.attrs = queryAttrs.join(',');
@@ -440,9 +435,6 @@ async function purgeEntities(req, res) {
         attrs = [];
         if (optionsGet.searchParams.q) {
             attrs.push('q=' + optionsGet.searchParams.q);
-        }
-        if (optionsGet.searchParams.options) {
-            attrs.push('options=' + optionsGet.searchParams.options);
         }
         if (optionsGet.searchParams.type) {
             attrs.push('type=' + optionsGet.searchParams.type);

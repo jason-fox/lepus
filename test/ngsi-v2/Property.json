@@ -1,0 +1,10 @@
+ {
+    "type": "Property",
+    "value": 25,
+    "metadata": {
+      "unitCode": {
+        "type": "Property",
+        "value": "CEL"
+      }
+    }
+ }

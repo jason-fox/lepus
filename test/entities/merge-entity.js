@@ -76,6 +76,34 @@ describe('Merge Entity', function () {
         });
     });
 
+    describe('When an entity is merged using urn:ngsi-ld:null ', function () {
+        beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-nulls.json');
+            contextBrokerMock = nock(V2_BROKER)
+                .get(ORION_ENTITY_ONLY)
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-id-only.json'));
+
+            contextBrokerMock
+                .put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-merged-nulls.json'))
+                .reply(200);
+
+            done();
+        });
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should forward requests to the v2 broker', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+
     describe('When a concise entity is merged', function () {
         beforeEach(function (done) {
             options.json = utils.readExampleFile('./test/ngsi-ld/Entity-concise-no-id.json');

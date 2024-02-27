@@ -17,10 +17,11 @@ const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 const _ = require('lodash');
+const timekeeper = require('timekeeper');
 
 let contextBrokerMock;
 
-describe('Batch Delete Entities', function () {
+describe('Delete Single Entity Attribute', function () {
     beforeEach(function (done) {
         nock.cleanAll();
         done();
@@ -44,25 +45,50 @@ describe('Batch Delete Entities', function () {
     });
 
     const options = {
-        method: 'POST',
-        url: LEPUS_URL + 'entityOperations/delete'
+        method: 'DELETE'
     };
-    const ORION_ENDPOINT = '/v2/op/update/';
 
-    describe('When multiple entities are deleted', function () {
+    describe('When an attribute is deleted by name', function () {
         beforeEach(function (done) {
-            options.json = utils.readExampleFile('./test/ngsi-ld/Batch-Delete-Entities.json');
+            options.url = LEPUS_URL + 'entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature';
             contextBrokerMock = nock(V2_BROKER)
-                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Batch-Delete-Entities-no-type.json'))
+                .delete('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature')
                 .reply(204);
 
             done();
+        });
+
+        it('should forward an NGSI-v2 DELETE request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
         });
         it('should return no content', function (done) {
             request(options, function (error, response, body) {
                 response.statusCode.should.equal(204);
                 done();
             });
+        });
+    });
+
+    describe('When a property is deleted on a tenant', function () {
+        beforeEach(function (done) {
+            options.url = LEPUS_URL + 'entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature';
+            options.headers = {
+                'NGSILD-Tenant': 'tenant'
+            };
+            contextBrokerMock = nock(V2_BROKER)
+                .delete('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature')
+                .matchHeader('fiware-service', 'tenant')
+                .reply(204);
+
+            done();
+        });
+
+        afterEach(function (done) {
+            delete options.headers;
+            done();
         });
 
         it('should forward an NGSI-v2 DELETE request', function (done) {
@@ -72,21 +98,28 @@ describe('Batch Delete Entities', function () {
             });
         });
     });
-    /*
-    describe('When an deleted entity is not found', function () {
-        beforeEach(function (done) {
-            contextBrokerMock = nock(V2_BROKER)
-                .delete(ORION_ENDPOINT)
-                .reply(404, utils.readExampleFile('./test/ngsi-v2/Not-Found.json'));
 
+    describe('When no entity is found', function () {
+        beforeEach(function (done) {
+            delete options.searchParams;
+            contextBrokerMock = nock(V2_BROKER)
+                .delete('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature')
+                .reply(404, utils.readExampleFile('./test/ngsi-v2/Not-Found.json'));
             done();
         });
+
+        it('should forward an NGSI-v2 DELETE request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+
         it('should return not found', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(404);
                 const expected = utils.readExampleFile('./test/ngsi-ld/Not-Found.json');
                 done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
             });
         });
-    });*/
+    });
 });
