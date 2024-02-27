@@ -5,7 +5,9 @@
 [![Docker badge](https://img.shields.io/badge/quay.io-fiware%2Flepus-grey?logo=red%20hat&labelColor=EE0000)](https://quay.io/repository/fiware/lepus)<br/>
 [![NGSI v2](https://img.shields.io/badge/NGSI-v2-5dc0cf.svg)](https://fiware-ges.github.io/orion/api/v2/stable/)
 [![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf)
-[![JSON LD](https://img.shields.io/badge/JSON--LD-1.1-f06f38.svg)](https://w3c.github.io/json-ld-syntax/)
+[![JSON LD](https://img.shields.io/badge/JSON--LD-1.1-f06f38.svg)](https://w3c.github.io/json-ld-syntax/)<br/>
+![CI](https://github.com/jason-fox/lepus/workflows/CI/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/jason-fox/lepus/badge.svg?branch=master)](https://coveralls.io/github/jason-fox/lepus?branch=master)
 
 An **NGSI-LD** wrapper for use with **NGSI-v2** Context Brokers. It understands the NGSI-LD endpoints and inputs, converts them to NGSI-v2, makes a request to
 the NGSI-v2 broker behind it and transforms responses back to NGSI-LD using a **fixed JSON-LD `@context`**. It supports the NGSI-LD **federationOps** endpoints only 
@@ -42,10 +44,10 @@ The following endpoints are supported as defined in the latest [NGSI-LD Specific
 -   **DELETE**  `/entities/` - Purge Entities
 <br/>
 
--   **GET** `/entities/{entityId}` - Entity retrieval by id  - §5.7.1; §6.5.3.1
+-   **GET** `/entities/{entityId}` - Entity retrieval by ID  - §5.7.1; §6.5.3.1
 -   **PATCH** `/entities/{entityId}` - Merge Entity  - §5.6.17; §6.5.3.4
 -   **PUT** `/entities/{entityId}` - Replace Entity  - §5.6.17; §6.5.3.3
--   **DELETE** `/entities/{entityId}` - Entity retrieval by id  - §5.6.6; §6.5.3.2
+-   **DELETE** `/entities/{entityId}` - Entity retrieval by ID  - §5.6.6; §6.5.3.2
 <br/>
 
 -   **POST** `/entities/{entityId}/attrs` - Append Entity attributes - §5.6.3; §6.6.3.1
@@ -60,9 +62,9 @@ The following endpoints are supported as defined in the latest [NGSI-LD Specific
 
 -   **POST** `/subscriptions/` - Create Subscription  - §5.8.1;  §6.10.3.1
 -   **GET**  ` /subscriptions/` - Retrieve list of Subscriptions  - §5.8.4;  §6.10.3.2
--   **GET** `/subscriptions/{subscriptionId}` - Subscription retrieval by id  - §5.8.3;  §6.11.3.1
--   **PATCH** `/subscriptions/{subscriptionId}` - Subscription update by id  - §5.8.2;  §6.11.3.2
--   **DELETE** `/subscriptions/{subscriptionId}` - Subscription deletion by id  - §5.8.5;  §6.11.3.3
+-   **GET** `/subscriptions/{subscriptionId}` - Subscription retrieval by ID  - §5.8.3;  §6.11.3.1
+-   **PATCH** `/subscriptions/{subscriptionId}` - Subscription update by ID  - §5.8.2;  §6.11.3.2
+-   **DELETE** `/subscriptions/{subscriptionId}` - Subscription deletion by ID  - §5.8.5;  §6.11.3.3
 <br/>
 
 #### Types
