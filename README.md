@@ -194,14 +194,14 @@ returns NGSI-LD with a fixed `@context`
 
 Configuration occurs using Docker Environment variables:
 
-  -   **DEBUG** - for debug output - e.g. `DEBUG=adapter:*`
-  -   **LEPUS_PORT** - port used for interactions - defaults to `3000`
-  -   **LEPUS_RELAY_TIMEOUT** maximum length of time to forward the **NGSI-LD** notification
-  -   **LEPUS_RELAY_URL** for the location of Lepus itself -  e.g. `LEPUS_RELAY_URL=http://<lepus>/notify`
-  -   **INCLUDE_VALUE_TYPE** - include the NGSI-v2 attribute `type` in the returned payload
-  -   **NGSI_V2_CONTEXT_BROKER** for the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL - e.g. `NGSI_V2_CONTEXT_BROKER=http://orion2:1026/v2` 
-  -   **NGSI_V2_TIMEOUT** maximum length of time to access the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL in milliseconds
-  -   **USER_CONTEXT_URL** for the fixed JSON-LD `@context` to be supplied - e.g. `USER_CONTEXT_URL=https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
+-   **DEBUG** - for debug output - e.g. `DEBUG=adapter:*`
+-   **LEPUS_PORT** - port used for interactions - defaults to `3000`
+-   **LEPUS_RELAY_TIMEOUT** maximum length of time to forward the **NGSI-LD** notification
+-   **LEPUS_RELAY_URL** for the location of Lepus itself -  e.g. `LEPUS_RELAY_URL=http://<lepus>/notify`
+-   **INCLUDE_VALUE_TYPE** - include the NGSI-v2 attribute `type` in the returned payload
+-   **NGSI_V2_CONTEXT_BROKER** for the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL - e.g. `NGSI_V2_CONTEXT_BROKER=http://orion2:1026/v2`
+-   **NGSI_V2_TIMEOUT** maximum length of time to access the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL in milliseconds
+-   **USER_CONTEXT_URL** for the fixed JSON-LD `@context` to be supplied - e.g. `USER_CONTEXT_URL=https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
 
 
 ## NGSI-LD Registration

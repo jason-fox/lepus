@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "lint": "eslint lib/ bin/www --cache --fix",
+    "lint:md": "remark  -f '*.md'",
     "prettier": "prettier --config .prettierrc.json --write **/**/*.js  **/*.js *.js",
     "test:single": "nyc --reporter=text mocha --recursive 'test/**/*.js' --reporter spec --timeout 5000 --ui bdd --exit  --color true -g 'Update Single Entity Attribute'",
     "test:html": "nyc --reporter=html mocha -- --recursive 'test/**/*.js' --reporter spec --exit",
@@ -39,6 +40,19 @@
     "nock": "13.0.3",
     "nyc": "~15.1.0",
     "prettier": "~3.0.0",
+    "remark-cli": "^10.0.1",
+    "remark-preset-lint-recommended": "^6.1.2",
+    "remark-lint-no-undefined-references": "^4.2.1",
     "should": "13.2.3"
+  },
+  "remarkConfig": {
+    "settings": {
+      "bullet": "-",
+      "paddedTable": true
+    },
+    "plugins": [
+      "remark-preset-lint-recommended",
+      "remark-lint-no-undefined-references"
+    ]
   }
 }
