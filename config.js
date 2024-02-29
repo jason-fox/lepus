@@ -15,10 +15,10 @@ config.v2Timeout = 1000;
 // The fixed JSON-LD `@context` to be supplied - e.g. `https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
 config.userContext = 'https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld';
 
-// The location of Lepus itself -  e.g. `http://<lepus>/notify`
-config.notificationRelay = 'https://localhost:3000/notify';
+// The location of Lepus itself -  e.g. `http://<lepus>`
+config.lepusUrl = 'https://localhost:3000';
 
 //  include the NGSI-v2 attribute `type` in the returned payload
-config.valueType = false;
+config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld';
 
 module.exports = config;

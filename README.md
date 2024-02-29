@@ -175,7 +175,7 @@ Now query Lepus as if it is an NGSI-LD source - e.g.
 
 ```console
 curl -L 'http://localhost:3005/ngsi-ld/v1/types' \
--H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://lepus/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Accept: application/ld+json'
 ```
 
@@ -188,7 +188,10 @@ returns NGSI-LD with a fixed `@context`
     "typeList": [
         "Store"
     ],
-    "@context": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld"
+    "@context": [
+        "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
+        "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld"
+    ]
 }
 ```
 
@@ -199,7 +202,7 @@ Configuration occurs using Docker Environment variables:
 -   **DEBUG** - for debug output - e.g. `DEBUG=adapter:*`
 -   **LEPUS_PORT** - port used for interactions - defaults to `3000`
 -   **LEPUS_RELAY_TIMEOUT** maximum length of time to forward the **NGSI-LD** notification
--   **LEPUS_RELAY_URL** for the location of Lepus itself -  e.g. `LEPUS_RELAY_URL=http://<lepus>/notify`
+-   **LEPUS_URL** for the location of Lepus itself -  e.g. `LEPUS_URL=http://<lepus>`
 -   **INCLUDE_VALUE_TYPE** - include the NGSI-v2 attribute `type` in the returned payload
 -   **NGSI_V2_CONTEXT_BROKER** for the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL - e.g. `NGSI_V2_CONTEXT_BROKER=http://orion2:1026/v2`
 -   **NGSI_V2_TIMEOUT** maximum length of time to access the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL in milliseconds

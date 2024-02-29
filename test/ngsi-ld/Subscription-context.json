@@ -21,5 +21,8 @@
       "accept": "application/json"
     }
   },
-  "@context": "https://context/context.jsonld"
+  "@context": [
+    "https://context/ngsi-ld.jsonld",
+    "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld"
+  ]
 }

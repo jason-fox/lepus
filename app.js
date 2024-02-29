@@ -52,4 +52,8 @@ app.use(function (req, res, next) {
 app.use('/ngsi-ld/v1', indexRouter);
 app.use('//ngsi-ld/v1', indexRouter);
 
+app.get('/context.jsonld', (req, res) => {
+    return Request.serveContext(req, res);
+});
+
 module.exports = app;

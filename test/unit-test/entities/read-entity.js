@@ -17,6 +17,7 @@ const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 const SINGLE_ENTITY = 'entities/urn:ngsi-ld:TemperatureSensor:001';
 const timekeeper = require('timekeeper');
+const LINK_HEADER = '<https://localhost:3000/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
 
 let contextBrokerMock;
 
@@ -63,8 +64,9 @@ describe('Read Entity', function () {
             });
         });
 
-        it('should return an NGSI-LD payload', function (done) {
+        it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity.json'));
                 done();
             });
@@ -81,8 +83,9 @@ describe('Read Entity', function () {
             done();
         });
 
-        it('should return a converted NGSI-LD payload', function (done) {
+        it('should return a converted NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords.json'));
                 done();
             });
@@ -113,8 +116,9 @@ describe('Read Entity', function () {
             });
         });
 
-        it('should return an NGSI-LD payload', function (done) {
+        it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-concise.json'));
                 done();
             });
@@ -145,8 +149,9 @@ describe('Read Entity', function () {
             });
         });
 
-        it('should return a keyValues payload', function (done) {
+        it('should return a keyValues payload and Link Header', function (done) {
             request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-keyValues.json'));
                 done();
             });
@@ -197,6 +202,7 @@ describe('Read Entity', function () {
 
         it('should return picked attrs only', function (done) {
             request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-pick.json'));
                 done();
             });
@@ -229,6 +235,7 @@ describe('Read Entity', function () {
 
         it('should return without omitted attrs', function (done) {
             request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-omit.json'));
                 done();
             });
@@ -269,6 +276,7 @@ describe('Read Entity', function () {
 
         it('should return without omitted attrs', function (done) {
             request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-sysAttrs.json'));
                 done();
             });
@@ -373,8 +381,9 @@ describe('Read Entity with valueType', function () {
             });
         });
 
-        it('should return an NGSI-LD payload', function (done) {
+        it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-valueType.json'));
                 done();
             });
@@ -406,8 +415,9 @@ describe('Read Entity with valueType', function () {
             });
         });
 
-        it('should return an NGSI-LD payload', function (done) {
+        it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-valueType-concise.json'));
                 done();
             });
