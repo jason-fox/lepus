@@ -18,7 +18,7 @@ and is designed to be used as a registered source with NGSI-LD Context Brokers i
 _Give me the Stores with the name "Einkauf" in **NGSI-LD** format_
 
 ```console
-curl -L '<lepus-context-broker>/ngsi-ld/v1/entities?type=Store&q=name%22Einkauf%22' \
+curl -L 'https://<lepus-context-broker>/ngsi-ld/v1/entities?type=Store&q=name%22Einkauf%22' \
 -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Accept: application/ld+json'
 ```
@@ -26,7 +26,7 @@ curl -L '<lepus-context-broker>/ngsi-ld/v1/entities?type=Store&q=name%22Einkauf%
 is transformed to _Give me the Stores with the name "Einkauf" in **NGSI-v2** format_
 
 ```console
-curl -L '<ngsi-v2-context-broker>/v2/entities?type=Store&q=nameEinkauf' \
+curl -L 'https://<ngsi-v2-context-broker>/v2/entities?type=Store&q=nameEinkauf' \
 -H 'Accept: application/json'
 ```
 
@@ -171,11 +171,11 @@ curl -L 'http://localhost:1026/v2/entities/' \
 }'
 ```
 
-Now query Lepus as if it is an NGSI-LD source - e.g.
+Now query Lepus `Accept: application/ld+json` as if it is an NGSI-LD source - e.g.
 
 ```console
-curl -L 'http://localhost:3005/ngsi-ld/v1/types' \
--H 'Link: <http://lepus/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+curl -L 'http://<lepus-context-broker>/ngsi-ld/v1/types' \
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Accept: application/ld+json'
 ```
 
@@ -194,6 +194,44 @@ returns NGSI-LD with a fixed `@context`
     ]
 }
 ```
+
+
+Alternatively query Lepus with `Accept: application/json`
+
+```console
+curl -iX 'https://<lepus-context-broker>/ngsi-ld/v1/types' \
+-H 'Link: <https://<lepus-context-broker>/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Accept: application/json'
+```
+
+
+Returns
+
+```text
+Link: <https://<lepus-context-broker>/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"
+```
+
+```json
+{
+    "id": "urn:ngsi-ld:EntityTypeList:a1993de4-83e0-44c9-990b-be2e84b31df1",
+    "type": "EntityTypeList",
+    "typeList": [
+        "Store"
+    ]
+}
+```
+
+And `https://<lepus-context-broker>/context.jsonld` returns NGSI-LD with a fixed `@context`
+
+```json
+{
+    "@context": [
+        "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
+        "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld"
+    ]
+}
+```
+
 
 ### Configuration
 
@@ -217,14 +255,13 @@ to preprocess all interactions:
 ```console
 curl -L 'http://localhost:9090/ngsi-ld/v1/csourceRegistrations/' \
 -H 'Content-Type: application/json' \
--H 'Link: <ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <https://<lepus-context-broker>/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -d ' {
     "type": "ContextSourceRegistration",
     "information": [
         {
             "entities": [
-                
-                 {
+                {
                     "type": "Shelf"
                 }
             ]
@@ -233,14 +270,14 @@ curl -L 'http://localhost:9090/ngsi-ld/v1/csourceRegistrations/' \
      "contextSourceInfo":[
         {
             "key": "jsonldContext",
-            "value": "<hard-coded-json-ld>"
+            "value": "https://<lepus-context-broker>/context.jsonld"
         }
     ],
     "mode": "inclusive",
     "operations": [
         "federationOps"
     ],
-    "endpoint": "http://<lepus>"
+    "endpoint": "https://<lepus-context-broker>"
 }'
 ```
 
