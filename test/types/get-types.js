@@ -11,34 +11,22 @@ const lepus = require('../../lib/lepus');
 const config = require('../config-test');
 const nock = require('nock');
 const should = require('should');
-const assert = require('node:assert').strict;
 const utils = require('../utils');
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
-const _ = require('lodash');
 const timekeeper = require('timekeeper');
 
 let contextBrokerMock;
 
 describe('Attributes endpoint', function () {
-    beforeEach(function (done) {
-        nock.cleanAll();
-        done();
-    });
-
-    afterEach(function (done) {
-        nock.cleanAll();
-        done();
-    });
-
-    before(function (done) {
+    beforeEach((done) => {
         lepus.start(config, function (text) {
             done();
         });
     });
 
-    after(function (done) {
+    afterEach((done) => {
         lepus.stop(function () {
             done();
         });
@@ -73,8 +61,8 @@ describe('Attributes endpoint', function () {
         it('should return an EntityTypeList', function (done) {
             request(options, function (error, response, body) {
                 body.id = 'urn:ngsi-ld:EntityTypeList:xxx';
-                const expected = utils.readExampleFile('./test/ngsi-ld/EntityTypeList.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/EntityTypeList.json'));
+                done();
             });
         });
     });
@@ -109,8 +97,8 @@ describe('Attributes endpoint', function () {
         it('should return EntityTypeInformation', function (done) {
             request(options, function (error, response, body) {
                 body.id = 'urn:ngsi-ld:EntityTypeInformation:xxx';
-                const expected = utils.readExampleFile('./test/ngsi-ld/EntityTypeInformation.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/EntityTypeInformation.json'));
+                done();
             });
         });
     });

@@ -11,35 +11,23 @@ const lepus = require('../lib/lepus');
 const config = require('./config-test');
 const nock = require('nock');
 const should = require('should');
-const assert = require('node:assert').strict;
 const utils = require('./utils');
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 const SINGLE_ENTITY = 'entities/';
-const _ = require('lodash');
-const timekeeper = require('timekeeper');
 
 let contextBrokerMock;
 
 describe('Error Handling', function () {
-    beforeEach(function (done) {
+    beforeEach((done) => {
         nock.cleanAll();
-        done();
-    });
-
-    afterEach(function (done) {
-        nock.cleanAll();
-        done();
-    });
-
-    before(function (done) {
-        lepus.start(config, function (text) {
+        lepus.start(config, () => {
             done();
         });
     });
 
-    after(function (done) {
+    afterEach((done) => {
         lepus.stop(function () {
             done();
         });
@@ -63,7 +51,8 @@ describe('Error Handling', function () {
                         title: 'Method Not Allowed',
                         message: 'GET not supported for /unknown'
                     };
-                    done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                    body.should.eql(expected);
+                    done();
                 }
             );
         });
@@ -85,7 +74,8 @@ describe('Error Handling', function () {
                     title: 'Gateway Timeout',
                     message: '/entities/ is did not respond in time'
                 };
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(expected);
+                done();
             });
         });
     });
@@ -106,7 +96,8 @@ describe('Error Handling', function () {
                     title: 'Bad Gateway',
                     message: '/entities/ server is unavailable'
                 };
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(expected);
+                done();
             });
         });
     });
@@ -127,7 +118,8 @@ describe('Error Handling', function () {
                     title: 'Internal Server Error',
                     message: '/entities/ caused an error:  EUNKNOWN'
                 };
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(expected);
+                done();
             });
         });
     });

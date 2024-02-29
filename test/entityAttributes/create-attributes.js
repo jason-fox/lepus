@@ -11,34 +11,22 @@ const lepus = require('../../lib/lepus');
 const config = require('../config-test');
 const nock = require('nock');
 const should = require('should');
-const assert = require('node:assert').strict;
 const utils = require('../utils');
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
-const _ = require('lodash');
-const timekeeper = require('timekeeper');
 
 let contextBrokerMock;
 
 describe('Create Entity Attribute(s)', function () {
-    beforeEach(function (done) {
+    beforeEach((done) => {
         nock.cleanAll();
-        done();
-    });
-
-    afterEach(function (done) {
-        nock.cleanAll();
-        done();
-    });
-
-    before(function (done) {
-        lepus.start(config, function (text) {
+        lepus.start(config, () => {
             done();
         });
     });
 
-    after(function (done) {
+    afterEach((done) => {
         lepus.stop(function () {
             done();
         });
@@ -198,7 +186,7 @@ describe('Create Entity Attribute(s)', function () {
             done();
         });
 
-        afterEach(function (done) {
+        afterEach((done) => {
             delete options.headers;
             done();
         });

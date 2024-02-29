@@ -11,35 +11,24 @@ const lepus = require('../../lib/lepus');
 const config = require('../config-test');
 const nock = require('nock');
 const should = require('should');
-const assert = require('node:assert').strict;
 const utils = require('../utils');
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 const SINGLE_ENTITY = 'entities/urn:ngsi-ld:TemperatureSensor:001';
-const _ = require('lodash');
 const timekeeper = require('timekeeper');
 
 let contextBrokerMock;
 
 describe('Read Entity', function () {
-    beforeEach(function (done) {
+    beforeEach((done) => {
         nock.cleanAll();
-        done();
-    });
-
-    afterEach(function (done) {
-        nock.cleanAll();
-        done();
-    });
-
-    before(function (done) {
-        lepus.start(config, function (text) {
+        lepus.start(config, () => {
             done();
         });
     });
 
-    after(function (done) {
+    afterEach((done) => {
         lepus.stop(function () {
             done();
         });
@@ -76,8 +65,8 @@ describe('Read Entity', function () {
 
         it('should return an NGSI-LD payload', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/Entity.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity.json'));
+                done();
             });
         });
     });
@@ -94,8 +83,8 @@ describe('Read Entity', function () {
 
         it('should return a converted NGSI-LD payload', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/keywords.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords.json'));
+                done();
             });
         });
     });
@@ -126,8 +115,8 @@ describe('Read Entity', function () {
 
         it('should return an NGSI-LD payload', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/Entity-concise.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-concise.json'));
+                done();
             });
         });
     });
@@ -158,8 +147,8 @@ describe('Read Entity', function () {
 
         it('should return a keyValues payload', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/Entity-keyValues.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-keyValues.json'));
+                done();
             });
         });
     });
@@ -208,8 +197,8 @@ describe('Read Entity', function () {
 
         it('should return picked attrs only', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/Entity-pick.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-pick.json'));
+                done();
             });
         });
     });
@@ -240,8 +229,8 @@ describe('Read Entity', function () {
 
         it('should return without omitted attrs', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/Entity-omit.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-omit.json'));
+                done();
             });
         });
     });
@@ -259,7 +248,7 @@ describe('Read Entity', function () {
             done();
         });
 
-        afterEach(function (done) {
+        afterEach((done) => {
             timekeeper.reset();
             done();
         });
@@ -280,8 +269,8 @@ describe('Read Entity', function () {
 
         it('should return without omitted attrs', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/Entity-sysAttrs.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-sysAttrs.json'));
+                done();
             });
         });
     });
@@ -304,8 +293,8 @@ describe('Read Entity', function () {
 
         it('should return not found', function (done) {
             request(options, function (error, response, body) {
-                const expected = utils.readExampleFile('./test/ngsi-ld/Not-Found.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Not-Found.json'));
+                done();
             });
         });
     });
@@ -324,7 +313,7 @@ describe('Read Entity', function () {
             done();
         });
 
-        afterEach(function (done) {
+        afterEach((done) => {
             delete options.headers;
             done();
         });

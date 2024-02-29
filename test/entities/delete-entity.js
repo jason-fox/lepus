@@ -11,33 +11,22 @@ const lepus = require('../../lib/lepus');
 const config = require('../config-test');
 const nock = require('nock');
 const should = require('should');
-const assert = require('node:assert').strict;
 const utils = require('../utils');
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
-const _ = require('lodash');
 
 let contextBrokerMock;
 
 describe('Delete Entity', function () {
-    beforeEach(function (done) {
+    beforeEach((done) => {
         nock.cleanAll();
-        done();
-    });
-
-    afterEach(function (done) {
-        nock.cleanAll();
-        done();
-    });
-
-    before(function (done) {
-        lepus.start(config, function (text) {
+        lepus.start(config, () => {
             done();
         });
     });
 
-    after(function (done) {
+    afterEach((done) => {
         lepus.stop(function () {
             done();
         });
@@ -81,8 +70,8 @@ describe('Delete Entity', function () {
         it('should return not found', function (done) {
             request(options, function (error, response, body) {
                 response.statusCode.should.equal(404);
-                const expected = utils.readExampleFile('./test/ngsi-ld/Not-Found.json');
-                done(_.isEqual(body, expected) ? '' : 'Incorrect payload');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Not-Found.json'));
+                done();
             });
         });
     });

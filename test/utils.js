@@ -1,7 +1,5 @@
 const fs = require('fs');
-const debug = require('debug')('adapter:utils');
 const got = require('got');
-const util = require('util');
 
 function readExampleFile(name, raw) {
     let text = null;

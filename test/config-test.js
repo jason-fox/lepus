@@ -1,4 +1,4 @@
-var config = {};
+const config = {};
 
 config.port = 3000;
 config.relayTimeout = 1000;
