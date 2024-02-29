@@ -326,3 +326,91 @@ describe('Read Entity', function () {
         });
     });
 });
+
+
+describe('Read Entity with valueType', function () {
+    beforeEach((done) => {
+        nock.cleanAll();
+        config.valueType = true;
+        lepus.start(config, () => {
+            done();
+        });
+    });
+
+    afterEach((done) => {
+        config.valueType = false;
+        lepus.stop(function () {
+            done();
+        });
+    });
+
+     const options = {
+        method: 'GET',
+        url: LEPUS_URL + SINGLE_ENTITY
+    };
+
+    describe('When a normalized entity with valueType is read by id', function () {
+        beforeEach(function (done) {
+            delete options.searchParams;
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-valueType.json'));
+
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should return an NGSI-LD payload', function (done) {
+            request(options, function (error, response, body) {
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-valueType.json'));
+                done();
+            });
+        });
+    });
+
+
+     describe('When a concise entity with valueType is read by id', function () {
+        beforeEach(function (done) {
+            options.searchParams = 'options=concise';
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-valueType.json'));
+
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should return an NGSI-LD payload', function (done) {
+            request(options, function (error, response, body) {
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-valueType-concise.json'));
+                done();
+            });
+        });
+    });
+}); 

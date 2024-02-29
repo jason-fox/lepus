@@ -98,6 +98,8 @@ describe('Create Entity', function () {
         });
     });
 
+
+
     describe('When a concise entity is created', function () {
         beforeEach(function (done) {
             options.json = utils.readExampleFile('./test/ngsi-ld/Entity-concise.json');
@@ -183,3 +185,77 @@ describe('Create Entity', function () {
         });
     });
 });
+
+
+
+
+describe('Create Entity with valueType', function () {
+    beforeEach((done) => {
+        nock.cleanAll();
+        config.valueType = true;
+        lepus.start(config, () => {
+            done();
+        });
+    });
+
+    afterEach((done) => {
+        config.valueType = false;
+        lepus.stop(function () {
+            done();
+        });
+    });
+
+    const options = {
+        method: 'POST',
+        url: LEPUS_URL + 'entities'
+    };
+    const ORION_ENDPOINT = '/v2/entities';
+
+    describe('When a normalized entity with valueType is created', function () {
+        beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-valueType.json');
+            contextBrokerMock = nock(V2_BROKER)
+                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-valueType.json'))
+                .reply(201);
+
+            done();
+        });
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(201);
+                done();
+            });
+        });
+
+        it('should forward an NGSI-v2 POST request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+
+    describe('When a concise entity with valueType is created', function () {
+        beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-valueType-concise.json');
+            contextBrokerMock = nock(V2_BROKER)
+                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-valueType.json'))
+                .reply(201);
+
+            done();
+        });
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(201);
+                done();
+            });
+        });
+
+        it('should forward an NGSI-v2 POST request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+}); 

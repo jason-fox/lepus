@@ -148,8 +148,6 @@ async function createSubscription(req, res) {
     const response = await Request.sendRequest('/subscriptions', options);
 
     res.statusCode = response.statusCode;
-
-    console.log(response.headers);
     if (response.headers.location) {
         {
             res.set(
