@@ -1,0 +1,26 @@
+{
+  "description": "LD Notify me of low stock in Store 002",
+  "type": "Subscription",
+  "entities": [
+    {
+      "type": "Shelf"
+    }
+  ],
+  "watchedAttributes": [
+    "numberOfItems"
+  ],
+  "q": "numberOfItems<10;locatedIn==%22urn:ngsi-ld:Building:store002%22",
+  "notification": {
+    "attributes": [
+      "numberOfItems",
+      "stocks",
+      "locatedIn"
+    ],
+    "format": "normalized",
+    "endpoint": {
+      "uri": "http://tutorial:3000/subscription/low-stock-store002",
+      "accept": "application/json"
+    }
+  },
+  "@context": "https://context/context.jsonld"
+}

@@ -80,13 +80,13 @@ async function readSubscription(req, res) {
 
     debug('readSubscription: ', req.path, options);
     const response = await Request.sendRequest('/subscriptions/' + id, options);
-    const v2Body = JSON.parse(response.body);
+    const v2Body = response.body ? JSON.parse(response.body) : undefined;
     res.statusCode = response.statusCode;
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
     if (!Request.is2xxSuccessful(res.statusCode)) {
-        return Request.sendError(res, v2Body);
+        return Request.sendResponse(res, v2Body);
     }
     res.headers = response.headers;
     Request.linkContext(res, isJSONLD);
@@ -120,11 +120,9 @@ async function deleteSubscription(req, res) {
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
-    if (!Request.is2xxSuccessful(res.statusCode)) {
-        const v2Body = JSON.parse(response.body);
-        return Request.sendError(res, v2Body);
-    }
-    return res.send();
+
+    const v2Body = response.body ? JSON.parse(response.body) : undefined;
+    return Request.sendResponse(res, v2Body);
 }
 
 /**
@@ -150,11 +148,16 @@ async function createSubscription(req, res) {
     const response = await Request.sendRequest('/subscriptions', options);
 
     res.statusCode = response.statusCode;
+
+    console.log(response.headers);
     if (response.headers.location) {
         {
             res.set(
                 'Location',
-                response.headers.location.replace(/v2\/subscriptions\//gi, 'ngsi-ld/v1/urn:ngsi-ld:Subscription:')
+                response.headers.location.replace(
+                    /v2\/subscriptions\//gi,
+                    'ngsi-ld/v1/subscriptions/urn:ngsi-ld:Subscription:'
+                )
             );
         }
     }
@@ -190,11 +193,9 @@ async function updateSubscription(req, res) {
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
-    if (!Request.is2xxSuccessful(res.statusCode)) {
-        const v2Body = JSON.parse(response.body);
-        return Request.sendError(res, v2Body);
-    }
-    return res.send();
+
+    const v2Body = response.body ? JSON.parse(response.body) : undefined;
+    return Request.sendResponse(res, v2Body);
 }
 
 exports.list = listSubscriptions;

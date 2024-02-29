@@ -1,0 +1,34 @@
+{
+  "id": "001",
+  "type": "Subscription",
+  "description": "LD Notify me of low stock in Store 002",
+  "subject": {
+    "condition": {
+      "expression": {
+        "q": "numberOfItems<10;locatedIn==urn:ngsi-ld:Building:store002"
+      },
+      "attrs": [
+        "numberOfItems"
+      ]
+    },
+    "entities": [
+      {
+        "type": "Shelf",
+        "idPattern": ".*"
+      }
+    ]
+  },
+  "notification": {
+    "attrsFormat": "normalized",
+    "attrs": [
+      "numberOfItems"
+    ],
+    "httpCustom": {
+      "headers": {
+        "target": "http://tutorial:3000/subscription/low-stock-store002",
+        "target_accept": "application/json"
+      },
+      "url": "https://localhost:3000/notify"
+    }
+  }
+}
