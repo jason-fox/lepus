@@ -15,7 +15,6 @@ const utils = require('../../utils');
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
-const timekeeper = require('timekeeper');
 
 let contextBrokerMock;
 

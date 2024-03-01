@@ -13,6 +13,7 @@ const subscriptions = require('../controllers/subscriptions');
 const notify = require('../controllers/notify');
 const types = require('../controllers/types');
 const batch = require('../controllers/batchOperations');
+const identity = require('../controllers/sourceIdentity');
 const attributes = require('../controllers/attributes');
 const StatusCodes = require('http-status-codes').StatusCodes;
 const getReasonPhrase = require('http-status-codes').getReasonPhrase;
@@ -178,6 +179,13 @@ router
         optionsHandler(req, res, next, 'POST,OPTIONS');
     })
     .post(tryCatch(batch.delete))
+    .all(methodNotAllowedHandler);
+router
+    .route('/info/sourceIdentity')
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'GET,OPTIONS');
+    })
+    .get(tryCatch(identity.get))
     .all(methodNotAllowedHandler);
 
 // All other routes

@@ -17,7 +17,6 @@ const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 const SINGLE_PROPERTY = 'entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature';
 const SINGLE_RELATIONSHIP = 'entities/urn:ngsi-ld:TemperatureSensor:001/attrs/controlledAsset';
-const timekeeper = require('timekeeper');
 
 let contextBrokerMock;
 

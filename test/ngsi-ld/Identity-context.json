@@ -1,0 +1,29 @@
+{
+  "id": "urn:ngsi-ld:ContextSourceIdentity:xxx",
+  "type": "ContextSourceIdentity",
+  "contextSourceExtras": {
+    "version": "3.8.1",
+    "uptime": "0 d, 0 h, 50 m, 22 s",
+    "git_hash": "30622caf67bb4384b73747abb17733e5ad9989a8",
+    "compile_time": "Fri Feb 17 10:20:06 UTC 2023",
+    "compiled_by": "root",
+    "compiled_in": "02a18b9e9dcd",
+    "release_date": "Fri Feb 17 10:20:06 UTC 2023",
+    "machine": "x86_64",
+    "doc": "https://fiware-orion.rtfd.io/en/3.8.1/",
+    "libversions": {
+      "boost": "1_74",
+      "libcurl": "libcurl/7.74.0 OpenSSL/1.1.1n zlib/1.2.12 brotli/1.0.9 libidn2/2.3.0 libpsl/0.21.0 (+libidn2/2.3.0) libssh2/1.9.0 nghttp2/1.43.0 librtmp/2.3",
+      "libmosquitto": "2.0.15",
+      "libmicrohttpd": "0.9.73",
+      "openssl": "1.1",
+      "rapidjson": "1.1.0",
+      "mongoc": "1.23.1",
+      "bson": "1.23.1"
+    }
+  },
+  "contextSourceUptime": "P0DT0H50M22S",
+  "contextSourceTimeAt": "1970-01-20T18:38:49.200Z",
+  "contextSourceAlias": "lepus",
+  "@context":"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld"
+}
