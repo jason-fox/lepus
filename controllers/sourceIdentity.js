@@ -21,7 +21,6 @@ const got = require('got').extend({
     }
 });
 
-
 function is2xxSuccessful(status) {
     return Math.floor(status / 100) === 2;
 }
@@ -49,7 +48,7 @@ async function getIdentity(req, res) {
 
     const response = await got(path.join(Config.getConfig().v2ContextBroker, 'version'), options);
 
-   res.statusCode = response.statusCode;
+    res.statusCode = response.statusCode;
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
@@ -60,7 +59,9 @@ async function getIdentity(req, res) {
     if (!isJSONLD && is2xxSuccessful(res.statusCode)) {
         res.header(
             'Link',
-            `<${Config.getConfig().coreContext}>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"`
+            `<${
+                Config.getConfig().coreContext
+            }>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"`
         );
     }
     return Request.sendResponse(res, v2Body, ldPayload, contentType);

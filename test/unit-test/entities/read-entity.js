@@ -92,6 +92,52 @@ describe('Read Entity', function () {
         });
     });
 
+    describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.4 is set', function () {
+        beforeEach(function (done) {
+            delete options.searchParams;
+             options.headers = {
+                'prefer': 'ngsi-ld=1.4'
+            };
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+
+            done();
+        });
+
+        it('should return a 1.4 payload, a NGSILD-Version header and a Link Header', function (done) {
+            request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
+                response.headers["ngsild-version"].should.equal("1.4");
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.4.json'));
+                done();
+            });
+        });
+    });
+
+      describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.17 is set', function () {
+        beforeEach(function (done) {
+            delete options.searchParams;
+             options.headers = {
+                'prefer': 'ngsi-ld=1.17'
+            };
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+
+            done();
+        });
+
+        it('should return a 1.8 payload, a NGSILD-Version header and a Link Header', function (done) {
+            request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER)
+                response.headers["ngsild-version"].should.equal("1.8");
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.8.json'));
+                done();
+            });
+        });
+    });
+
     describe('When a concise entity is read by id', function () {
         beforeEach(function (done) {
             options.searchParams = 'options=concise';
@@ -339,13 +385,14 @@ describe('Read Entity', function () {
 describe('Read Entity with valueType', function () {
     beforeEach((done) => {
         nock.cleanAll();
-        config.valueType = true;
+        config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld';
         lepus.start(config, () => {
             done();
         });
     });
 
     afterEach((done) => {
+        config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld';
         config.valueType = false;
         lepus.stop(function () {
             done();

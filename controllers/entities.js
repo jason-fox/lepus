@@ -26,6 +26,7 @@ const Request = require('../lib/request');
 async function readEntities(req, res) {
     debug('readEntities');
     const isJSONLD = req.get('Accept') === 'application/ld+json';
+    const isPrefer = req.get('Prefer') ? req.get('Prefer') : null;
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const queryOptions = req.query.options ? req.query.options.split(',') : null;
     const queryFormat = req.query.format;
@@ -42,6 +43,10 @@ async function readEntities(req, res) {
     transformFlags.attrsOnly = req.path.split(path.sep).includes('attrs');
     transformFlags.pick = req.query.pick;
     transformFlags.omit = req.query.omit;
+
+    if (isPrefer && isPrefer.startsWith('ngsi-ld=')) {
+        transformFlags.version = isPrefer.substring(8);
+    }
 
     let v2queryOptions = null;
     let ldPayload = null;
@@ -148,6 +153,7 @@ async function readEntities(req, res) {
     }
     ldPayload = NGSI_LD.appendContext(ldPayload, isJSONLD);
     Request.linkContext(res, isJSONLD);
+    Request.ngsiVersion(res, transformFlags.version);
     res.type(!isJSONLD ? 'application/json' : 'application/ld+json');
     return Request.sendResponse(res, v2Body, ldPayload, contentType);
 }

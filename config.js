@@ -21,7 +21,6 @@ config.lepusUrl = 'https://localhost:3000';
 //  include the NGSI-v2 attribute `type` in the returned payload
 config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld';
 
-
-config.alias='lepus';
+config.alias = 'lepus';
 
 module.exports = config;

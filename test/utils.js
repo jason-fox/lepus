@@ -97,6 +97,7 @@ function request(options, callback) {
         })
         .catch((error) => {
             //debug( 'Error: %s', JSON.stringify(util.inspect(error), null, 4));
+            console.log(error);
             return callback(error);
         });
 }
