@@ -1,0 +1,59 @@
+{
+  "id": "urn:ngsi-ld:TemperatureSensor:001",
+  "type": "TemperatureSensor",
+  "dateExpires": {
+    "type": "DateTime",
+    "value": "2024-02-22T01:00:00.000Z"
+  },
+  "batteryLevel": {
+    "type": "Property",
+    "value": 0.8,
+    "metadata": {
+      "unitCode": {
+        "type": "Property",
+        "value": "C62"
+      },
+      "dateExpires": {
+        "type": "DateTime",
+        "value": "2024-02-22T01:00:00.000Z"
+      }
+    }
+  },
+  "category": {
+    "type": "VocabularyProperty",
+    "value": "sensor",
+    "metadata": {}
+  },
+  "controlledAsset": {
+    "type": "Relationship",
+    "value": "urn:ngsi-ld:Building:barn002",
+    "metadata": {
+      "objectType": {
+        "type": "Property",
+        "value": "Building"
+      }
+    }
+  },
+  "temperature": {
+    "type": "Property",
+    "value": 25,
+    "metadata": {
+      "unitCode": {
+        "type": "Property",
+        "value": "CEL"
+      },
+      "dateExpires": {
+        "type": "DateTime",
+        "value": "2024-02-22T01:00:00.000Z"
+      }
+    }
+  },
+  "location": {
+      "type": "geo:json",
+      "value": {
+         "type": "Point",
+         "coordinates": [13.3986, 52.5547]
+      },
+      "metadata": {}
+  }
+}

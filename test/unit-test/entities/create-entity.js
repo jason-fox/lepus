@@ -261,3 +261,76 @@ describe('Create Entity with valueType', function () {
         });
     });
 }); 
+
+describe('Create Entity with expiresAt', function () {
+    beforeEach((done) => {
+        nock.cleanAll();
+        config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld';
+        config.valueType = true;
+        lepus.start(config, () => {
+            done();
+        });
+    });
+
+    afterEach((done) => {
+        config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld';
+        config.valueType = false;
+        lepus.stop(function () {
+            done();
+        });
+    });
+
+    const options = {
+        method: 'POST',
+        url: LEPUS_URL + 'entities'
+    };
+    const ORION_ENDPOINT = '/v2/entities';
+
+    describe('When a normalized entity with expiresAt is created', function () {
+        beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-expiresAt.json');
+            contextBrokerMock = nock(V2_BROKER)
+                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-expiresAt.json'))
+                .reply(201);
+
+            done();
+        });
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(201);
+                done();
+            });
+        });
+
+        it('should forward an NGSI-v2 POST request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+
+    describe('When a concise entity with expiresAt is created', function () {
+        beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Entity-expiresAt-concise.json');
+            contextBrokerMock = nock(V2_BROKER)
+                .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-expiresAt.json'))
+                .reply(201);
+
+            done();
+        });
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(201);
+                done();
+            });
+        });
+
+        it('should forward an NGSI-v2 POST request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+}); 
