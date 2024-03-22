@@ -15,8 +15,8 @@ const utils = require('../../utils');
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
-const LINK_HEADER = '<https://localhost:3000/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
-
+const LINK_HEADER =
+    '<https://localhost:3000/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
 
 let contextBrokerMock;
 
@@ -64,7 +64,7 @@ describe('Query Entities Tests', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entities.json'));
                 done();
             });
@@ -97,7 +97,7 @@ describe('Query Entities Tests', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entities.json'));
                 done();
             });
@@ -130,7 +130,7 @@ describe('Query Entities Tests', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entities-picked.json'));
                 done();
             });
@@ -163,7 +163,7 @@ describe('Query Entities Tests', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entities-omitted.json'));
                 done();
             });
@@ -196,7 +196,7 @@ describe('Query Entities Tests', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entities-concise.json'));
                 done();
             });
@@ -229,7 +229,7 @@ describe('Query Entities Tests', function () {
 
         it('should return a keyValues payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entities-keyValues.json'));
                 done();
             });
@@ -260,7 +260,7 @@ describe('Query Entities Tests', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql([]);
                 done();
             });

@@ -98,8 +98,6 @@ describe('Create Entity', function () {
         });
     });
 
-
-
     describe('When a concise entity is created', function () {
         beforeEach(function (done) {
             options.json = utils.readExampleFile('./test/ngsi-ld/Entity-concise.json');
@@ -186,9 +184,6 @@ describe('Create Entity', function () {
     });
 });
 
-
-
-
 describe('Create Entity with valueType', function () {
     beforeEach((done) => {
         nock.cleanAll();
@@ -260,7 +255,7 @@ describe('Create Entity with valueType', function () {
             });
         });
     });
-}); 
+});
 
 describe('Create Entity with expiresAt', function () {
     beforeEach((done) => {
@@ -333,4 +328,4 @@ describe('Create Entity with expiresAt', function () {
             });
         });
     });
-}); 
+});

@@ -107,7 +107,7 @@ describe('Read SourceIdentity', function () {
             options.url = LEPUS_URL + SOURCE_INFO;
             delete options.searchParams;
             options.headers = {
-                'Accept': 'application/ld+json'
+                Accept: 'application/ld+json'
             };
             contextBrokerMock = nock(V2_BROKER)
                 .get('/version')
