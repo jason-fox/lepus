@@ -1,0 +1,30 @@
+{
+    "id": "urn:ngsi-ld:TemperatureSensor:001",
+    "type": "TemperatureSensor",
+    "batteryLevel": {
+        "type": "Property",
+        "value": 0.8,
+        "unitCode": "C62"
+    },
+    "category": {
+        "type": "Property",
+        "value": "sensor"
+    },
+    "controlledAsset": {
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:Building:barn002",
+        "objectType": "Building"
+    },
+    "temperature": {
+        "type": "Property",
+        "value": 25,
+        "unitCode": "CEL"
+    },
+    "location": {
+      "type": "GeoProperty",
+      "value": {
+         "type": "Point",
+         "coordinates": [13.3986, 52.5547]
+      }
+    }
+}

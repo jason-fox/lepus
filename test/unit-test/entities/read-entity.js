@@ -17,7 +17,8 @@ const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 const SINGLE_ENTITY = 'entities/urn:ngsi-ld:TemperatureSensor:001';
 const timekeeper = require('timekeeper');
-const LINK_HEADER = '<https://localhost:3000/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+const LINK_HEADER =
+    '<https://localhost:3000/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
 
 let contextBrokerMock;
 
@@ -66,7 +67,7 @@ describe('Read Entity', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity.json'));
                 done();
             });
@@ -85,7 +86,7 @@ describe('Read Entity', function () {
 
         it('should return a converted NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords.json'));
                 done();
             });
@@ -95,8 +96,8 @@ describe('Read Entity', function () {
     describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.4 is set', function () {
         beforeEach(function (done) {
             delete options.searchParams;
-             options.headers = {
-                'prefer': 'ngsi-ld=1.4'
+            options.headers = {
+                prefer: 'ngsi-ld=1.4'
             };
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
@@ -107,19 +108,42 @@ describe('Read Entity', function () {
 
         it('should return a 1.4 payload, a NGSILD-Version header and a Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
-                response.headers["ngsild-version"].should.equal("1.4");
+                response.headers.link.should.equal(LINK_HEADER);
+                response.headers['ngsild-version'].should.equal('1.4');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.4.json'));
                 done();
             });
         });
     });
 
-      describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.17 is set', function () {
+    describe('When an entity using v2 dateExpired is read by id and prefer=ngsi-ld=1.4 is set', function () {
         beforeEach(function (done) {
             delete options.searchParams;
-             options.headers = {
-                'prefer': 'ngsi-ld=1.17'
+            options.headers = {
+                prefer: 'ngsi-ld=1.4'
+            };
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-expiresAt.json'));
+
+            done();
+        });
+
+        it('should return a 1.4 payload, a NGSILD-Version header and a Link Header', function (done) {
+            request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER);
+                response.headers['ngsild-version'].should.equal('1.4');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-expiresAt-1.4.json'));
+                done();
+            });
+        });
+    });
+
+    describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.17 is set', function () {
+        beforeEach(function (done) {
+            delete options.searchParams;
+            options.headers = {
+                prefer: 'ngsi-ld=1.17'
             };
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
@@ -130,8 +154,8 @@ describe('Read Entity', function () {
 
         it('should return a 1.8 payload, a NGSILD-Version header and a Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
-                response.headers["ngsild-version"].should.equal("1.8");
+                response.headers.link.should.equal(LINK_HEADER);
+                response.headers['ngsild-version'].should.equal('1.8');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.8.json'));
                 done();
             });
@@ -164,7 +188,7 @@ describe('Read Entity', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-concise.json'));
                 done();
             });
@@ -197,7 +221,7 @@ describe('Read Entity', function () {
 
         it('should return a keyValues payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-keyValues.json'));
                 done();
             });
@@ -248,7 +272,7 @@ describe('Read Entity', function () {
 
         it('should return picked attrs only', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-pick.json'));
                 done();
             });
@@ -281,7 +305,7 @@ describe('Read Entity', function () {
 
         it('should return without omitted attrs', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-omit.json'));
                 done();
             });
@@ -322,7 +346,7 @@ describe('Read Entity', function () {
 
         it('should return without omitted attrs', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-sysAttrs.json'));
                 done();
             });
@@ -381,7 +405,6 @@ describe('Read Entity', function () {
     });
 });
 
-
 describe('Read Entity with valueType', function () {
     beforeEach((done) => {
         nock.cleanAll();
@@ -399,7 +422,7 @@ describe('Read Entity with valueType', function () {
         });
     });
 
-     const options = {
+    const options = {
         method: 'GET',
         url: LEPUS_URL + SINGLE_ENTITY
     };
@@ -430,15 +453,14 @@ describe('Read Entity with valueType', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-valueType.json'));
                 done();
             });
         });
     });
 
-
-     describe('When a concise entity with valueType is read by id', function () {
+    describe('When a concise entity with valueType is read by id', function () {
         beforeEach(function (done) {
             options.searchParams = 'options=concise';
             contextBrokerMock = nock(V2_BROKER)
@@ -464,14 +486,13 @@ describe('Read Entity with valueType', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-valueType-concise.json'));
                 done();
             });
         });
     });
 });
-
 
 describe('Read Entity with expiresAt', function () {
     beforeEach((done) => {
@@ -490,7 +511,7 @@ describe('Read Entity with expiresAt', function () {
         });
     });
 
-     const options = {
+    const options = {
         method: 'GET',
         url: LEPUS_URL + SINGLE_ENTITY
     };
@@ -520,15 +541,14 @@ describe('Read Entity with expiresAt', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-expiresAt.json'));
                 done();
             });
         });
     });
 
-
-     describe('When a concise entity with expiresAt is read by id', function () {
+    describe('When a concise entity with expiresAt is read by id', function () {
         beforeEach(function (done) {
             options.searchParams = 'options=concise';
             contextBrokerMock = nock(V2_BROKER)
@@ -554,10 +574,10 @@ describe('Read Entity with expiresAt', function () {
 
         it('should return an NGSI-LD payload and Link Header', function (done) {
             request(options, function (error, response, body) {
-                response.headers.link.should.equal(LINK_HEADER)
+                response.headers.link.should.equal(LINK_HEADER);
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-expiresAt-concise.json'));
                 done();
             });
         });
     });
-}); 
+});
