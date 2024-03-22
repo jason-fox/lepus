@@ -188,7 +188,6 @@ describe('Create Entity with valueType', function () {
     beforeEach((done) => {
         nock.cleanAll();
         config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld';
-        config.valueType = true;
         lepus.start(config, () => {
             done();
         });
@@ -196,7 +195,6 @@ describe('Create Entity with valueType', function () {
 
     afterEach((done) => {
         config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld';
-        config.valueType = false;
         lepus.stop(function () {
             done();
         });
@@ -261,7 +259,6 @@ describe('Create Entity with expiresAt', function () {
     beforeEach((done) => {
         nock.cleanAll();
         config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld';
-        config.valueType = true;
         lepus.start(config, () => {
             done();
         });
@@ -269,7 +266,6 @@ describe('Create Entity with expiresAt', function () {
 
     afterEach((done) => {
         config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld';
-        config.valueType = false;
         lepus.stop(function () {
             done();
         });

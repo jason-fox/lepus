@@ -74,7 +74,7 @@ describe('Read Entity', function () {
         });
     });
 
-    describe('When an entity using v2 typed keywords is read by id', function () {
+    describe('When an entity using v2 typed keywords is read by id 1.8 core', function () {
         beforeEach(function (done) {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
@@ -93,7 +93,7 @@ describe('Read Entity', function () {
         });
     });
 
-    describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.4 is set', function () {
+    describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.4 is set 1.8 core', function () {
         beforeEach(function (done) {
             delete options.searchParams;
             options.headers = {
@@ -139,7 +139,7 @@ describe('Read Entity', function () {
         });
     });
 
-    describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.17 is set', function () {
+    describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.17 is set  1.8 core', function () {
         beforeEach(function (done) {
             delete options.searchParams;
             options.headers = {
@@ -416,7 +416,6 @@ describe('Read Entity with valueType', function () {
 
     afterEach((done) => {
         config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld';
-        config.valueType = false;
         lepus.stop(function () {
             done();
         });
@@ -426,6 +425,71 @@ describe('Read Entity with valueType', function () {
         method: 'GET',
         url: LEPUS_URL + SINGLE_ENTITY
     };
+
+    describe('When an entity using v2 typed keywords is read by id', function () {
+        beforeEach(function (done) {
+            delete options.searchParams;
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+
+            done();
+        });
+
+        it('should return a converted NGSI-LD payload and Link Header', function (done) {
+            request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER);
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.9.json'));
+                done();
+            });
+        });
+    });
+
+    describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.4 is set', function () {
+        beforeEach(function (done) {
+            delete options.searchParams;
+            options.headers = {
+                prefer: 'ngsi-ld=1.4'
+            };
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+
+            done();
+        });
+
+        it('should return a 1.4 payload, a NGSILD-Version header and a Link Header', function (done) {
+            request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER);
+                response.headers['ngsild-version'].should.equal('1.4');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.4.json'));
+                done();
+            });
+        });
+    });
+
+    describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.17 is set', function () {
+        beforeEach(function (done) {
+            delete options.searchParams;
+            options.headers = {
+                prefer: 'ngsi-ld=1.17'
+            };
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+
+            done();
+        });
+
+        it('should return a 1.8 payload, a NGSILD-Version header and a Link Header', function (done) {
+            request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER);
+                response.headers['ngsild-version'].should.equal('1.9');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.9.json'));
+                done();
+            });
+        });
+    });
 
     describe('When a normalized entity with valueType is read by id', function () {
         beforeEach(function (done) {
@@ -505,7 +569,6 @@ describe('Read Entity with expiresAt', function () {
 
     afterEach((done) => {
         config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld';
-        config.valueType = false;
         lepus.stop(function () {
             done();
         });

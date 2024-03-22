@@ -12,8 +12,7 @@
     },
     "controlledAsset": {
         "type": "Relationship",
-        "object": "urn:ngsi-ld:Building:barn002",
-        "objectType": "Building"
+        "object": "urn:ngsi-ld:Building:barn002"
     },
     "temperature": {
         "type": "Property",
