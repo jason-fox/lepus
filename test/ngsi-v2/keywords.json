@@ -21,7 +21,12 @@
   "controlledAsset": {
     "type": "ListRelationship",
     "value": ["urn:ngsi-ld:Building:barn002"],
-    "metadata": {}
+    "metadata": {
+      "objectType": {
+        "type": "Property",
+        "value": "Building"
+      }
+    }
   },
   "location": {
     "type": "geo:json",

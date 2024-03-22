@@ -17,7 +17,8 @@
     "type": "ListRelationship",
     "objectList": [
       "urn:ngsi-ld:Building:barn002"
-    ]
+    ],
+    "objectType": "Building"
   },
   "location": {
     "type": "GeoProperty",

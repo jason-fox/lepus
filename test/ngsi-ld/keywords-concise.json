@@ -14,7 +14,8 @@
   "controlledAsset": {
     "objectList": [
       "urn:ngsi-ld:Building:barn002"
-    ]
+    ],
+    "objectType": "Building"
   },
   "location": {
       "type": "Point",
