@@ -106,10 +106,10 @@ describe('Read Entity', function () {
             done();
         });
 
-        it('should return a 1.4 payload, a NGSILD-Version header and a Link Header', function (done) {
+        it('should return a 1.4 payload, a Preference-Applied header and a Link Header', function (done) {
             request(options, function (error, response, body) {
                 response.headers.link.should.equal(LINK_HEADER);
-                response.headers['ngsild-version'].should.equal('1.4');
+                response.headers['preference-applied'].should.equal('ngsi-ld=1.4');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.4.json'));
                 done();
             });
@@ -135,10 +135,10 @@ describe('Read Entity', function () {
             done();
         });
 
-        it('should return a 1.4 payload, a NGSILD-Version header and a Link Header', function (done) {
+        it('should return a 1.4 payload, a Preference-Applied header and a Link Header', function (done) {
             request(options, function (error, response, body) {
                 response.headers.link.should.equal(LINK_HEADER);
-                response.headers['ngsild-version'].should.equal('1.4');
+                response.headers['preference-applied'].should.equal('ngsi-ld=1.4');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-expiresAt-1.4.json'));
                 done();
             });
@@ -164,10 +164,10 @@ describe('Read Entity', function () {
             done();
         });
 
-        it('should return a 1.8 payload, a NGSILD-Version header and a Link Header', function (done) {
+        it('should return a 1.8 payload, a Preference-Applied header and a Link Header', function (done) {
             request(options, function (error, response, body) {
                 response.headers.link.should.equal(LINK_HEADER);
-                response.headers['ngsild-version'].should.equal('1.8');
+                response.headers['preference-applied'].should.equal('ngsi-ld=1.8');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.8.json'));
                 done();
             });
@@ -470,10 +470,10 @@ describe('Read Entity with valueType', function () {
             done();
         });
 
-        it('should return a 1.4 payload, a NGSILD-Version header and a Link Header', function (done) {
+        it('should return a 1.4 payload, a Preference-Applied header and a Link Header', function (done) {
             request(options, function (error, response, body) {
                 response.headers.link.should.equal(LINK_HEADER);
-                response.headers['ngsild-version'].should.equal('1.4');
+                response.headers['preference-applied'].should.equal('ngsi-ld=1.4');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.4.json'));
                 done();
             });
@@ -499,10 +499,10 @@ describe('Read Entity with valueType', function () {
             done();
         });
 
-        it('should return a 1.8 payload, a NGSILD-Version header and a Link Header', function (done) {
+        it('should return a 1.9 payload, a Preference-Applied header and a Link Header', function (done) {
             request(options, function (error, response, body) {
                 response.headers.link.should.equal(LINK_HEADER);
-                response.headers['ngsild-version'].should.equal('1.9');
+                response.headers['preference-applied'].should.equal('ngsi-ld=1.9');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.9.json'));
                 done();
             });
