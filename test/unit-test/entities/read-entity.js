@@ -114,6 +114,12 @@ describe('Read Entity', function () {
                 done();
             });
         });
+        it('should return Non-Authoritative Information', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(203);
+                done();
+            });
+        });
     });
 
     describe('When an entity using v2 dateExpired is read by id and prefer=ngsi-ld=1.4 is set', function () {
@@ -134,6 +140,12 @@ describe('Read Entity', function () {
                 response.headers.link.should.equal(LINK_HEADER);
                 response.headers['ngsild-version'].should.equal('1.4');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entity-expiresAt-1.4.json'));
+                done();
+            });
+        });
+        it('should return Non-Authoritative Information', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(203);
                 done();
             });
         });
@@ -463,6 +475,12 @@ describe('Read Entity with valueType', function () {
                 response.headers.link.should.equal(LINK_HEADER);
                 response.headers['ngsild-version'].should.equal('1.4');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/keywords-1.4.json'));
+                done();
+            });
+        });
+        it('should return Non-Authoritative Information', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(203);
                 done();
             });
         });
