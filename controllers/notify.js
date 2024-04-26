@@ -13,9 +13,6 @@ const debug = require('debug')('adapter:notify');
 
 const moment = require('moment-timezone');
 const { v4: uuidv4 } = require('uuid');
-const util = require('util');
-const StatusCodes = require('http-status-codes').StatusCodes;
-const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 
 const got = require('got').extend({
     timeout: {
@@ -58,7 +55,7 @@ async function notify(req, res) {
     };
 
     if (!isJSONLD) {
-        options.headers['Link'] =
+        options.headers.Link =
             '<' +
             Config.getConfig().userContext +
             '>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';

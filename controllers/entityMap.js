@@ -7,7 +7,6 @@
 
 const debug = require('debug')('adapter:entities');
 const _ = require('lodash');
-const path = require('node:path');
 const NGSI_LD = require('../lib/ngsi-ld');
 const NGSI_V2 = require('../lib/ngsi-v2');
 const Request = require('../lib/request');
@@ -25,14 +24,11 @@ const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 async function generateEntityMap(req, res) {
     debug('readIds');
     const isJSONLD = req.get('Accept') === 'application/ld+json';
-    const isPrefer = req.get('Prefer') ? req.get('Prefer') : null;
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const queryOptions = req.query.options ? req.query.options.split(',') : null;
     const queryType = req.query.type ? req.query.type.split(',') : [];
     const queryQ = req.query.q;
 
-
-  
     let v2queryOptions = null;
     if (req.query.options) {
         v2queryOptions = _.without(queryOptions, 'concise', 'sysAttrs');
@@ -64,9 +60,8 @@ async function generateEntityMap(req, res) {
         options.searchParams.limit = Config.getConfig().limit;
     }
 
-
     if (options.searchParams) {
-        attrs = [];
+        const attrs = [];
         if (options.searchParams.q) {
             attrs.push('q=' + options.searchParams.q);
         }
@@ -86,7 +81,7 @@ async function generateEntityMap(req, res) {
     const ids = [];
     let offset = 0;
 
-    while (moreEntities){
+    while (moreEntities) {
         const response = await Request.sendRequest('/entities', options);
         const v2Body = response.body ? JSON.parse(response.body) : [];
         if (!Request.is2xxSuccessful(res.statusCode)) {
@@ -96,16 +91,17 @@ async function generateEntityMap(req, res) {
             //Request.getErrorType(res.statusCode, error)
             return Request.sendError(res, error);
         }
-        const returnedIds = _.map(v2Body , (e)=>{ return e.id; });
-        ids.push(...returnedIds)
+        const returnedIds = _.map(v2Body, (e) => {
+            return e.id;
+        });
+        ids.push(...returnedIds);
 
-        if (returnedIds.length === 0){
-            moreEntities = false
+        if (returnedIds.length === 0) {
+            moreEntities = false;
         } else {
             offset = offset + options.searchParams.limit;
             options.searchParams.offset = offset;
         }
-       
     }
 
     if (res.locals.tenant) {
@@ -114,16 +110,13 @@ async function generateEntityMap(req, res) {
     if (res.locals.servicePath) {
         res.set('NGSILD-Path', res.locals.servicePath);
     }
-
-    console.log(ids)
     const ldPayload = NGSI_LD.formatEntityMap(ids, isJSONLD);
-    console.log(ldPayload)
     res.type(!isJSONLD ? 'application/json' : 'application/ld+json');
     return Request.sendResponse(res, {}, ldPayload, contentType);
 }
 /**
  * Since Entity Maps are not stored, return not found
- * 
+ *
  * @param req - the incoming request
  * @param res - the response to return
  */

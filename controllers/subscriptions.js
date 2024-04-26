@@ -5,11 +5,9 @@
  *
  */
 
-const StatusCodes = require('http-status-codes').StatusCodes;
-const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 const _ = require('lodash');
 const debug = require('debug')('adapter:subscriptions');
-const Config = require('../lib/configService');
+
 const Request = require('../lib/request');
 const NGSI_LD = require('../lib/ngsi-ld');
 const NGSI_V2 = require('../lib/ngsi-v2');
@@ -149,15 +147,13 @@ async function createSubscription(req, res) {
 
     res.statusCode = response.statusCode;
     if (response.headers.location) {
-        {
-            res.set(
-                'Location',
-                response.headers.location.replace(
-                    /v2\/subscriptions\//gi,
-                    'ngsi-ld/v1/subscriptions/urn:ngsi-ld:Subscription:'
-                )
-            );
-        }
+        res.set(
+            'Location',
+            response.headers.location.replace(
+                /v2\/subscriptions\//gi,
+                'ngsi-ld/v1/subscriptions/urn:ngsi-ld:Subscription:'
+            )
+        );
     }
     if (res.locals.tenant) {
         res.set('NGSILD-Tenant', res.locals.tenant);
@@ -173,7 +169,7 @@ async function createSubscription(req, res) {
 async function updateSubscription(req, res) {
     const headers = res.locals.headers;
     const id = req.params.id.replace(/urn:ngsi-ld:Subscription:/gi, '');
-    let v2Payload = NGSI_V2.formatSubscription(req.body);
+    const v2Payload = NGSI_V2.formatSubscription(req.body);
 
     const options = {
         method: req.method,

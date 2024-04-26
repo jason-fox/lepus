@@ -7,7 +7,6 @@
 const debug = require('debug')('adapter:batch');
 const _ = require('lodash');
 const NGSI_V2 = require('../lib/ngsi-v2');
-const Config = require('../lib/configService');
 const Request = require('../lib/request');
 
 /**
@@ -60,6 +59,7 @@ async function deleteEntities(req, res) {
     });
     const options = {
         method: req.method,
+        headers,
         throwHttpErrors: false,
         retry: 0,
         json: {
@@ -92,6 +92,7 @@ async function upsertEntities(req, res) {
     });
     const options = {
         method: req.method,
+        headers,
         throwHttpErrors: false,
         retry: 0,
         json: {
@@ -124,6 +125,7 @@ async function updateEntities(req, res) {
     });
     const options = {
         method: req.method,
+        headers,
         throwHttpErrors: false,
         retry: 0,
         json: {

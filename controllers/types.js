@@ -4,14 +4,8 @@
  * This file is part of NGSI-LD to NGSI-v2 Adapter
  *
  */
-
-const StatusCodes = require('http-status-codes').StatusCodes;
-const getReasonPhrase = require('http-status-codes').getReasonPhrase;
-const _ = require('lodash');
-
 const debug = require('debug')('adapter:types');
 const NGSI_LD = require('../lib/ngsi-ld');
-const Config = require('../lib/configService');
 const Request = require('../lib/request');
 
 async function listTypes(req, res) {

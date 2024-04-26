@@ -11,7 +11,6 @@ const _ = require('lodash');
 
 const debug = require('debug')('adapter:attributes');
 const NGSI_LD = require('../lib/ngsi-ld');
-const Constants = require('../lib/constants');
 const Request = require('../lib/request');
 
 /**

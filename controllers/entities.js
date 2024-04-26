@@ -9,11 +9,9 @@ const debug = require('debug')('adapter:entities');
 const StatusCodes = require('http-status-codes').StatusCodes;
 const getReasonPhrase = require('http-status-codes').getReasonPhrase;
 const _ = require('lodash');
-const moment = require('moment-timezone');
 const path = require('node:path');
 const NGSI_LD = require('../lib/ngsi-ld');
 const NGSI_V2 = require('../lib/ngsi-v2');
-const Config = require('../lib/configService');
 const Request = require('../lib/request');
 
 /**
@@ -91,7 +89,7 @@ async function readEntities(req, res) {
     }
 
     if (options.searchParams) {
-        attrs = [];
+        const attrs = [];
         if (options.searchParams.q) {
             attrs.push('q=' + options.searchParams.q);
         }
@@ -401,7 +399,6 @@ async function deleteEntityAttribute(req, res) {
  */
 async function purgeEntities(req, res) {
     debug('purgeEntities');
-    const isJSONLD = req.get('Accept') === 'application/ld+json';
     const queryAttrs = req.query.attrs ? req.query.attrs.split(',') : null;
     const queryType = req.query.type ? req.query.type.split(',') : [];
     const queryQ = req.query.q;
@@ -438,7 +435,7 @@ async function purgeEntities(req, res) {
     }
 
     if (optionsGet.searchParams) {
-        attrs = [];
+        const attrs = [];
         if (optionsGet.searchParams.q) {
             attrs.push('q=' + optionsGet.searchParams.q);
         }
@@ -461,6 +458,7 @@ async function purgeEntities(req, res) {
     res.statusCode = responseGet.statusCode;
 
     const v2BodyGet = JSON.parse(responseGet.body);
+    const type = v2BodyGet.type;
     if (!Request.is2xxSuccessful(res.statusCode)) {
         return Request.sendError(res, v2BodyGet);
     }

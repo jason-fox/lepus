@@ -5,14 +5,9 @@
  *
  */
 
-const StatusCodes = require('http-status-codes').StatusCodes;
-const getReasonPhrase = require('http-status-codes').getReasonPhrase;
-const _ = require('lodash');
-
 const path = require('path');
 const debug = require('debug')('adapter:identity');
 const NGSI_LD = require('../lib/ngsi-ld');
-const Constants = require('../lib/constants');
 const Config = require('../lib/configService');
 const Request = require('../lib/request');
 const got = require('got').extend({
@@ -34,7 +29,6 @@ function is2xxSuccessful(status) {
 
 async function getIdentity(req, res) {
     const headers = res.locals.headers;
-    const attrName = req.params.attr;
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
 
