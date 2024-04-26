@@ -242,6 +242,7 @@ Configuration occurs using Docker Environment variables:
 -   **LEPUS_ALIAS** - host alias for Lepus
 -   **LEPUS_RELAY_TIMEOUT** maximum length of time to forward the **NGSI-LD** notification
 -   **LEPUS_URL** for the location of Lepus itself -  e.g. `LEPUS_URL=http://<lepus>`
+-   **LEPUS_MULTI_CORE** - whether to use multiple cores
 -   **INCLUDE_VALUE_TYPE** - include the NGSI-v2 attribute `type` in the returned payload
 -   **NGSI_V2_CONTEXT_BROKER** for the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL - e.g. `NGSI_V2_CONTEXT_BROKER=http://orion2:1026`
 -   **NGSI_V2_TIMEOUT** maximum length of time to access the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL in milliseconds

@@ -5,9 +5,42 @@
  */
 
 const lepus = require('../lib/lepus');
+const config = require('../lib/configService');
 const newConfig = require('../config');
 const debug = require('debug')('adapter:lepus');
+const cluster = require('cluster');
 
-lepus.start(newConfig, (text)=>{ debug(text);})
 
+config.setConfig(newConfig);
 
+// If if was configured multi-core and the value is true
+if (config.getConfig().multiCore !== true) {
+	lepus.start(null, (text)=>{ debug(text);});
+} else if (cluster.isMaster) {
+    // Code to run if we're in a master node process
+    // Count the machine's CPUs
+    const cpuCount = require('os').cpus().length;
+    debug('Master cluster setting up ' + cpuCount + ' workers...');
+
+    // Create a worker for each CPU in the machine
+    for (let i = 0; i < cpuCount; i += 1) {
+        cluster.fork();
+    }
+
+    // Log information about the creation of the workers
+    cluster.on('online', function (worker) {
+        debug('Worker ' + worker.process.pid + ' is online');
+    });
+
+    // If a worker died, automatically we create a new worker to replace it
+    cluster.on('exit', function (worker, code, signal) {
+        const message = 'Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal;
+        debug(message);
+        debug('Starting a new worker...');
+        cluster.fork();
+    });
+} else {
+    // We are in the worker, and they can share any TCP connection
+    debug('Starting a new worker...');
+    lepus.start(null, (text)=>{ debug(text);})
+}

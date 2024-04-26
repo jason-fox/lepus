@@ -23,4 +23,6 @@ config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.
 
 config.alias = 'lepus';
 
+config.multiCore = false;
+
 module.exports = config;
