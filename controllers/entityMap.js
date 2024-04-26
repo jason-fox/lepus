@@ -22,7 +22,7 @@ const getReasonPhrase = require('http-status-codes').getReasonPhrase;
  * @param res - the response to return
  */
 async function generateEntityMap(req, res) {
-    debug('readIds');
+    debug('generateEntityMap');
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const queryOptions = req.query.options ? req.query.options.split(',') : null;
@@ -32,6 +32,14 @@ async function generateEntityMap(req, res) {
     let v2queryOptions = null;
     if (req.query.options) {
         v2queryOptions = _.without(queryOptions, 'concise', 'sysAttrs');
+    }
+
+    if (!req.query.q && !req.query.type) {
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            type: 'https://uri.etsi.org/ngsi-ld/errors/BadRequestData',
+            title: getReasonPhrase(StatusCodes.BAD_REQUEST),
+            detail: `${req.path}`
+        });
     }
 
     const headers = NGSI_V2.setHeaders(res);
@@ -121,6 +129,7 @@ async function generateEntityMap(req, res) {
  * @param res - the response to return
  */
 function readEntityMap(req, res) {
+    debug('readEntityMap');
     return res.status(StatusCodes.NOT_FOUND).send({
         type: 'https://uri.etsi.org/ngsi-ld/errors/ResourceNotFound',
         title: getReasonPhrase(StatusCodes.NOT_FOUND),
@@ -135,6 +144,7 @@ function readEntityMap(req, res) {
  * @param res - the response to return
  */
 function mergeEntityMap(req, res) {
+    debug('mergeEntityMap');
     return res.status(StatusCodes.NOT_FOUND).send({
         type: 'https://uri.etsi.org/ngsi-ld/errors/ResourceNotFound',
         title: getReasonPhrase(StatusCodes.NOT_FOUND),
