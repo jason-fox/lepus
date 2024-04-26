@@ -25,4 +25,6 @@ config.alias = 'lepus';
 
 config.multiCore = false;
 
+config.limit = 1000;
+
 module.exports = config;

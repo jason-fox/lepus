@@ -9,5 +9,6 @@ config.lepusUrl = 'https://localhost:3000';
 config.coreContext = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld';
 config.alias = 'lepus';
 config.multiCore = false;
+config.limit = 3;
 
 module.exports = config;

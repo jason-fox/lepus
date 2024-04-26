@@ -9,6 +9,7 @@ const debug = require('debug')('adapter:routes');
 const express = require('express');
 const router = express.Router();
 const entities = require('../controllers/entities');
+const entityMap = require('../controllers/entityMap');
 const subscriptions = require('../controllers/subscriptions');
 const notify = require('../controllers/notify');
 const types = require('../controllers/types');
@@ -188,6 +189,27 @@ router
     .get(tryCatch(identity.get))
     .all(methodNotAllowedHandler);
 
+router
+    .route('/entityMap')
+    .options((req, res, next) => {
+        optionsHandler(req, res, next, 'GET,OPTIONS');
+    })
+    .get(tryCatch(entityMap.generate))
+    .all(methodNotAllowedHandler);
+router
+    .route('/entityMap/:id')
+    .get(tryCatch(entityMap.read))
+    .patch(tryCatch(entityMap.merge))
+    .options((req, res, next) => {
+        optionsHandler(
+            req,
+            res,
+            next,
+            'GET,PATCH,OPTIONS',
+            'application/json, application/ld+json, application/merge-patch+json'
+        );
+    })
+    .all(methodNotAllowedHandler);
 // All other routes
 router.route('/*').all(methodNotAllowedHandler);
 
