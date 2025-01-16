@@ -8,7 +8,7 @@
         "valueType": "Float"
     },
     "category": {
-        "type": "VocabularyProperty",
+        "type": "VocabProperty",
         "vocab": "sensor"
     },
     "controlledAsset": {

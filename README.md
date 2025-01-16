@@ -287,4 +287,4 @@ curl -L 'http://localhost:9090/ngsi-ld/v1/csourceRegistrations/' \
 
 ## License
 
-[MIT](LICENSE) © 2023 FIWARE Foundation e.V.
+[MIT](LICENSE) © 2023-2025 FIWARE Foundation e.V.

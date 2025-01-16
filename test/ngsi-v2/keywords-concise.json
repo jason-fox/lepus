@@ -10,7 +10,7 @@
     "metadata": {}
   },
   "category": {
-    "type": "VocabularyProperty",
+    "type": "VocabProperty",
     "value": "sensor",
     "metadata": {
       "TimeInstant": {
