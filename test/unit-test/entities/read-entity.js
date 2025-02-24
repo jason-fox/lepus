@@ -18,7 +18,7 @@ const V2_BROKER = 'http://orion:1026';
 const SINGLE_ENTITY = 'entities/urn:ngsi-ld:TemperatureSensor:001';
 const timekeeper = require('timekeeper');
 const LINK_HEADER =
-    '<https://localhost:3000/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
+    '<https://context/ngsi-ld.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
 
 let contextBrokerMock;
 
