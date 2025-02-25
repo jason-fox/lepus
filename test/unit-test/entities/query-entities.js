@@ -16,7 +16,7 @@ const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 const LINK_HEADER =
-    '<https://localhost:3000/context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
+    '<https://context/ngsi-ld.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
 
 let contextBrokerMock;
 
