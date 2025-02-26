@@ -523,8 +523,8 @@ async function purgeEntities(req, res) {
 }
 
 function createNextPrevBaseURL(req) {
-    let url = req.path;
-    let params = [];
+    const url = req.path;
+    const params = [];
 
     _.forEach(req.query, function (value, key) {
         if (key !== 'offset') {
