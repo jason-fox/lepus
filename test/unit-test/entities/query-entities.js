@@ -104,6 +104,44 @@ describe('Query Entities Tests', function () {
         });
     });
 
+
+    describe('When normalized entities are read by query and count requested', function () {
+        beforeEach(function (done) {
+            options.searchParams = 'q=temperature==100&count=true';
+            contextBrokerMock = nock(V2_BROKER)
+                .get('/v2/entities?q=temperature==100&options=count')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'), { 'Fiware-Total-Count': '2'});
+
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should return an NGSI-LD payload, Link Header and NGSILD-Results-Count Header ', function (done) {
+            request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER);
+
+                console.log(response.headers)
+
+                response.headers['ngsild-results-count'].should.equal('2');
+                body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entities.json'));
+                done();
+            });
+        });
+    });
+
     describe('When normalized entities are queried and attributes picked', function () {
         beforeEach(function (done) {
             options.searchParams = 'q=temperature==100&pick=id,type,temperature';

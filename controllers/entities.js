@@ -41,6 +41,7 @@ async function readEntities(req, res) {
     transformFlags.attrsOnly = req.path.split(path.sep).includes('attrs');
     transformFlags.pick = req.query.pick;
     transformFlags.omit = req.query.omit;
+    transformFlags.count = req.query.count;
 
     if (isPrefer && isPrefer.startsWith('ngsi-ld=')) {
         transformFlags.version = isPrefer.substring(8);
@@ -50,6 +51,9 @@ async function readEntities(req, res) {
     let ldPayload = null;
     if (req.query.options) {
         v2queryOptions = _.without(queryOptions, 'concise', 'sysAttrs');
+    }
+    if(transformFlags.count){
+       v2queryOptions = v2queryOptions ? v2queryOptions.push('count') : ['count'] 
     }
 
     const headers = NGSI_V2.setHeaders(res);
@@ -67,6 +71,7 @@ async function readEntities(req, res) {
         delete options.searchParams.pick;
         delete options.searchParams.omit;
         delete options.searchParams.format;
+        delete options.searchParams.count;
 
         if (queryType.length > 1) {
             delete options.searchParams.type;
@@ -120,6 +125,7 @@ async function readEntities(req, res) {
         res.set('NGSILD-Path', res.locals.servicePath);
     }
     const v2Body = response.body ? JSON.parse(response.body) : {};
+    const v2Headers = response.headers;
     const type = v2Body.type;
     if (!Request.is2xxSuccessful(res.statusCode)) {
         const error = {
@@ -153,7 +159,7 @@ async function readEntities(req, res) {
     Request.linkContext(res, isJSONLD);
     Request.ngsiVersion(res, transformFlags.version);
     res.type(!isJSONLD ? 'application/json' : 'application/ld+json');
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType, v2Headers);
 }
 
 /**
