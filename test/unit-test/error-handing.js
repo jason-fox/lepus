@@ -60,7 +60,7 @@ describe('Error Handling', function () {
 
     describe('When a timeout occurs', function () {
         beforeEach(function (done) {
-            contextBrokerMock = nock(V2_BROKER).get('/v2/entities/').replyWithError({
+            contextBrokerMock = nock(V2_BROKER).get('/v2/entities/?options=count').replyWithError({
                 message: 'something awful happened',
                 code: 'ETIMEDOUT'
             });
@@ -82,7 +82,7 @@ describe('Error Handling', function () {
 
     describe('When connection is refused', function () {
         beforeEach(function (done) {
-            contextBrokerMock = nock(V2_BROKER).get('/v2/entities/').replyWithError({
+            contextBrokerMock = nock(V2_BROKER).get('/v2/entities/?options=count').replyWithError({
                 message: 'something awful happened',
                 code: 'ECONNREFUSED'
             });
@@ -104,7 +104,7 @@ describe('Error Handling', function () {
 
     describe('When an unexpected error occurs', function () {
         beforeEach(function (done) {
-            contextBrokerMock = nock(V2_BROKER).get('/v2/entities/').replyWithError({
+            contextBrokerMock = nock(V2_BROKER).get('/v2/entities/?options=count').replyWithError({
                 message: 'something awful happened',
                 code: 'EUNKNOWN'
             });

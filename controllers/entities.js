@@ -42,6 +42,8 @@ async function readEntities(req, res) {
     transformFlags.pick = req.query.pick;
     transformFlags.omit = req.query.omit;
     transformFlags.count = req.query.count;
+    transformFlags.limit = req.query.limit || 20;
+    transformFlags.offset = req.query.offset || 0;
 
     if (isPrefer && isPrefer.startsWith('ngsi-ld=')) {
         transformFlags.version = isPrefer.substring(8);
@@ -51,11 +53,14 @@ async function readEntities(req, res) {
     let ldPayload = null;
     if (req.query.options) {
         v2queryOptions = _.without(queryOptions, 'concise', 'sysAttrs');
-    }
-    if(transformFlags.count){
-       v2queryOptions = v2queryOptions ? v2queryOptions.push('count') : ['count'] 
-    }
 
+        if (!req.params.id) {
+            v2queryOptions.push('count');
+        }
+    } else if (!req.params.id) {
+        v2queryOptions = v2queryOptions ? v2queryOptions.push('count') : ['count'];
+    }
+    const baseUrl = createNextPrevBaseURL(req);
     const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: req.method,
@@ -159,7 +164,7 @@ async function readEntities(req, res) {
     Request.linkContext(res, isJSONLD);
     Request.ngsiVersion(res, transformFlags.version);
     res.type(!isJSONLD ? 'application/json' : 'application/ld+json');
-    return Request.sendResponse(res, v2Body, ldPayload, contentType, v2Headers);
+    return Request.sendResponse(res, v2Body, ldPayload, contentType, v2Headers, transformFlags, baseUrl);
 }
 
 /**
@@ -515,6 +520,18 @@ async function purgeEntities(req, res) {
     const v2BodyDelete = responseDelete.body ? JSON.parse(responseDelete.body) : undefined;
 
     return Request.sendResponse(res, v2BodyDelete);
+}
+
+function createNextPrevBaseURL(req) {
+    let url = req.path;
+    let params = [];
+
+    _.forEach(req.query, function (value, key) {
+        if (key !== 'offset') {
+            params.push(`${key}=${value}`);
+        }
+    });
+    return `${url}?${params.join('&')}`;
 }
 
 exports.read = readEntities;
