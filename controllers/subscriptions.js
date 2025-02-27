@@ -20,7 +20,7 @@ const NGSI_V2 = require('../lib/ngsi-v2');
  */
 
 async function listSubscriptions(req, res) {
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const options = {
@@ -65,7 +65,7 @@ async function listSubscriptions(req, res) {
  */
 
 async function readSubscription(req, res) {
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
     const isJSONLD = req.get('Accept') === 'application/ld+json';
     const contentType = isJSONLD ? 'application/ld+json' : 'application/json';
     const id = req.params.id.replace(/urn:ngsi-ld:Subscription:/gi, '');
@@ -100,7 +100,7 @@ async function readSubscription(req, res) {
  */
 
 async function deleteSubscription(req, res) {
-    const headers = res.locals.headers;
+    const headers = NGSI_V2.setHeaders(res);
 
     const id = req.params.id.replace(/urn:ngsi-ld:Subscription:/gi, '');
     const options = {
