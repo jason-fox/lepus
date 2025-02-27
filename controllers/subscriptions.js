@@ -131,15 +131,13 @@ async function deleteSubscription(req, res) {
  */
 
 async function createSubscription(req, res) {
-    const headers = res.locals.headers;
-    const v2Payload = NGSI_V2.formatSubscription(req.body);
-
+    const headers = NGSI_V2.setHeaders(res);
     const options = {
         method: req.method,
         throwHttpErrors: false,
-        headers,
         retry: 0,
-        json: v2Payload
+        headers,
+        json: NGSI_V2.formatSubscription(req.body)
     };
 
     debug('createSubscription: ', req.path, options);
