@@ -26,7 +26,7 @@ services:
       - "3000:3000"
     environment:
       - DEBUG=adapter:*
-      - NGSI_V2_CONTEXT_BROKER=http://orion2:1026/v2
+      - NGSI_V2_CONTEXT_BROKER=http://orion2:1026
       - CONTEXT_URL=https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld
       - NOTIFICATION_RELAY_URL=http://adapter:3000/notify
       
