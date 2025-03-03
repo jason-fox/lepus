@@ -131,9 +131,6 @@ describe('Query Entities Tests', function () {
         it('should return an NGSI-LD payload, Link Header and NGSILD-Results-Count Header ', function (done) {
             request(options, function (error, response, body) {
                 response.headers.link.should.equal(LINK_HEADER);
-
-                console.log(response.headers);
-
                 response.headers['ngsild-results-count'].should.equal('2');
                 body.should.eql(utils.readExampleFile('./test/ngsi-ld/Entities.json'));
                 done();
