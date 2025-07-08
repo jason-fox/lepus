@@ -7,6 +7,6 @@ const tryCatch = require('../lib/errors').tryCatch;
 
 
 
-router.route('/notify').post(tryCatch(notify.notify)).all(methodNotAllowedHandler);
+router.route('/notify').post(tryCatch(notify.notifyAsV2)).all(methodNotAllowedHandler);
 
 module.exports = router;

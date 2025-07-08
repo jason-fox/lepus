@@ -106,7 +106,7 @@ router.route('/attributes').get(tryCatch(attributes.list)).options(optionsHandle
 router.route('/attributes/:attr').get(tryCatch(attributes.read)).options(optionsHandler).all(methodNotAllowedHandler);
 
 // Notifications
-router.route('/notify').post(tryCatch(notify.notify)).all(methodNotAllowedHandler);
+router.route('/notify').post(tryCatch(notify.notifyAsLD)).all(methodNotAllowedHandler);
 
 // Batch Operations
 router

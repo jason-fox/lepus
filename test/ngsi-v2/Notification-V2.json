@@ -1,8 +1,5 @@
 {
-  "id": "urn:ngsi-ld:Notification:xxx",
-  "type": "Notification",
-  "notifiedAt": "2024-02-xxx",
-  "subscriptionId": "urn:ngsi-ld:Subscription:001",
+  "id": "urn:ngsi-ld:Subscription:001",
   "data": [
     {
       "id": "urn:ngsi-ld:TemperatureSensor:001",
@@ -10,20 +7,32 @@
       "batteryLevel": {
         "type": "Property",
         "value": 0.8,
-        "unitCode": "C62"
+        "metadata": {
+          "unitCode": {
+            "type": "Property",
+            "value": "C62"
+          }
+        }
       },
       "category": {
         "type": "Property",
-        "value": "sensor"
+        "value": "sensor",
+        "metadata": {}
       },
       "controlledAsset": {
         "type": "Relationship",
-        "object": "urn:ngsi-ld:Building:barn002"
+        "value": "urn:ngsi-ld:Building:barn002",
+        "metadata": {}
       },
       "temperature": {
         "type": "Property",
         "value": 25,
-        "unitCode": "CEL"
+        "metadata": {
+          "unitCode": {
+            "type": "Property",
+            "value": "CEL"
+          }
+        }
       }
     },
     {
@@ -31,12 +40,18 @@
       "type": "TemperatureSensor",
       "category": {
         "type": "Property",
-        "value": "sensor"
+        "value": "sensor",
+        "metadata": {}
       },
       "temperature": {
         "type": "Property",
         "value": 21,
-        "unitCode": "CEL"
+        "metadata": {
+          "unitCode": {
+            "type": "Property",
+            "value": "CEL"
+          }
+        }
       }
     }
   ]

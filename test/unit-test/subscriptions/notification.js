@@ -14,6 +14,7 @@ const should = require('should');
 const utils = require('../../utils');
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
+const LEPUS_REVERSE_URL = 'http://localhost:3000/ngsi/v2/';
 const SUBSCRIBER_ENDPOINT = 'http://localhost:3001';
 const StatusCodes = require('http-status-codes').StatusCodes;
 const bodyParser = require('body-parser');
@@ -55,7 +56,7 @@ describe('Raise Notification', function () {
         url: LEPUS_URL + '/notify'
     };
 
-    describe('When a notification is raised', function () {
+    describe('When an NGSI-v2 notification is raised', function () {
         beforeEach(function (done) {
             options.json = utils.readExampleFile('./test/ngsi-v2/Notification.json');
             notification = null;
@@ -77,4 +78,27 @@ describe('Raise Notification', function () {
             });
         });
     });
+
+    describe('When an an NGSI-LD notification is raised', function () {
+        beforeEach(function (done) {
+            options.json = utils.readExampleFile('./test/ngsi-ld/Notification.json');
+            options.url = LEPUS_REVERSE_URL + '/notify'
+            notification = null;
+            done();
+        });
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should forward an NGSI-v2 subscriber', function (done) {
+            request(options, function (error, response, body) {
+                notification.should.eql(utils.readExampleFile('./test/ngsi-v2/Notification-V2.json'));
+                done();
+            });
+        });
+    });
 });
+
