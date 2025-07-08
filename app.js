@@ -4,7 +4,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const _ = require('lodash');
 
-const indexRouter = require('./routes/index');
+const nsgiLdRouter = require('./routes/ngsi-ld');
+const nsgiv2Router = require('./routes/ngsi-v2');
 const nocache = require('nocache');
 const Request = require('./lib/request');
 
@@ -49,8 +50,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/ngsi-ld/v1', indexRouter);
-app.use('//ngsi-ld/v1', indexRouter);
+app.use('/ngsi/v2', nsgiv2Router);
+app.use('//ngsi/v2', nsgiv2Router);
+app.use('/ngsi-ld/v1', nsgiLdRouter);
+app.use('//ngsi-ld/v1', nsgiLdRouter);
 
 app.get('/context.jsonld', (req, res) => {
     return Request.serveContext(req, res);
