@@ -7,7 +7,7 @@ config.relayTimeout = 1000;
 
 // The **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL - e.g. `NGSI_V2_CONTEXT_BROKER=http://orion2:1026/v2`
 
-config.v2ContextBroker = 'http://localhost:1027';
+config.v2ContextBroker = 'http://localhost:1026';
 
 // maximum length of time to access the **NGSI-v2** [Orion Context Broker](https://github.com/telefonicaid/fiware-orion) URL in milliseconds
 config.v2Timeout = 1000;
