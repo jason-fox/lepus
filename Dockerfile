@@ -45,7 +45,7 @@ ENV NODE_ENV=development
 # Ports used by application
 EXPOSE ${WEB_APP_PORT:-3000} ${DUMMY_DEVICES_PORT:-3001}
 CMD ["node", "/opt/adapter/bin/www"]
-HEALTHCHECK --interval=5s --timeout=5s --start-period=10s \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
    CMD npm run healthcheck
 
 ########################################################################################
@@ -89,6 +89,6 @@ ENV NODE_ENV=production
 EXPOSE ${WEB_APP_PORT:-3000} 
 CMD ["./bin/www"]
 
-HEALTHCHECK --interval=5s --timeout=5s --start-period=10s \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
     CMD ["/nodejs/bin/node", "./bin/healthcheck"]
 
