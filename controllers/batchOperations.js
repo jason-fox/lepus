@@ -40,7 +40,7 @@ async function createEntities(req, res) {
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
     const ldPayload = null;
 
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -73,7 +73,7 @@ async function deleteEntities(req, res) {
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
     const ldPayload = null;
 
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -106,7 +106,7 @@ async function upsertEntities(req, res) {
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
     const ldPayload = null;
 
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -139,7 +139,7 @@ async function updateEntities(req, res) {
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
     const ldPayload = null;
 
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 exports.upsert = upsertEntities;

@@ -9,7 +9,7 @@
     "lint:md": "remark -S -f '*.md'",
     "lint:text": "textlint '*.md'",
     "prettier": "prettier --config .prettierrc.json --write **/**/**/*.js  **/**/*.js  **/*.js *.js",
-    "test:single": "nyc --reporter=text mocha --recursive 'test/**/*.js' --reporter spec --timeout 5000 --ui bdd --exit  --color true -g 'When an unexpected error occurs'",
+    "test:single": "nyc --reporter=text mocha --recursive 'test/**/*.js' --reporter spec --timeout 5000 --ui bdd --exit  --color true -g 'NGSI-LD - Startup tests'",
     "test:html": "nyc --reporter=html mocha -- --recursive 'test/**/*.js' --reporter spec --exit",
     "test": "nyc --reporter=text mocha --recursive 'test/**/*.js' --reporter spec --timeout 5000 --ui bdd --exit  --color true",
     "test:coverage": "nyc --reporter=lcov mocha -- --recursive 'test/**/*.js' --reporter spec --exit",

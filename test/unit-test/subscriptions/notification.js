@@ -82,7 +82,7 @@ describe('Raise Notification', function () {
     describe('When an an NGSI-LD notification is raised', function () {
         beforeEach(function (done) {
             options.json = utils.readExampleFile('./test/ngsi-ld/Notification.json');
-            options.url = LEPUS_REVERSE_URL + '/notify'
+            options.url = LEPUS_REVERSE_URL + '/notify';
             notification = null;
             done();
         });
@@ -101,4 +101,3 @@ describe('Raise Notification', function () {
         });
     });
 });
-

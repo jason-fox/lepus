@@ -52,7 +52,7 @@ async function listAttributes(req, res) {
         });
     }
     Request.linkContext(res, isJSONLD);
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -94,7 +94,7 @@ async function readAttribute(req, res) {
         });
     }
     Request.linkContext(res, isJSONLD);
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 exports.list = listAttributes;

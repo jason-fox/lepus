@@ -91,17 +91,19 @@ async function notifyAsV2(req, res) {
         return NGSI_V2.formatEntity(entity);
     });
 
-     console.log(JSON.stringify(body))
-     console.log('*****')
+    console.log(JSON.stringify(body));
+    console.log('*****');
 
-    console.log(JSON.stringify(
-        {
-            id: subscriptionId,
-            data
-        }, null, 2
-
-
-        ))
+    console.log(
+        JSON.stringify(
+            {
+                id: subscriptionId,
+                data
+            },
+            null,
+            2
+        )
+    );
 
     const options = {
         method: 'POST',
@@ -115,7 +117,6 @@ async function notifyAsV2(req, res) {
             data
         }
     };
-
 
     debug('notify: ', req.path, options);
     const response = await got(target, options);

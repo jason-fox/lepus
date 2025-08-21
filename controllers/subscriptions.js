@@ -54,7 +54,7 @@ async function listSubscriptions(req, res) {
         });
     }
 
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -84,12 +84,12 @@ async function readSubscription(req, res) {
         res.set('NGSILD-Tenant', res.locals.tenant);
     }
     if (!Request.is2xxSuccessful(res.statusCode)) {
-        return Request.sendResponse(res, v2Body);
+        return Request.sendResponse(req, res, v2Body);
     }
     res.headers = response.headers;
     Request.linkContext(res, isJSONLD);
     const ldPayload = NGSI_LD.formatSubscription(v2Body, isJSONLD);
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 /**
@@ -120,7 +120,7 @@ async function deleteSubscription(req, res) {
     }
 
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
-    return Request.sendResponse(res, v2Body);
+    return Request.sendResponse(req, res, v2Body);
 }
 
 /**
@@ -187,7 +187,7 @@ async function updateSubscription(req, res) {
     }
 
     const v2Body = response.body ? JSON.parse(response.body) : undefined;
-    return Request.sendResponse(res, v2Body);
+    return Request.sendResponse(req, res, v2Body);
 }
 
 exports.list = listSubscriptions;

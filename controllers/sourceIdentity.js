@@ -58,7 +58,7 @@ async function getIdentity(req, res) {
             }>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"`
         );
     }
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 exports.get = getIdentity;

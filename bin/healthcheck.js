@@ -24,14 +24,11 @@ async function getVersion() {
 }
 
 config.setConfig(newConfig);
-getVersion()
-    .then((result) => {
-        debug(`Performed health check, result ${result.statusCode}`);
-        if (result.statusCode === httpCode) {
-            console.log('0')
-            process.exit(0);
-        } else {
-            console.log('0')
-            process.exit(1);
-        }
-    });
+getVersion().then((result) => {
+    debug(`Performed health check, result ${result.statusCode}`);
+    if (result.statusCode === httpCode) {
+        process.exit(0);
+    } else {
+        process.exit(1);
+    }
+});

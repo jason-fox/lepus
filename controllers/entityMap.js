@@ -120,7 +120,7 @@ async function generateEntityMap(req, res) {
     }
     const ldPayload = NGSI_LD.formatEntityMap(ids, isJSONLD);
     res.type(!isJSONLD ? 'application/json' : 'application/ld+json');
-    return Request.sendResponse(res, {}, ldPayload, contentType);
+    return Request.sendResponse(req, res, {}, ldPayload, contentType);
 }
 /**
  * Since Entity Maps are not stored, return not found

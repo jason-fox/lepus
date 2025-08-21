@@ -32,20 +32,20 @@ describe('Subscriptions options', function () {
     };
 
     describe('/subscriptions are queried', function () {
-        it('should return GET,POST,OPTIONS', function (done) {
+        it('should return GET,HEAD,POST,OPTIONS', function (done) {
             options.url = LEPUS_URL + 'subscriptions';
             request(options, function (error, response, body) {
-                response.headers.allow.should.eql('GET,POST,OPTIONS');
+                response.headers.allow.should.eql('GET,HEAD,POST,OPTIONS');
                 done();
             });
         });
     });
 
     describe('/subscriptions/xxx are queried', function () {
-        it('should return GET,PATCH,DELETE,OPTIONS', function (done) {
+        it('should return GET,HEAD,PATCH,DELETE,OPTIONS', function (done) {
             options.url = LEPUS_URL + 'subscriptions/xxx';
             request(options, function (error, response, body) {
-                response.headers.allow.should.eql('GET,PATCH,DELETE,OPTIONS');
+                response.headers.allow.should.eql('GET,HEAD,PATCH,DELETE,OPTIONS');
                 done();
             });
         });

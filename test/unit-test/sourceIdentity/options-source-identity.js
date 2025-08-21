@@ -32,10 +32,10 @@ describe('sourceIdentity options', function () {
     };
 
     describe('/info/sourceIdentity  are queried', function () {
-        it('should return GET,OPTIONS', function (done) {
+        it('should return GET,HEAD,OPTIONS', function (done) {
             options.url = LEPUS_URL + 'types';
             request(options, function (error, response, body) {
-                response.headers.allow.should.eql('GET,OPTIONS');
+                response.headers.allow.should.eql('GET,HEAD,OPTIONS');
                 done();
             });
         });

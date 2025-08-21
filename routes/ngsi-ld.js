@@ -21,7 +21,7 @@ const StatusCodes = require('http-status-codes').StatusCodes;
 const methodNotAllowedHandler = require('../lib/errors').methodNotAllowedHandler;
 const tryCatch = require('../lib/errors').tryCatch;
 
-function optionsHandler(req, res, next, options = 'GET,OPTIONS', acceptPatch) {
+function optionsHandler(req, res, next, options = 'GET,HEAD,OPTIONS', acceptPatch) {
     if (acceptPatch) {
         res.header('Accept-Patch', acceptPatch);
     }
@@ -30,20 +30,21 @@ function optionsHandler(req, res, next, options = 'GET,OPTIONS', acceptPatch) {
     res.status(StatusCodes.OK).send();
 }
 
-
 // Entities
 router
     .route('/entities')
     .get(tryCatch(entities.read))
+    .head(tryCatch(entities.read))
     .post(tryCatch(entities.create))
     .delete(tryCatch(entities.purge))
     .options((req, res, next) => {
-        optionsHandler(req, res, next, 'GET,POST,DELETE,OPTIONS');
+        optionsHandler(req, res, next, 'GET,HEAD,POST,DELETE,OPTIONS');
     })
     .all(methodNotAllowedHandler);
 router
     .route('/entities/:id')
     .get(tryCatch(entities.read))
+    .head(tryCatch(entities.read))
     .put(tryCatch(entities.overwrite))
     .patch(tryCatch(entities.merge))
     .delete(tryCatch(entities.delete))
@@ -52,7 +53,7 @@ router
             req,
             res,
             next,
-            'GET,PATCH,PUT,DELETE,OPTIONS',
+            'GET,HEAD,PATCH,PUT,DELETE,OPTIONS',
             'application/json, application/ld+json, application/merge-patch+json'
         );
     })
@@ -63,17 +64,18 @@ router
     .post(tryCatch(entities.create))
     .patch(tryCatch(entities.update))
     .options((req, res, next) => {
-        optionsHandler(req, res, next, 'GET,PATCH,POST,OPTIONS', 'application/json, application/ld+json');
+        optionsHandler(req, res, next, 'GET,HEAD,PATCH,POST,OPTIONS', 'application/json, application/ld+json');
     })
     .all(methodNotAllowedHandler);
 router
     .route('/entities/:id/attrs/:attr')
     .get(tryCatch(entities.read))
+    .head(tryCatch(entities.read))
     .patch(tryCatch(entities.updateAttr))
     .delete(tryCatch(entities.deleteAttr))
     .put(tryCatch(entities.overwriteAttr))
     .options((req, res, next) => {
-        optionsHandler(req, res, next, 'GET,PATCH,PUT,DELETE,OPTIONS', 'application/json, application/ld+json');
+        optionsHandler(req, res, next, 'GET,HEAD,PATCH,PUT,DELETE,OPTIONS', 'application/json, application/ld+json');
     })
     .all(methodNotAllowedHandler);
 
@@ -81,28 +83,45 @@ router
 router
     .route('/subscriptions')
     .get(tryCatch(subscriptions.list))
+    .head(tryCatch(subscriptions.list))
     .post(tryCatch(subscriptions.create))
     .options((req, res, next) => {
-        optionsHandler(req, res, next, 'GET,POST,OPTIONS');
+        optionsHandler(req, res, next, 'GET,HEAD,POST,OPTIONS');
     })
     .all(methodNotAllowedHandler);
 
 router
     .route('/subscriptions/:id')
     .get(tryCatch(subscriptions.read))
+    .head(tryCatch(subscriptions.read))
     .delete(tryCatch(subscriptions.delete))
     .patch(tryCatch(subscriptions.update))
     .options((req, res, next) => {
-        optionsHandler(req, res, next, 'GET,PATCH,DELETE,OPTIONS');
+        optionsHandler(req, res, next, 'GET,HEAD,PATCH,DELETE,OPTIONS');
     })
     .all(methodNotAllowedHandler);
 
 // Types
-router.route('/types').get(tryCatch(types.list)).options(optionsHandler).all(methodNotAllowedHandler);
-router.route('/types/:type').get(tryCatch(types.read)).options(optionsHandler).all(methodNotAllowedHandler);
+router
+    .route('/types')
+    .get(tryCatch(types.list))
+    .head(tryCatch(types.list))
+    .options(optionsHandler)
+    .all(methodNotAllowedHandler);
+router
+    .route('/types/:type')
+    .get(tryCatch(types.read))
+    .head(tryCatch(types.read))
+    .options(optionsHandler)
+    .all(methodNotAllowedHandler);
 
 // Attributes
-router.route('/attributes').get(tryCatch(attributes.list)).options(optionsHandler).all(methodNotAllowedHandler);
+router
+    .route('/attributes')
+    .get(tryCatch(attributes.list))
+    .head(tryCatch(attributes.list))
+    .options(optionsHandler)
+    .all(methodNotAllowedHandler);
 router.route('/attributes/:attr').get(tryCatch(attributes.read)).options(optionsHandler).all(methodNotAllowedHandler);
 
 // Notifications
@@ -140,32 +159,36 @@ router
 router
     .route('/info/sourceIdentity')
     .options((req, res, next) => {
-        optionsHandler(req, res, next, 'GET,OPTIONS');
+        optionsHandler(req, res, next, 'GET,HEAD,OPTIONS');
     })
     .get(tryCatch(identity.get))
+    .head(tryCatch(identity.get))
     .all(methodNotAllowedHandler);
 
 router
     .route('/entityMap')
     .options((req, res, next) => {
-        optionsHandler(req, res, next, 'GET,OPTIONS');
+        optionsHandler(req, res, next, 'GET,HEAD,OPTIONS');
     })
     .get(tryCatch(entityMap.generate))
+    .head(tryCatch(entityMap.generate))
     .all(methodNotAllowedHandler);
 router
     .route('/entityMap/:id')
     .get(tryCatch(entityMap.read))
+    .head(tryCatch(entityMap.read))
     .patch(tryCatch(entityMap.merge))
     .options((req, res, next) => {
         optionsHandler(
             req,
             res,
             next,
-            'GET,PATCH,OPTIONS',
+            'GET,HEAD,PATCH,OPTIONS',
             'application/json, application/ld+json, application/merge-patch+json'
         );
     })
     .all(methodNotAllowedHandler);
+
 // All other routes
 router.route('/*').all(methodNotAllowedHandler);
 

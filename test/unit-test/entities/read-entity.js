@@ -43,6 +43,7 @@ describe('Read Entity', function () {
 
     describe('When a normalized entity is read by id', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
@@ -74,8 +75,43 @@ describe('Read Entity', function () {
         });
     });
 
+    describe('When a normalized entity is read by id and no body is requested', function () {
+        beforeEach(function (done) {
+            options.method = 'HEAD';
+            delete options.searchParams;
+            contextBrokerMock = nock(V2_BROKER)
+                .head('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
+                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
+
+            done();
+        });
+
+        it('should forward an NGSI-v2 GET request', function (done) {
+            request(options, function (error, response, body) {
+                contextBrokerMock.done();
+                done();
+            });
+        });
+
+        it('should return success', function (done) {
+            request(options, function (error, response, body) {
+                response.statusCode.should.equal(200);
+                done();
+            });
+        });
+
+        it('should return a Link Header and no body', function (done) {
+            request(options, function (error, response, body) {
+                response.headers.link.should.equal(LINK_HEADER);
+                body.should.eql('');
+                done();
+            });
+        });
+    });
+
     describe('When an entity using v2 typed keywords is read by id 1.8 core', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
@@ -95,6 +131,7 @@ describe('Read Entity', function () {
 
     describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.4 is set 1.8 core', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             delete options.searchParams;
             options.headers = {
                 prefer: 'ngsi-ld=1.4'
@@ -118,6 +155,7 @@ describe('Read Entity', function () {
 
     describe('When an entity using v2 dateExpired is read by id and prefer=ngsi-ld=1.4 is set', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             delete options.searchParams;
             options.headers = {
                 prefer: 'ngsi-ld=1.4'
@@ -141,6 +179,7 @@ describe('Read Entity', function () {
 
     describe('When an entity using v2 typed keywords is read by id and prefer=ngsi-ld=1.17 is set  1.8 core', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             delete options.searchParams;
             options.headers = {
                 prefer: 'ngsi-ld=1.17'
@@ -164,6 +203,7 @@ describe('Read Entity', function () {
 
     describe('When a concise entity is read by id', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             options.searchParams = 'options=concise';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
@@ -197,6 +237,7 @@ describe('Read Entity', function () {
 
     describe('When a keyValues entity is read by id', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             options.searchParams = 'options=keyValues';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001?options=keyValues')
@@ -230,6 +271,7 @@ describe('Read Entity', function () {
 
     describe('When an Entity with attrs is read by id', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             options.searchParams = 'attrs=category,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001?attrs=category,temperature')
@@ -248,6 +290,7 @@ describe('Read Entity', function () {
 
     describe('When an Entity with pick is read by id', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             options.searchParams = 'pick=category,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
@@ -281,6 +324,7 @@ describe('Read Entity', function () {
 
     describe('When an Entity with omit is read by id', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             options.searchParams = 'omit=category,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
@@ -314,6 +358,7 @@ describe('Read Entity', function () {
 
     describe('When an Entity with sysAttrs is read by id', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             options.searchParams = 'options=sysAttrs';
             const time = new Date(1708729200); // 2024-02-23T16:18:07+0000
 
@@ -355,6 +400,7 @@ describe('Read Entity', function () {
 
     describe('When no entity is found', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
@@ -379,6 +425,7 @@ describe('Read Entity', function () {
 
     describe('When a normalized entity is read on a tenant', function () {
         beforeEach(function (done) {
+            options.method = 'GET';
             delete options.searchParams;
             options.headers = {
                 'NGSILD-Tenant': 'tenant'

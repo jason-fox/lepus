@@ -32,40 +32,40 @@ describe('Entity options', function () {
     };
 
     describe('/entities are queried', function () {
-        it('should return GET,POST,DELETE,OPTIONS', function (done) {
+        it('should return GET,HEAD,POST,DELETE,OPTIONS', function (done) {
             options.url = LEPUS_URL + 'entities';
             request(options, function (error, response, body) {
-                response.headers.allow.should.equal('GET,POST,DELETE,OPTIONS');
+                response.headers.allow.should.equal('GET,HEAD,POST,DELETE,OPTIONS');
                 done();
             });
         });
     });
 
     describe('/entities/xxx are queried', function () {
-        it('should return GET,PATCH,PUT,DELETE,OPTIONS', function (done) {
+        it('should return GET,HEAD,PATCH,PUT,DELETE,OPTIONS', function (done) {
             options.url = LEPUS_URL + 'entities/xxx';
             request(options, function (error, response, body) {
-                response.headers.allow.should.equal('GET,PATCH,PUT,DELETE,OPTIONS');
+                response.headers.allow.should.equal('GET,HEAD,PATCH,PUT,DELETE,OPTIONS');
                 done();
             });
         });
     });
 
     describe('/entities/xxx/attrs are queried', function () {
-        it('should return GET,PATCH,POST,OPTIONS', function (done) {
+        it('should return GET,HEAD,PATCH,POST,OPTIONS', function (done) {
             options.url = LEPUS_URL + 'entities/xxx/attrs';
             request(options, function (error, response, body) {
-                response.headers.allow.should.equal('GET,PATCH,POST,OPTIONS');
+                response.headers.allow.should.equal('GET,HEAD,PATCH,POST,OPTIONS');
                 done();
             });
         });
     });
 
     describe('/entities/xxx/attrs/yyy are queried', function () {
-        it('should return GET,PATCH,PUT,DELETE,OPTIONS', function (done) {
+        it('should return GET,HEAD,PATCH,PUT,DELETE,OPTIONS', function (done) {
             options.url = LEPUS_URL + 'entities/xxx/attrs/yyy';
             request(options, function (error, response, body) {
-                response.headers.allow.should.equal('GET,PATCH,PUT,DELETE,OPTIONS');
+                response.headers.allow.should.equal('GET,HEAD,PATCH,PUT,DELETE,OPTIONS');
                 done();
             });
         });

@@ -60,14 +60,17 @@ app.get('/context.jsonld', (req, res) => {
     return Request.serveContext(req, res);
 });
 
-app.get('/health', tryCatch( async (req, res) => {
-    const options = {
-        method: 'GET',
-        throwHttpErrors: false,
-        retry: 0
-    };
-    const result = await Request.sendRequest('/../version/', options);
-    return res.sendStatus(result.statusCode);
-}));
+app.get(
+    '/health',
+    tryCatch(async (req, res) => {
+        const options = {
+            method: 'GET',
+            throwHttpErrors: false,
+            retry: 0
+        };
+        const result = await Request.sendRequest('/../version/', options);
+        return res.sendStatus(result.statusCode);
+    })
+);
 
 module.exports = app;

@@ -5,8 +5,6 @@ const notify = require('../controllers/notify');
 const methodNotAllowedHandler = require('../lib/errors').methodNotAllowedHandler;
 const tryCatch = require('../lib/errors').tryCatch;
 
-
-
 router.route('/notify').post(tryCatch(notify.notifyAsV2)).all(methodNotAllowedHandler);
 
 module.exports = router;

@@ -32,20 +32,20 @@ describe('attributes options', function () {
     };
 
     describe('/attributes are queried', function () {
-        it('should return GET,OPTIONS', function (done) {
+        it('should return GET,HEAD,OPTIONS', function (done) {
             options.url = LEPUS_URL + 'attributes';
             request(options, function (error, response, body) {
-                response.headers.allow.should.eql('GET,OPTIONS');
+                response.headers.allow.should.eql('GET,HEAD,OPTIONS');
                 done();
             });
         });
     });
 
     describe('/attributes/xxx are queried', function () {
-        it('should return GET,OPTIONS', function (done) {
+        it('should return GET,HEAD,OPTIONS', function (done) {
             options.url = LEPUS_URL + 'attributes/xxx';
             request(options, function (error, response, body) {
-                response.headers.allow.should.eql('GET,OPTIONS');
+                response.headers.allow.should.eql('GET,HEAD,OPTIONS');
                 done();
             });
         });

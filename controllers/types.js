@@ -38,7 +38,7 @@ async function listTypes(req, res) {
 
     ldPayload = NGSI_LD.formatEntityTypeList(v2Body, isJSONLD);
 
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 async function readType(req, res) {
@@ -69,7 +69,7 @@ async function readType(req, res) {
 
     const ldPayload = NGSI_LD.formatEntityTypeInformation(v2Body, isJSONLD, typeName);
 
-    return Request.sendResponse(res, v2Body, ldPayload, contentType);
+    return Request.sendResponse(req, res, v2Body, ldPayload, contentType);
 }
 
 exports.list = listTypes;
