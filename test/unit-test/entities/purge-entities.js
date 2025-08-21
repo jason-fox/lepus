@@ -13,6 +13,7 @@ const nock = require('nock');
 const should = require('should');
 const utils = require('../../utils');
 const request = utils.request;
+const StatusCode = require('http-status-codes').StatusCodes;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 
@@ -41,11 +42,11 @@ describe('Purge Entities Tests', function () {
             options.searchParams = 'type=TemperatureSensor';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?type=TemperatureSensor')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             contextBrokerMock
                 .post('/v2/op/update/', utils.readExampleFile('./test/ngsi-v2/Batch-Delete-Entities.json'))
-                .reply(200);
+                .reply(StatusCode.OK);
 
             done();
         });
@@ -58,7 +59,7 @@ describe('Purge Entities Tests', function () {
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -69,11 +70,11 @@ describe('Purge Entities Tests', function () {
             options.searchParams = 'q=temperature==100&pick=temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?q=temperature==100')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             contextBrokerMock
                 .post('/v2/op/update/', utils.readExampleFile('./test/ngsi-v2/Batch-Replace-Entities-picked.json'))
-                .reply(200);
+                .reply(StatusCode.OK);
             done();
         });
 
@@ -85,7 +86,7 @@ describe('Purge Entities Tests', function () {
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });

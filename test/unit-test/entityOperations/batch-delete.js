@@ -13,6 +13,7 @@ const nock = require('nock');
 const should = require('should');
 const utils = require('../../utils');
 const request = utils.request;
+const StatusCode = require('http-status-codes').StatusCodes;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 
@@ -43,13 +44,13 @@ describe('Batch Delete Entities', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/Batch-Delete-Entities.json');
             contextBrokerMock = nock(V2_BROKER)
                 .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Batch-Delete-Entities-no-type.json'))
-                .reply(204);
+                .reply(StatusCode.NO_CONTENT);
 
             done();
         });
         it('should return no content', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(204);
+                response.statusCode.should.equal(StatusCode.NO_CONTENT);
                 done();
             });
         });

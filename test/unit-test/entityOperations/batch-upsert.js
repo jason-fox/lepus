@@ -13,6 +13,7 @@ const nock = require('nock');
 const should = require('should');
 const utils = require('../../utils');
 const request = utils.request;
+const StatusCode = require('http-status-codes').StatusCodes;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 
@@ -43,13 +44,13 @@ describe('Batch Upsert Entities', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/Batch-Upsert-Entities.json');
             contextBrokerMock = nock(V2_BROKER)
                 .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Batch-Upsert-Entities.json'))
-                .reply(201);
+                .reply(StatusCode.CREATED);
 
             done();
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(201);
+                response.statusCode.should.equal(StatusCode.CREATED);
                 done();
             });
         });
@@ -68,7 +69,7 @@ describe('Batch Upsert Entities', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/keywords.json');
             contextBrokerMock = nock(V2_BROKER)
                 .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/keywords-id.json'))
-                .reply(201);
+                .reply(StatusCode.CREATED);
 
             done();
         });
@@ -86,7 +87,7 @@ describe('Batch Upsert Entities', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/keywords-concise.json');
             contextBrokerMock = nock(V2_BROKER)
                 .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/keywords-concise.json'))
-                .reply(201);
+                .reply(StatusCode.CREATED);
 
             done();
         });
@@ -105,7 +106,7 @@ describe('Batch Upsert Entities', function () {
 
             contextBrokerMock = nock(V2_BROKER)
                 .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity.json'))
-                .reply(201);
+                .reply(StatusCode.CREATED);
 
             done();
         });
@@ -119,7 +120,7 @@ describe('Batch Upsert Entities', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(201);
+                response.statusCode.should.equal(StatusCode.CREATED);
                 done();
             });
         });
@@ -133,7 +134,7 @@ describe('Batch Upsert Entities', function () {
             };
             contextBrokerMock = nock(V2_BROKER)
                 .post(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity.json'))
-                .reply(201);
+                .reply(StatusCode.CREATED);
 
             done();
         });
@@ -146,7 +147,7 @@ describe('Batch Upsert Entities', function () {
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(201);
+                response.statusCode.should.equal(StatusCode.CREATED);
                 done();
             });
         });

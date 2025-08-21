@@ -13,6 +13,7 @@ const nock = require('nock');
 const should = require('should');
 const utils = require('../../utils');
 const request = utils.request;
+const StatusCode = require('http-status-codes').StatusCodes;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 
@@ -46,7 +47,7 @@ describe('Update Entity Attribute(s)', function () {
                 .patch('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs', {
                     temperature: utils.readExampleFile('./test/ngsi-v2/Property.json')
                 })
-                .reply(204);
+                .reply(StatusCode.NO_CONTENT);
 
             done();
         });
@@ -59,7 +60,7 @@ describe('Update Entity Attribute(s)', function () {
         });
         it('should return no content', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(204);
+                response.statusCode.should.equal(StatusCode.NO_CONTENT);
                 done();
             });
         });
@@ -74,7 +75,7 @@ describe('Update Entity Attribute(s)', function () {
                 .patch('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs', {
                     temperature: utils.readExampleFile('./test/ngsi-v2/Property.json')
                 })
-                .reply(204);
+                .reply(StatusCode.NO_CONTENT);
 
             done();
         });
@@ -87,7 +88,7 @@ describe('Update Entity Attribute(s)', function () {
         });
         it('should return no content', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(204);
+                response.statusCode.should.equal(StatusCode.NO_CONTENT);
                 done();
             });
         });
@@ -102,7 +103,7 @@ describe('Update Entity Attribute(s)', function () {
                 .patch('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs', {
                     controlledAsset: utils.readExampleFile('./test/ngsi-v2/Relationship.json')
                 })
-                .reply(204);
+                .reply(StatusCode.NO_CONTENT);
 
             done();
         });
@@ -115,7 +116,7 @@ describe('Update Entity Attribute(s)', function () {
         });
         it('should return no content', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(204);
+                response.statusCode.should.equal(StatusCode.NO_CONTENT);
                 done();
             });
         });
@@ -130,7 +131,7 @@ describe('Update Entity Attribute(s)', function () {
                 .patch('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs', {
                     controlledAsset: utils.readExampleFile('./test/ngsi-v2/Relationship.json')
                 })
-                .reply(204);
+                .reply(StatusCode.NO_CONTENT);
 
             done();
         });
@@ -143,7 +144,7 @@ describe('Update Entity Attribute(s)', function () {
         });
         it('should return no content', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(204);
+                response.statusCode.should.equal(StatusCode.NO_CONTENT);
                 done();
             });
         });
@@ -162,7 +163,7 @@ describe('Update Entity Attribute(s)', function () {
                     temperature: utils.readExampleFile('./test/ngsi-v2/Property.json')
                 })
                 .matchHeader('fiware-service', 'tenant')
-                .reply(204);
+                .reply(StatusCode.NO_CONTENT);
 
             done();
         });

@@ -13,6 +13,7 @@ const nock = require('nock');
 const should = require('should');
 const utils = require('../../utils');
 const request = utils.request;
+const StatusCode = require('http-status-codes').StatusCodes;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 const SINGLE_PROPERTY = 'entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature';
@@ -44,7 +45,7 @@ describe('Read Entity Attribute', function () {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Property.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Property.json'));
 
             done();
         });
@@ -57,7 +58,7 @@ describe('Read Entity Attribute', function () {
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -76,7 +77,7 @@ describe('Read Entity Attribute', function () {
             options.searchParams = 'options=concise';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Property.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Property.json'));
 
             done();
         });
@@ -89,7 +90,7 @@ describe('Read Entity Attribute', function () {
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -108,7 +109,7 @@ describe('Read Entity Attribute', function () {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/controlledAsset')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Relationship.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Relationship.json'));
 
             done();
         });
@@ -121,7 +122,7 @@ describe('Read Entity Attribute', function () {
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -140,7 +141,7 @@ describe('Read Entity Attribute', function () {
             options.searchParams = 'options=concise';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/controlledAsset')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Relationship.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Relationship.json'));
 
             done();
         });
@@ -153,7 +154,7 @@ describe('Read Entity Attribute', function () {
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -201,7 +202,7 @@ describe('Read Entity Attribute', function () {
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature')
                 .matchHeader('fiware-service', 'tenant')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Property.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Property.json'));
 
             done();
         });

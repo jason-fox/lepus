@@ -13,6 +13,7 @@ const nock = require('nock');
 const should = require('should');
 const utils = require('../../utils');
 const request = utils.request;
+const StatusCode = require('http-status-codes').StatusCodes;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 
@@ -43,13 +44,13 @@ describe('Update Entity', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/Entity-no-id.json');
             contextBrokerMock = nock(V2_BROKER)
                 .put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json'))
-                .reply(200);
+                .reply(StatusCode.OK);
 
             done();
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -67,13 +68,13 @@ describe('Update Entity', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/Entity-concise-no-id.json');
             contextBrokerMock = nock(V2_BROKER)
                 .put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json'))
-                .reply(200);
+                .reply(StatusCode.OK);
 
             done();
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });

@@ -13,6 +13,7 @@ const nock = require('nock');
 const should = require('should');
 const utils = require('../../utils');
 const request = utils.request;
+const StatusCode = require('http-status-codes').StatusCodes;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 
@@ -44,15 +45,15 @@ describe('Merge Entity', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/Entity-no-id.json');
             contextBrokerMock = nock(V2_BROKER)
                 .get(ORION_ENTITY_ONLY)
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-id-only.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-id-only.json'));
 
-            contextBrokerMock.put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json')).reply(200);
+            contextBrokerMock.put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json')).reply(StatusCode.OK);
 
             done();
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -70,17 +71,17 @@ describe('Merge Entity', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/Entity-nulls.json');
             contextBrokerMock = nock(V2_BROKER)
                 .get(ORION_ENTITY_ONLY)
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-id-only.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-id-only.json'));
 
             contextBrokerMock
                 .put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-merged-nulls.json'))
-                .reply(200);
+                .reply(StatusCode.OK);
 
             done();
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -98,15 +99,15 @@ describe('Merge Entity', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/Entity-concise-no-id.json');
             contextBrokerMock = nock(V2_BROKER)
                 .get(ORION_ENTITY_ONLY)
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-id-only.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-id-only.json'));
 
-            contextBrokerMock.put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json')).reply(200);
+            contextBrokerMock.put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/Entity-attrs.json')).reply(StatusCode.OK);
 
             done();
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -124,17 +125,17 @@ describe('Merge Entity', function () {
             options.json = utils.readExampleFile('./test/ngsi-ld/keywords-concise-no-id.json');
             contextBrokerMock = nock(V2_BROKER)
                 .get(ORION_ENTITY_ONLY)
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-id-only.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-id-only.json'));
 
             contextBrokerMock
                 .put(ORION_ENDPOINT, utils.readExampleFile('./test/ngsi-v2/keywords-attrs.json'))
-                .reply(200);
+                .reply(StatusCode.OK);
 
             done();
         });
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });

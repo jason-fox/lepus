@@ -12,6 +12,7 @@ const config = require('../../config-test');
 const nock = require('nock');
 const should = require('should');
 const utils = require('../../utils');
+const StatusCode = require('http-status-codes').StatusCodes;
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
@@ -43,7 +44,7 @@ describe('Query Entities Tests', function () {
             options.searchParams = 'type=TemperatureSensor';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?type=TemperatureSensor&options=count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });
@@ -57,7 +58,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -76,7 +77,7 @@ describe('Query Entities Tests', function () {
             options.searchParams = 'q=temperature==100';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?q=temperature==100&options=count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });
@@ -90,7 +91,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -109,7 +110,7 @@ describe('Query Entities Tests', function () {
             options.searchParams = 'q=temperature==100&count=true';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?q=temperature==100&options=count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'), { 'Fiware-Total-Count': '2' });
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'), { 'Fiware-Total-Count': '2' });
 
             done();
         });
@@ -123,7 +124,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -143,7 +144,7 @@ describe('Query Entities Tests', function () {
             options.searchParams = 'q=temperature==100&limit=2';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?q=temperature==100&limit=2&options=count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'), { 'Fiware-Total-Count': '8' });
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'), { 'Fiware-Total-Count': '8' });
 
             done();
         });
@@ -157,7 +158,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -177,7 +178,7 @@ describe('Query Entities Tests', function () {
             options.searchParams = 'q=temperature==100&limit=3&offset=4';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?q=temperature==100&limit=3&offset=4&options=count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'), { 'Fiware-Total-Count': '8' });
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'), { 'Fiware-Total-Count': '8' });
 
             done();
         });
@@ -191,7 +192,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -211,7 +212,7 @@ describe('Query Entities Tests', function () {
             options.searchParams = 'q=temperature==100&pick=id,type,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?q=temperature==100&options=count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });
@@ -225,7 +226,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -244,7 +245,7 @@ describe('Query Entities Tests', function () {
             options.searchParams = 'q=temperature==100&omit=id,type,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?q=temperature==100&options=count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });
@@ -258,7 +259,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -277,7 +278,7 @@ describe('Query Entities Tests', function () {
             options.searchParams = 'type=TemperatureSensor&options=concise';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?type=TemperatureSensor&options=count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });
@@ -291,7 +292,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -310,7 +311,7 @@ describe('Query Entities Tests', function () {
             options.searchParams = 'type=TemperatureSensor&options=keyValues';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?type=TemperatureSensor&options=keyValues,count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities-keyValues.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities-keyValues.json'));
 
             done();
         });
@@ -324,7 +325,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -341,7 +342,7 @@ describe('Query Entities Tests', function () {
     describe('When no entities are returned', function () {
         beforeEach(function (done) {
             options.searchParams = 'type=TemperatureSensor';
-            contextBrokerMock = nock(V2_BROKER).get('/v2/entities?type=TemperatureSensor&options=count').reply(200, []);
+            contextBrokerMock = nock(V2_BROKER).get('/v2/entities?type=TemperatureSensor&options=count').reply(StatusCode.OK, []);
 
             done();
         });
@@ -355,7 +356,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -377,7 +378,7 @@ describe('Query Entities Tests', function () {
             };
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?type=TemperatureSensor&options=count')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });
@@ -396,7 +397,7 @@ describe('Query Entities Tests', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -417,7 +418,7 @@ describe('Query Entities Tests', function () {
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities?type=TemperatureSensor&options=count')
                 .matchHeader('fiware-service', 'tenant')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });
@@ -443,7 +444,7 @@ describe('Query Entities Tests', function () {
                 .get(
                     '/v2/entities?id=urn:ngsi-ld:TemperatureSensor:001,urn:ngsi-ld:TemperatureSensor:002,urn:ngsi-ld:TemperatureSensor:003&options=count'
                 )
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entities.json'));
 
             done();
         });

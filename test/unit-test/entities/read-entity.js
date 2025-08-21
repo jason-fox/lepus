@@ -11,6 +11,7 @@ const lepus = require('../../../lib/lepus');
 const config = require('../../config-test');
 const nock = require('nock');
 const should = require('should');
+const StatusCode = require('http-status-codes').StatusCodes;
 const utils = require('../../utils');
 const request = utils.request;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
@@ -47,7 +48,7 @@ describe('Read Entity', function () {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
 
             done();
         });
@@ -61,7 +62,7 @@ describe('Read Entity', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -81,7 +82,7 @@ describe('Read Entity', function () {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .head('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
 
             done();
         });
@@ -95,7 +96,7 @@ describe('Read Entity', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.NO_CONTENT);
                 done();
             });
         });
@@ -115,7 +116,7 @@ describe('Read Entity', function () {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
 
             done();
         });
@@ -138,7 +139,7 @@ describe('Read Entity', function () {
             };
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
 
             done();
         });
@@ -162,7 +163,7 @@ describe('Read Entity', function () {
             };
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-expiresAt.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-expiresAt.json'));
 
             done();
         });
@@ -186,7 +187,7 @@ describe('Read Entity', function () {
             };
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
 
             done();
         });
@@ -207,7 +208,7 @@ describe('Read Entity', function () {
             options.searchParams = 'options=concise';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
 
             done();
         });
@@ -221,7 +222,7 @@ describe('Read Entity', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -241,7 +242,7 @@ describe('Read Entity', function () {
             options.searchParams = 'options=keyValues';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001?options=keyValues')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-keyValues.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-keyValues.json'));
 
             done();
         });
@@ -255,7 +256,7 @@ describe('Read Entity', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -275,7 +276,7 @@ describe('Read Entity', function () {
             options.searchParams = 'attrs=category,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001?attrs=category,temperature')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
 
             done();
         });
@@ -294,7 +295,7 @@ describe('Read Entity', function () {
             options.searchParams = 'pick=category,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
 
             done();
         });
@@ -308,7 +309,7 @@ describe('Read Entity', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -328,7 +329,7 @@ describe('Read Entity', function () {
             options.searchParams = 'omit=category,temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
 
             done();
         });
@@ -342,7 +343,7 @@ describe('Read Entity', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -365,7 +366,7 @@ describe('Read Entity', function () {
             timekeeper.freeze(time);
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001?metadata=dateCreated,dateModified,*')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-sysAttrs.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-sysAttrs.json'));
 
             done();
         });
@@ -384,7 +385,7 @@ describe('Read Entity', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -433,7 +434,7 @@ describe('Read Entity', function () {
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
                 .matchHeader('fiware-service', 'tenant')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity.json'));
 
             done();
         });
@@ -478,7 +479,7 @@ describe('Read Entity with valueType', function () {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
 
             done();
         });
@@ -500,7 +501,7 @@ describe('Read Entity with valueType', function () {
             };
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
 
             done();
         });
@@ -523,7 +524,7 @@ describe('Read Entity with valueType', function () {
             };
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/keywords.json'));
 
             done();
         });
@@ -543,7 +544,7 @@ describe('Read Entity with valueType', function () {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-valueType.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-valueType.json'));
 
             done();
         });
@@ -557,7 +558,7 @@ describe('Read Entity with valueType', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -576,7 +577,7 @@ describe('Read Entity with valueType', function () {
             options.searchParams = 'options=concise';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-valueType.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-valueType.json'));
 
             done();
         });
@@ -590,7 +591,7 @@ describe('Read Entity with valueType', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -630,7 +631,7 @@ describe('Read Entity with expiresAt', function () {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-expiresAt.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-expiresAt.json'));
 
             done();
         });
@@ -644,7 +645,7 @@ describe('Read Entity with expiresAt', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });
@@ -663,7 +664,7 @@ describe('Read Entity with expiresAt', function () {
             options.searchParams = 'options=concise';
             contextBrokerMock = nock(V2_BROKER)
                 .get('/v2/entities/urn:ngsi-ld:TemperatureSensor:001')
-                .reply(200, utils.readExampleFile('./test/ngsi-v2/Entity-expiresAt.json'));
+                .reply(StatusCode.OK, utils.readExampleFile('./test/ngsi-v2/Entity-expiresAt.json'));
 
             done();
         });
@@ -677,7 +678,7 @@ describe('Read Entity with expiresAt', function () {
 
         it('should return success', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(200);
+                response.statusCode.should.equal(StatusCode.OK);
                 done();
             });
         });

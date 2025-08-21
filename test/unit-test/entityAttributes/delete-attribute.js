@@ -13,6 +13,7 @@ const nock = require('nock');
 const should = require('should');
 const utils = require('../../utils');
 const request = utils.request;
+const StatusCode = require('http-status-codes').StatusCodes;
 const LEPUS_URL = 'http://localhost:3000/ngsi-ld/v1/';
 const V2_BROKER = 'http://orion:1026';
 
@@ -41,7 +42,7 @@ describe('Delete Single Entity Attribute', function () {
             options.url = LEPUS_URL + 'entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature';
             contextBrokerMock = nock(V2_BROKER)
                 .delete('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature')
-                .reply(204);
+                .reply(StatusCode.NO_CONTENT);
 
             done();
         });
@@ -54,7 +55,7 @@ describe('Delete Single Entity Attribute', function () {
         });
         it('should return no content', function (done) {
             request(options, function (error, response, body) {
-                response.statusCode.should.equal(204);
+                response.statusCode.should.equal(StatusCode.NO_CONTENT);
                 done();
             });
         });
@@ -69,7 +70,7 @@ describe('Delete Single Entity Attribute', function () {
             contextBrokerMock = nock(V2_BROKER)
                 .delete('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature')
                 .matchHeader('fiware-service', 'tenant')
-                .reply(204);
+                .reply(StatusCode.NO_CONTENT);
 
             done();
         });
@@ -92,7 +93,7 @@ describe('Delete Single Entity Attribute', function () {
             delete options.searchParams;
             contextBrokerMock = nock(V2_BROKER)
                 .delete('/v2/entities/urn:ngsi-ld:TemperatureSensor:001/attrs/temperature')
-                .reply(404, utils.readExampleFile('./test/ngsi-v2/Not-Found.json'));
+                .reply(StatusCode.NOT_FOUND, utils.readExampleFile('./test/ngsi-v2/Not-Found.json'));
             done();
         });
 
